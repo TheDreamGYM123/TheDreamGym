@@ -4,7 +4,6 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
-const db = require('./database');
 
 const envPath = path.join(__dirname, '.env');
 if (fs.existsSync(envPath)) {
@@ -28,6 +27,30 @@ process.on('unhandledRejection', (reason) => {
     console.error('Unhandled rejection:', reason);
 });
 
+let databaseStartupError = null;
+let db;
+
+try {
+    db = require('./database');
+} catch (error) {
+    databaseStartupError = error;
+    console.error('Database startup failed:', error);
+    db = {
+        all: (sql, params, cb) => {
+            const callback = typeof params === 'function' ? params : cb;
+            callback(databaseStartupError);
+        },
+        get: (sql, params, cb) => {
+            const callback = typeof params === 'function' ? params : cb;
+            callback(databaseStartupError);
+        },
+        run: (sql, params, cb) => {
+            const callback = typeof params === 'function' ? params : cb;
+            if (callback) callback(databaseStartupError);
+        }
+    };
+}
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -40,7 +63,9 @@ app.get('/health', (req, res) => {
     res.json({
         status: 'ok',
         service: 'the-dream-gym',
-        time: new Date().toISOString()
+        time: new Date().toISOString(),
+        database: databaseStartupError ? 'error' : 'ok',
+        database_error: databaseStartupError ? databaseStartupError.message : null
     });
 });
 
