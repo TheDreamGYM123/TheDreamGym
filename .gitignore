@@ -1,0 +1,7 @@
+node_modules/
+.env
+database.sqlite
+uploads/
+.tools/
+hostinger-upload-staging/
+the-dream-gym-hostinger-upload.zip

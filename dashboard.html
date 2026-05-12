@@ -1,0 +1,413 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    /* Toggle Switch Styles */
+    .toggle-checkbox:checked {
+        right: 0;
+        border-color: #68D391;
+    }
+    .toggle-checkbox:checked + .toggle-label {
+        background-color: #68D391;
+    }
+</style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "background": "#15130a",
+                  "surface-container": "#222015",
+                  "surface-container-highest": "#373529",
+                  "outline-variant": "#4b4734",
+                  "secondary": "#e6d02d",
+                  "on-secondary": "#373100",
+                  "on-surface": "#e8e2d1",
+                  "on-surface-variant": "#cdc7ad",
+          },
+          "fontFamily": {
+                  "body": ["Epilogue"],
+                  "display": ["Epilogue"],
+          }
+        },
+      },
+    }
+</script>
+</head>
+<body class="bg-background text-on-surface font-body overflow-x-hidden">
+
+<div class="flex h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-surface-container border-r border-outline-variant/30 flex flex-col hidden md:flex">
+        <div class="p-6 border-b border-outline-variant/30 flex items-center gap-3">
+            <span class="material-symbols-outlined text-secondary text-3xl">fitness_center</span>
+            <span class="font-display font-bold tracking-widest text-lg">THE DREAM GYM</span>
+        </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="dashboard.html#banner-section" class="sidebar-link active flex items-center gap-3 px-4 py-3 bg-surface-container-highest/50 text-secondary rounded-lg font-bold tracking-wide transition-colors">
+                <span class="material-symbols-outlined">settings</span> Top Banner
+            </a>
+            <a href="dashboard.html#reviews-section" class="sidebar-link flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest/30 hover:text-on-surface rounded-lg font-bold tracking-wide transition-colors">
+                <span class="material-symbols-outlined">reviews</span> Client Reviews
+            </a>
+            <a href="dashboard.html#pricing-section" class="sidebar-link flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest/30 hover:text-on-surface rounded-lg font-bold tracking-wide transition-colors">
+                <span class="material-symbols-outlined">sell</span> Pricing
+            </a>
+            <a href="dashboard.html#gallery-section" class="sidebar-link flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest/30 hover:text-on-surface rounded-lg font-bold tracking-wide transition-colors">
+                <span class="material-symbols-outlined">grid_view</span> Gallery Grid
+            </a>
+            <a href="dashboard.html#about-carousel-section" class="sidebar-link flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest/30 hover:text-on-surface rounded-lg font-bold tracking-wide transition-colors">
+                <span class="material-symbols-outlined">collections</span> About Carousel
+            </a>
+            <a href="dashboard.html#trainers-section" class="sidebar-link flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest/30 hover:text-on-surface rounded-lg font-bold tracking-wide transition-colors">
+                <span class="material-symbols-outlined">sports_gymnastics</span> Trainers
+            </a>
+            <a href="applications.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest/30 hover:text-on-surface rounded-lg font-bold tracking-wide transition-colors">
+                <span class="material-symbols-outlined">mail</span> Applications
+            </a>
+            <a href="payments.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest/30 hover:text-on-surface rounded-lg font-bold tracking-wide transition-colors">
+                <span class="material-symbols-outlined">payments</span> Payments
+            </a>
+        </nav>
+        <div class="p-4 border-t border-outline-variant/30">
+            <button id="logout-btn" class="w-full flex items-center justify-center gap-2 px-4 py-3 text-on-surface-variant hover:text-red-400 transition-colors">
+                <span class="material-symbols-outlined">logout</span> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto">
+        <!-- Header -->
+        <header class="bg-surface-container border-b border-outline-variant/30 px-8 py-6 flex items-center justify-between">
+            <h1 class="text-2xl font-display font-bold uppercase tracking-wide">Dashboard</h1>
+            <div class="flex items-center gap-2 text-sm text-on-surface-variant">
+                <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.8)] animate-pulse"></div>
+                Admin Online
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="p-8 max-w-4xl">
+            
+            <!-- Banner Settings Section -->
+            <section id="banner-section" class="bg-surface-container rounded-xl border border-outline-variant/30 p-8 shadow-xl">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-xl font-display font-bold text-secondary flex items-center gap-2">
+                            <span class="material-symbols-outlined">campaign</span> Top Promotional Banner
+                        </h2>
+                        <p class="text-on-surface-variant text-sm mt-1">Control the scrolling text banner at the top of your website.</p>
+                    </div>
+                    
+                    <!-- Toggle Switch -->
+                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                        <input type="checkbox" name="toggle" id="banner-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 transition-transform duration-300 transform" />
+                        <label for="banner-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-500 cursor-pointer"></label>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase">Banner Text</label>
+                    <input type="text" id="banner-text" class="w-full bg-surface-container-highest border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="e.g. NOW & SAVE $50 ON INITIATION • ELITE MEMBERS">
+                    
+                    <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase">Banner Speed (Seconds)</label>
+                    <input type="number" id="banner-speed" class="w-full bg-surface-container-highest border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="120" min="10" max="300">
+                    
+                    <button id="save-banner" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)] transition-all">
+                        Save Banner Changes
+                    </button>
+                    <span id="banner-status" class="ml-4 text-green-400 text-sm opacity-0 transition-opacity">Saved successfully!</span>
+                </div>
+
+                <div class="space-y-4 mt-8 pt-8 border-t border-outline-variant/30">
+                    <div>
+                        <h3 class="text-lg font-bold text-on-surface flex items-center gap-2">
+                            <span class="material-symbols-outlined text-secondary">play_circle</span> Hero Watch Video
+                        </h3>
+                        <p class="text-on-surface-variant text-sm mt-1">Add the YouTube URL opened by the WATCH VIDEO button on the homepage.</p>
+                    </div>
+
+                    <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase">YouTube Video URL</label>
+                    <input type="url" id="hero-video-url" class="w-full bg-surface-container-highest border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="https://www.youtube.com/watch?v=...">
+
+                    <button id="save-hero-video" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)] transition-all">
+                        Save Video Link
+                    </button>
+                    <span id="hero-video-status" class="ml-4 text-green-400 text-sm opacity-0 transition-opacity">Saved successfully!</span>
+                </div>
+            </section>
+
+            <!-- Reviews Settings Section -->
+            <section id="reviews-section" class="bg-surface-container rounded-xl border border-outline-variant/30 p-8 shadow-xl mt-8">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-xl font-display font-bold text-secondary flex items-center gap-2">
+                            <span class="material-symbols-outlined">reviews</span> Client Reviews
+                        </h2>
+                        <p class="text-on-surface-variant text-sm mt-1">Manage client testimonials shown on the frontend.</p>
+                    </div>
+                </div>
+
+                <!-- Add New Review Form -->
+                <div class="space-y-4 mb-8 bg-surface-container-highest p-6 rounded-lg">
+                    <h3 class="text-lg font-bold text-on-surface">Add New Review</h3>
+                    <form id="add-review-form" class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Name</label>
+                                <input type="text" id="review-name" required class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="Client Name">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Role/Title</label>
+                                <input type="text" id="review-role" required class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="e.g. Software Engineer">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Review Content</label>
+                            <textarea id="review-content" required class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="Review text..."></textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Rating (1-5)</label>
+                                <input type="number" id="review-rating" required min="1" max="5" value="5" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Image URL</label>
+                                <input type="text" id="review-image" required class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="https://...">
+                            </div>
+                        </div>
+                        <button type="submit" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)] transition-all">
+                            Add Review
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Existing Reviews List -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-on-surface">Existing Reviews</h3>
+                    <div id="reviews-list" class="space-y-4">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pricing Settings Section -->
+            <section id="pricing-section" class="bg-surface-container rounded-xl border border-outline-variant/30 p-8 shadow-xl mt-8">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-xl font-display font-bold text-secondary flex items-center gap-2">
+                            <span class="material-symbols-outlined">sell</span> Pricing Plans
+                        </h2>
+                        <p class="text-on-surface-variant text-sm mt-1">Manage membership plans shown in the Invest In Yourself section.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-on-surface">Existing Plans</h3>
+                    <div id="pricing-list" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <div id="pricing-edit-form" class="hidden mt-8 bg-surface-container-highest p-6 rounded-lg space-y-4">
+                    <h3 class="text-lg font-bold text-on-surface" id="pricing-edit-title">Edit Plan</h3>
+                    <input type="hidden" id="edit-pricing-id">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Monthly Price</label>
+                            <input type="text" id="edit-monthly-price" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Monthly Cut Price</label>
+                            <input type="text" id="edit-monthly-cut-price" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Yearly Price</label>
+                            <input type="text" id="edit-yearly-price" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Yearly Cut Price</label>
+                            <input type="text" id="edit-yearly-cut-price" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Features (Comma separated)</label>
+                        <textarea id="edit-features" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary" rows="3"></textarea>
+                    </div>
+                    <div class="flex gap-4">
+                        <button id="save-pricing-btn" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)]">Save Plan</button>
+                        <button id="cancel-pricing-btn" class="bg-surface-container text-on-surface font-bold uppercase tracking-widest px-6 py-3 rounded-lg border border-outline-variant hover:bg-surface-container-highest">Cancel</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gallery Settings Section -->
+            <section id="gallery-section" class="bg-surface-container rounded-xl border border-outline-variant/30 p-8 shadow-xl mt-8 mb-16">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-xl font-display font-bold text-secondary flex items-center gap-2">
+                            <span class="material-symbols-outlined">grid_view</span> Gallery Bento Grid
+                        </h2>
+                        <p class="text-on-surface-variant text-sm mt-1">Manage grid images, youtube, instagram links, and text.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4 mb-8 bg-surface-container-highest p-6 rounded-lg">
+                    <h3 class="text-lg font-bold text-on-surface">Add New Gallery Item</h3>
+                    <form id="add-gallery-form" class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Item Type</label>
+                                <select id="gallery-type" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" onchange="toggleGalleryInputs()">
+                                    <option value="image_upload">Image Upload</option>
+                                    <option value="image">Image URL</option>
+                                    <option value="youtube">YouTube Embed URL</option>
+                                    <option value="instagram">Instagram Embed URL</option>
+                                    <option value="text">Text Only</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Grid Size</label>
+                                <select id="gallery-size" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors">
+                                    <option value="span 1,span 1">Standard (1x1)</option>
+                                    <option value="span 2,span 1">Wide (2x1)</option>
+                                    <option value="span 1,span 2">Tall (1x2)</option>
+                                    <option value="span 2,span 2">Large (2x2)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Title / Label (Optional)</label>
+                                <input type="text" id="gallery-title" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="e.g. ELITE RECOMP">
+                            </div>
+                            
+                            <!-- Input variations based on type -->
+                            <div id="gallery-input-file">
+                                <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Upload Image</label>
+                                <input type="file" id="gallery-file" accept="image/*" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors">
+                            </div>
+                            <div id="gallery-input-url" style="display:none;">
+                                <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Media URL</label>
+                                <input type="text" id="gallery-url" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="https://...">
+                            </div>
+                            <div id="gallery-input-text" style="display:none;">
+                                <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Text Content</label>
+                                <textarea id="gallery-text" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="Type quote or message here..."></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)] transition-all">
+                            Add to Grid
+                        </button>
+                    </form>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-on-surface">Current Grid Items</h3>
+                    <div id="gallery-list" class="space-y-4">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Carousel Section -->
+            <section id="about-carousel-section" class="bg-surface-container rounded-xl border border-outline-variant/30 p-8 shadow-xl mt-8">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-xl font-display font-bold text-secondary flex items-center gap-2">
+                            <span class="material-symbols-outlined">collections</span> About Carousel Images
+                        </h2>
+                        <p class="text-on-surface-variant text-sm mt-1">Manage the image carousel in the "Where Champions Are Built" section.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-highest p-6 rounded-lg border border-outline-variant/30 mb-8">
+                    <h3 class="text-lg font-bold text-on-surface mb-4">Add New Image</h3>
+                    <form id="add-about-image-form" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Image URL (Optional)</label>
+                                <input type="url" id="about-image-url" class="w-full bg-background border border-outline-variant/50 rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="https://example.com/image.jpg">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Or Upload Image</label>
+                                <input type="file" id="about-image-file" accept="image/*" class="w-full bg-background border border-outline-variant/50 rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-secondary transition-colors">
+                            </div>
+                        </div>
+                        <button type="submit" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)] transition-all">
+                            Add Image
+                        </button>
+                    </form>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-on-surface">Current Carousel Images</h3>
+                    <div id="about-images-list" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trainers Section -->
+            <section id="trainers-section" class="bg-surface-container rounded-xl border border-outline-variant/30 p-8 shadow-xl mt-8 mb-16">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-xl font-display font-bold text-secondary flex items-center gap-2">
+                            <span class="material-symbols-outlined">sports_gymnastics</span> Elite Trainers
+                        </h2>
+                        <p class="text-on-surface-variant text-sm mt-1">Manage the trainers shown in the "Meet Our Elite Trainers" section.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-highest p-6 rounded-lg border border-outline-variant/30 mb-8">
+                    <h3 class="text-lg font-bold text-on-surface mb-4">Add New Trainer</h3>
+                    <form id="add-trainer-form" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Trainer Name</label>
+                                <input type="text" id="trainer-name" required class="w-full bg-background border border-outline-variant/50 rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="e.g. Alex Rivera">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Role</label>
+                                <input type="text" id="trainer-role" required class="w-full bg-background border border-outline-variant/50 rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="e.g. Strength Specialist">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Image URL (Optional)</label>
+                                <input type="url" id="trainer-image-url" class="w-full bg-background border border-outline-variant/50 rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="https://example.com/image.jpg">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Or Upload Image</label>
+                                <input type="file" id="trainer-file" accept="image/*" class="w-full bg-background border border-outline-variant/50 rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-secondary transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Animation Delay</label>
+                                <input type="text" id="trainer-delay" class="w-full bg-background border border-outline-variant/50 rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="e.g. 0s, 0.1s, 0.2s">
+                            </div>
+                        </div>
+                        <button type="submit" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)] transition-all">
+                            Add Trainer
+                        </button>
+                    </form>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-on-surface">Current Trainers</h3>
+                    <div id="trainers-list" class="space-y-4">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>
+
+<script src="dashboard.js?v=20260524"></script>
+</body></html>

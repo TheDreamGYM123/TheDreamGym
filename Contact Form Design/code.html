@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Contact Us | The Dream Gym</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#222015",
+                        "on-tertiary-fixed-variant": "#49473b",
+                        "outline-variant": "#4b4734",
+                        "on-tertiary": "#333125",
+                        "on-tertiary-container": "#676457",
+                        "on-tertiary-fixed": "#1d1c11",
+                        "on-primary-fixed-variant": "#514700",
+                        "on-background": "#e8e2d1",
+                        "surface-container-low": "#1e1c11",
+                        "surface-tint": "#dec724",
+                        "background": "#15130a",
+                        "secondary-fixed-dim": "#dec823",
+                        "surface-container-lowest": "#100e06",
+                        "on-surface": "#e8e2d1",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#6b5f00",
+                        "primary": "#fffeff",
+                        "surface-container-highest": "#373529",
+                        "surface-bright": "#3c392e",
+                        "error-container": "#93000a",
+                        "primary-fixed": "#fce443",
+                        "tertiary": "#fffeff",
+                        "on-secondary-container": "#4f4600",
+                        "on-primary": "#383100",
+                        "tertiary-container": "#e7e2d1",
+                        "primary-container": "#fbe342",
+                        "on-error-container": "#ffdad6",
+                        "surface-dim": "#15130a",
+                        "on-secondary-fixed-variant": "#504700",
+                        "on-secondary-fixed": "#201c00",
+                        "surface": "#15130a",
+                        "on-surface-variant": "#cdc7ad",
+                        "inverse-on-surface": "#333025",
+                        "on-primary-fixed": "#201c00",
+                        "secondary-fixed": "#fbe442",
+                        "on-error": "#690005",
+                        "tertiary-fixed": "#e8e2d1",
+                        "surface-container-high": "#2c2a1f",
+                        "primary-fixed-dim": "#dec724",
+                        "outline": "#96917a",
+                        "secondary-container": "#c9b400",
+                        "on-secondary": "#373100",
+                        "tertiary-fixed-dim": "#cbc6b6",
+                        "inverse-surface": "#e8e2d1",
+                        "surface-variant": "#373529",
+                        "on-primary-container": "#716400",
+                        "secondary": "#e6d02d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "container-max": "1440px",
+                        "margin-desktop": "64px",
+                        "unit": "8px",
+                        "gutter": "24px",
+                        "section-gap": "120px"
+                    },
+                    "fontFamily": {
+                        "display-xl": ["Epilogue"],
+                        "body-lg": ["Epilogue"],
+                        "label-caps": ["Epilogue"],
+                        "headline-md": ["Epilogue"],
+                        "display-lg": ["Epilogue"],
+                        "body-sm": ["Epilogue"]
+                    },
+                    "fontSize": {
+                        "display-xl": ["96px", {"lineHeight": "90%", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "100%", "letterSpacing": "0.15em", "fontWeight": "700"}],
+                        "headline-md": ["32px", {"lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "display-lg": ["64px", {"lineHeight": "100%", "letterSpacing": "-0.03em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "150%", "letterSpacing": "0em", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(34, 32, 21, 0.4);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(150, 145, 122, 0.2);
+        }
+        .input-glow:focus {
+            outline: none;
+            border-color: #e6d02d;
+            box-shadow: 0 0 10px rgba(230, 208, 45, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg selection:bg-secondary selection:text-background min-h-screen flex items-center justify-center">
+<main class="w-full">
+<!-- Contact Section Only -->
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="flex justify-center">
+<!-- Left Column: Details -->
+<!-- Right Column: Form -->
+<div class="w-full max-w-2xl">
+<div class="glass-card p-10 md:p-16 rounded-xl relative overflow-hidden">
+<!-- Decorative glow -->
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-secondary/10 rounded-full blur-[100px]"></div>
+<form class="relative z-10 space-y-gutter">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="space-y-2">
+<label class="font-label-caps text-[10px] text-on-tertiary-container">FULL NAME</label>
+<input class="w-full bg-surface-container-lowest/50 border border-outline-variant/30 rounded-lg p-4 text-on-surface placeholder:text-on-tertiary-container input-glow" placeholder="John Wick" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-caps text-[10px] text-on-tertiary-container">EMAIL ADDRESS</label>
+<input class="w-full bg-surface-container-lowest/50 border border-outline-variant/30 rounded-lg p-4 text-on-surface placeholder:text-on-tertiary-container input-glow" placeholder="Email address" type="email"/>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-gutter">
+<div class="space-y-2">
+<label class="font-label-caps text-[10px] text-on-tertiary-container">PHONE NUMBER</label>
+<input class="w-full bg-surface-container-lowest/50 border border-outline-variant/30 rounded-lg p-4 text-on-surface placeholder:text-on-tertiary-container input-glow" placeholder="+91 000 000 0000" type="tel"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-caps text-[10px] text-on-tertiary-container">MESSAGE / GOALS</label>
+<textarea class="w-full bg-surface-container-lowest/50 border border-outline-variant/30 rounded-lg p-4 text-on-surface placeholder:text-on-tertiary-container input-glow resize-none" placeholder="Tell us about your ultimate fitness objectives..." rows="4"></textarea>
+</div>
+<button class="w-full bg-secondary text-background font-extrabold py-6 rounded-lg text-lg uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_0_20px_rgba(230,208,45,0.3)]" type="submit">
+                                SUBMIT APPLICATION
+                            </button>
+<p class="text-center font-body-sm text-body-sm text-on-tertiary-container mt-4 italic">
+                                * Selection is based on consultant availability and member alignment.
+                            </p>
+</form>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

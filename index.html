@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Dream Gym - Dark Cinematic Luxury</title>
+    <meta name="description"
+        content="Forge your strength, define your limits at The Dream Gym. Elite trainers, world-class equipment, and a premium training environment.">
+    <link rel="stylesheet" href="style.css?v=20260522">
+</head>
+
+<body>
+
+    <!-- Marquee Bar -->
+    <div class="marquee-bar" id="main-marquee">
+        <div class="marquee-content font-label-caps" id="marquee-content">
+            <!-- Dynamically populated via backend -->
+        </div>
+    </div>
+
+    <!-- Header / Nav -->
+    <header id="header">
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <img src="logo.png" alt="THE DREAM GYM">
+                </a>
+                <div class="nav-links font-label-caps">
+                    <a href="#" class="active">HOME</a>
+                    <a href="#programs">PROGRAMS</a>
+                    <a href="#coaches">COACHES</a>
+                    <a href="#pricing">MEMBERSHIP</a>
+                    <a href="#location">LOCATION</a>
+                </div>
+                <div class="nav-actions" style="display: flex; align-items: center; gap: 16px;">
+                    <button class="btn-primary font-label-caps hidden-mobile" onclick="window.location.href='#pricing'">JOIN ELITE</button>
+                    <button id="mobile-menu-btn" class="mobile-menu-btn" style="background: none; color: white; border: none; font-size: 32px;">
+                        <span class="material-symbols-outlined">menu</span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="mobile-menu font-label-caps">
+        <button id="close-menu-btn" class="close-menu-btn" style="position: absolute; top: 24px; right: 24px; background: none; color: white; border: none; font-size: 32px;">
+            <span class="material-symbols-outlined" style="font-size: 40px;">close</span>
+        </button>
+        <a href="#" class="mobile-link">HOME</a>
+        <a href="#programs" class="mobile-link">PROGRAMS</a>
+        <a href="#coaches" class="mobile-link">COACHES</a>
+        <a href="#pricing" class="mobile-link">MEMBERSHIP</a>
+        <a href="#location" class="mobile-link">LOCATION</a>
+        <button class="btn-primary font-label-caps" style="margin-top: 32px; padding: 16px 32px;" onclick="window.location.href='#pricing'">JOIN ELITE</button>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <img src="Background.jpeg" alt="Hero Background">
+            <div class="hero-overlay"></div>
+        </div>
+
+        <div class="container hero-content fade-in">
+            <div class="font-label-caps water-flow-animated"
+                style="font-size: clamp(28px, 6vw, 72px); letter-spacing: 0.1em; line-height: 1; margin-top: 64px; margin-bottom: 8px; font-weight: 800;">
+                THE DREAM GYM</div>
+            <h1 class="uppercase"
+                style="font-size: clamp(24px, 5vw, 64px); font-weight: 700; margin-bottom: 12px; line-height: 1.1;">
+                Forge Your strength<br><span class="text-secondary">define your limits</span></h1>
+            <p class="hero-desc font-body-sm" style="font-size: 16px;">Transform your physique with world-class
+                trainers, cutting-edge equipment, and a premium training environment.</p>
+
+            <div class="hero-buttons">
+                <button class="btn-primary font-label-caps" style="padding: 16px 32px;" onclick="window.location.href='#pricing'">START TRAINING</button>
+                <button id="watch-video-btn" class="btn-secondary font-label-caps" style="padding: 16px 32px;">
+                    <span class="material-symbols-outlined">play_circle</span>
+                    WATCH VIDEO
+                </button>
+            </div>
+
+            <div class="hero-info-bar fade-in">
+                <div class="info-item">
+                    <h4 class="font-label-caps info-title" style="letter-spacing: 0.2em;">FOLLOW US</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/people/The-Dream-Gym/61557587000859/?_rdr" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center;" aria-label="Facebook">
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.325V1.325C24 .593 23.407 0 22.675 0z" />
+                            </svg>
+                        </a>
+                        <a href="https://www.instagram.com/thedreamgym24?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer"
+                            style="display: flex; align-items: center;" aria-label="Instagram">
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm3.98-10.822a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                            </svg>
+                        </a>
+                        <a href="https://x.com/thedreamgym11" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center;" aria-label="X / Twitter">
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg>
+                        </a>
+                        <a href="https://www.youtube.com/@TheDreamGYM-p4j" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center;" aria-label="YouTube">
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 00-2.122 2.136C0 8.07 0 12 0 12s0 3.93.501 5.814a3.016 3.016 0 002.122 2.136c1.872.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="info-item middle">
+                    <h4 class="font-label-caps info-title" style="letter-spacing: 0.2em;">CONTACT US</h4>
+                    <div class="info-detail">
+                        <span class="material-symbols-outlined text-secondary">call</span>
+                        <span class="font-headline-md" style="font-size: 16px;">+91 83289 29165</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <h4 class="font-label-caps info-title" style="letter-spacing: 0.2em;">OUR LOCATION</h4>
+                    <div class="info-detail">
+                        <span class="material-symbols-outlined text-secondary">location_on</span>
+                        <span class="font-body-sm">Bhubaneswar, Odisha</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-bg-text">DREAM</div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container stats-grid fade-in">
+            <div>
+                <div class="font-display-lg stat-val">1K+</div>
+                <div class="font-label-caps stat-label">Active Members</div>
+            </div>
+            <div>
+                <div class="font-display-lg stat-val">10+</div>
+                <div class="font-label-caps stat-label">Expert Trainers</div>
+            </div>
+            <div>
+                <div class="font-display-lg stat-val">40+</div>
+                <div class="font-label-caps stat-label">Premium Machines</div>
+            </div>
+            <div>
+                <div class="font-display-lg stat-val">12/7</div>
+                <div class="font-label-caps stat-label">Access</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Programs Section -->
+    <section id="programs" class="section-gap container">
+        <div class="programs-header fade-in">
+            <div>
+                <h2 class="font-display-lg uppercase" style="margin-bottom: 16px;">ELITE <br><span class="text-secondary">PROGRAMS</span></h2>
+                <div style="width: 80px; height: 4px; background-color: var(--secondary); margin: 0 0 32px 0;"></div>
+            </div>
+            <a onclick="openModal('curriculum-modal')" class="font-label-caps text-secondary"
+                style="display:flex; align-items:center; gap:8px; text-decoration: none; cursor: pointer; align-self: flex-start; margin-top: 16px;">
+                CLICK TO EXPLORE CURRICULUM <span class="material-symbols-outlined">trending_flat</span>
+            </a>
+        </div>
+
+        <div class="programs-grid">
+            <!-- Program 1 -->
+            <div class="glass-card neon-glow program-card fade-in">
+                <div class="program-icon-row">
+                    <span class="material-symbols-outlined text-secondary"
+                        style="font-size: 32px;">fitness_center</span>
+                    <span class="font-label-caps program-num">01</span>
+                </div>
+                <div class="program-content">
+                    <h3 class="font-headline-md uppercase program-title">Strength</h3>
+                    <p class="font-body-sm program-desc">Master your mechanics and build foundational power with elite
+                        linear progression models.</p>
+                </div>
+                <div class="program-line"></div>
+            </div>
+            <!-- Program 2 -->
+            <div class="glass-card neon-glow program-card fade-in" style="transition-delay: 0.1s;">
+                <div class="program-icon-row">
+                    <span class="material-symbols-outlined text-secondary"
+                        style="font-size: 32px;">local_fire_department</span>
+                    <span class="font-label-caps program-num">02</span>
+                </div>
+                <div class="program-content">
+                    <h3 class="font-headline-md uppercase program-title">Fat Loss</h3>
+                    <p class="font-body-sm program-desc">High-intensity metabolic conditioning designed to incinerate
+                        fat while preserving muscle tissue.</p>
+                </div>
+                <div class="program-line"></div>
+            </div>
+            <!-- Program 3 -->
+            <div class="glass-card neon-glow program-card fade-in" style="transition-delay: 0.2s;">
+                <div class="program-icon-row">
+                    <span class="material-symbols-outlined text-secondary"
+                        style="font-size: 32px;">settings_accessibility</span>
+                    <span class="font-label-caps program-num">03</span>
+                </div>
+                <div class="program-content">
+                    <h3 class="font-headline-md uppercase program-title">CrossFit</h3>
+                    <p class="font-body-sm program-desc">Test your limits with constantly varied movements performed at
+                        high intensity.</p>
+                </div>
+                <div class="program-line"></div>
+            </div>
+            <!-- Program 4 -->
+            <div class="glass-card neon-glow program-card fade-in" style="transition-delay: 0.3s;">
+                <div class="program-icon-row">
+                    <span class="material-symbols-outlined text-secondary" style="font-size: 32px;">audiotrack</span>
+                    <span class="font-label-caps program-num">04</span>
+                </div>
+                <div class="program-content">
+                    <h3 class="font-headline-md uppercase program-title">Zumba</h3>
+                    <p class="font-body-sm program-desc">High-energy rhythmic workouts that combine Latin dance moves
+                        with cardiovascular exercise for a fun, full-body burn.</p>
+                </div>
+                <div class="program-line"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section section-gap">
+        <div class="container about-grid">
+            <div class="about-image fade-in">
+                <div class="about-circle"></div>
+                <div class="about-carousel">
+                    <div class="carousel-track">
+                        <img src="Photo/IMG_1881.JPG.jpeg" alt="The Dream Gym interior 1" class="about-img">
+                        <img src="Photo/IMG_1882.JPG.jpeg" alt="The Dream Gym interior 2" class="about-img">
+                        <img src="Photo/IMG_1886.JPG.jpeg" alt="The Dream Gym interior 3" class="about-img">
+                        <img src="Photo/IMG_1917.JPG.jpeg" alt="The Dream Gym interior 4" class="about-img">
+                        <img src="Photo/IMG_9449.JPG.jpeg" alt="The Dream Gym interior 5" class="about-img">
+                        <img src="Photo/IMG_9450.JPG.jpeg" alt="The Dream Gym interior 6" class="about-img">
+                        <img src="Photo/IMG_6450.jpg" alt="The Dream Gym interior 7" class="about-img">
+                        <img src="Photo/IMG_7519.jpg" alt="The Dream Gym interior 8" class="about-img">
+                    </div>
+                </div>
+                <div class="carousel-dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+            <div class="about-text fade-in">
+                <div class="about-heading-group">
+                    <h2 class="font-display-lg uppercase" style="margin-bottom: 0;">WHERE <span class="text-secondary">CHAMPIONS</span> ARE BUILT</h2>
+                    <div style="width: 80px; height: 4px; background-color: var(--secondary); margin: 0;"></div>
+                </div>
+                <p class="font-body-lg text-secondary" style="color: var(--on-surface-variant);">
+                    We don’t just provide equipment — we create a space built for focus, discipline, and performance. Every detail is designed to help you train better and push beyond your limits.<br><br>
+
+                    From premium equipment to a motivating atmosphere, our gym supports your journey toward strength, endurance, and personal growth. This is where dedication turns into results.<br><br>
+
+                    More than a gym, it’s a community driven by passion, ambition, and the pursuit of greatness.
+                </p>
+                <ul class="about-features font-label-caps">
+                    <li>
+                        <span class="material-symbols-outlined text-secondary">verified</span>
+                        PERSONAL COACHING EXCELLENCE
+                    </li>
+                    <li>
+                        <span class="material-symbols-outlined text-secondary">smart_display</span>
+                        SMART BIOMETRIC EQUIPMENT
+                    </li>
+                    <li>
+                        <span class="material-symbols-outlined text-secondary">spa</span>
+                        ELITE SAUNA & RECOVERY SESSIONS
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coaches Section -->
+    <section id="coaches" class="section-gap container">
+        <div class="text-center fade-in coaches-title">
+            <h2 class="font-display-xl uppercase" style="margin-bottom: 16px;">MEET OUR <span
+                    class="text-secondary">ELITE TRAINERS</span></h2>
+            <div style="width: 80px; height: 4px; background-color: var(--secondary); margin: 0 auto 32px auto;"></div>
+            <p class="font-body-lg" style="color: var(--on-surface-variant); max-width: 600px; margin: 0 auto;">Meet the
+                elite professionals dedicated to transforming ambition into strength, confidence, and lasting results.
+            </p>
+        </div>
+
+        <div id="coaches-grid" class="coaches-grid">
+            <!-- Loaded dynamically from script.js -->
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing-section section-gap">
+        <div class="pricing-bg"></div>
+        <div class="container">
+            <div class="pricing-header fade-in">
+                <h2 class="font-display-xl uppercase">INVEST IN <span class="text-secondary">YOURSELF</span></h2>
+                <div style="width: 80px; height: 4px; background-color: var(--secondary); margin: 16px auto 32px auto;"></div>
+                <p class="font-body-lg" style="color: var(--on-surface-variant); max-width: 600px; margin: 0 auto;">
+                    Luxury performance. Elite coaching. Uncompromising standards designed for those who demand
+                    excellence.</p>
+            </div>
+
+            <div class="pricing-toggle-wrap fade-in">
+                <input type="checkbox" id="pricing-toggle" class="pricing-toggle">
+                <label for="pricing-toggle" class="toggle-label">
+                    <span class="font-label-caps toggle-text text-secondary" id="monthly-text">Monthly</span>
+                    <div class="toggle-container">
+                        <div class="toggle-knob"></div>
+                    </div>
+                    <span class="font-label-caps toggle-text" id="yearly-text" style="opacity: 0.5;">Annually</span>
+                </label>
+            </div>
+
+            <div class="pricing-grid fade-in">
+                <!-- Populated dynamically by script.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="gallery-section section-gap container">
+        <div class="fade-in" style="margin-bottom: 64px;">
+            <h2 class="font-display-lg uppercase" style="margin-bottom: 16px;">OUR <span
+                    class="text-secondary">GALLERY</span></h2>
+            <div style="width: 80px; height: 4px; background-color: var(--secondary); margin: 0 auto 32px auto;"></div>
+            <p class="font-body-lg" style="color: var(--on-surface-variant); max-width: 600px; margin: 0 auto;">Explore
+                moments of strength, dedication, and transformation captured inside our premium fitness space.</p>
+        </div>
+
+        <div id="gallery-bento-grid" class="bento-grid fade-in" style="max-width: 100%; padding: 0 16px;">
+            <!-- Populated dynamically by script.js -->
+        </div>
+
+        <div style="text-align: center; margin-top: 48px;">
+            <button id="gallery-load-more" class="btn-secondary font-label-caps" style="margin: 0 auto; padding: 12px 32px;">LOAD MORE</button>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="reviews-section section-gap" style="background-color: var(--background);">
+        <div class="container text-center fade-in">
+            <h2 class="font-display-lg uppercase font-bold" style="margin-bottom: 16px;">WHAT ARE THE CLIENT SAYING <span class="text-secondary">ABOUT US</span></h2>
+            <div style="width: 80px; height: 4px; background-color: var(--secondary); margin: 0 auto 48px auto;"></div>
+        </div>
+
+        <div class="container reviews-shell fade-in">
+            <!-- Scrollable Container -->
+            <div class="reviews-container" id="reviews-container">
+                <!-- Reviews populated dynamically -->
+            </div>
+            
+            <!-- Navigation Buttons -->
+            <div class="review-controls">
+                <button class="review-nav prev" id="review-prev" aria-label="Previous review">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <button class="review-nav next" id="review-next" aria-label="Next review">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section id="location" class="location-section section-gap">
+        <div class="text-center fade-in" style="margin-bottom: 64px;">
+            <h2 class="font-display-lg uppercase" style="margin-bottom: 16px;">OUR <span
+                    class="text-secondary">LOCATION</span></h2>
+            <div style="width: 80px; height: 4px; background-color: var(--secondary); margin: 0 auto 32px auto;"></div>
+            <p class="font-body-lg" style="color: var(--on-surface-variant); max-width: 600px; margin: 0 auto;">Visit
+                our premium fitness destination designed for performance, luxury, and transformation.</p>
+        </div>
+        <div class="container new-location-container fade-in" style="margin: 0 auto;">
+            <!-- Left Info Card -->
+            <div class="new-location-card glass-card">
+                <div class="loc-item">
+                    <div class="loc-icon-wrapper"
+                        style="background-color: rgba(230, 208, 45, 0.1); color: var(--secondary);">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">location_on</span>
+                    </div>
+                    <div>
+                        <p class="loc-title font-body-sm"
+                            style="color: var(--on-surface-variant); font-weight: 600; margin-bottom: 8px;">Visit Us</p>
+                        <p class="loc-text font-body-sm" style="color: var(--on-surface); line-height: 1.6;">
+                            2nd Floor, Plot no: 12, Sai Mandir Lane,<br>
+                            near infocity, Sailashree Vihar,<br>
+                            Chandrasekharpur, Bhubaneswar,<br>
+                            Odisha 751021
+                        </p>
+                    </div>
+                </div>
+
+                <div class="loc-item">
+                    <div class="loc-icon-wrapper"
+                        style="background-color: rgba(230, 208, 45, 0.1); color: var(--secondary);">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">schedule</span>
+                    </div>
+                    <div>
+                        <p class="loc-title font-body-sm"
+                            style="color: var(--on-surface-variant); font-weight: 600; margin-bottom: 8px;">Opening
+                            Hours</p>
+                        <p class="loc-text font-body-sm" style="color: var(--on-surface); line-height: 1.6;">Mon - Sat:
+                            5:00 AM - 10:00 PM<br>Sun: 7:00 AM - 1:00 PM</p>
+                    </div>
+                </div>
+
+                <a href="https://www.google.com/maps/dir//The+Dream+Gym,+2nd+Floor,+Plot+no:+12,+Sai+Mandir+Lane,+near+infocity,+Sailashree+Vihar,+Chandrasekharpur,+Bhubaneswar,+Odisha+751021/@20.463197,86.2164489,6214m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x3a1909daa64f1645:0x1fc0020dacebcc21!2m2!1d85.8082999!2d20.3375747?entry=ttu&g_ep=EgoyMDI2MDUwMi4wIKXMDSoASAFQAw%3D%3D"
+                    target="_blank" class="btn-directions-outline font-label-caps" style="margin-top: 24px;">
+                    <span class="material-symbols-outlined"
+                        style="font-size: 18px; margin-right: 8px;">directions_alt</span>
+                    Get Directions
+                </a>
+            </div>
+
+            <!-- Right Map Area -->
+            <div class="new-map-container">
+                <iframe
+                    src="https://maps.google.com/maps?q=The%20Dream%20Gym%2C%202nd%20Floor%2C%20Plot%20no%3A%2012%2C%20Sai%20Mandir%20Lane%2C%20near%20infocity%2C%20Sailashree%20Vihar%2C%20Chandrasekharpur%2C%20Bhubaneswar%2C%20Odisha%20751021&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                    loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section id="cta" class="cta-section section-gap">
+        <div class="cta-bg">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCs1B1MUKlZ7XBBNUIVUj0-HkIJbUzaDV0491sdVzikte7eN5-6iZD2fQtGCebr7Ni1fHPBULkWV4euXJ13SMUVCKjYoI8skVhSrzQl0aJic2GC9POAspm0mZnfgwqRw7SbUlkZXsxqhEuI2Cb73usFZVGBqR667gvASLKsZv0sOAzvlud8zJtldvLWcn_IXlxzAAT0nGuqeGCFZjjfkIJ2ScHVzfY5VO__H0aujNFwiU4zAO6ld9oDF4E1aOpLA_uA3ucjd2DrZHo"
+                alt="CTA Background">
+            <div class="cta-overlay"></div>
+        </div>
+        <div class="container cta-content fade-in">
+            <h2 class="font-display-xl uppercase cta-title">START YOUR FITNESS <br><span class="text-secondary">REVOLUTION</span>
+                TODAY</h2>
+            <div class="cta-divider"></div>
+            <p class="font-body-lg cta-copy">
+                Join the exclusive ranks of high-performers who have already unlocked their true potential with The
+                Dream Gym.
+            </p>
+            <div class="cta-actions">
+                <button class="btn-cta font-display-md" onclick="window.location.href='#pricing'">
+                    GET STARTED NOW
+                </button>
+                <button class="btn-cta-outline font-display-md" onclick="openModal('contact-modal')">
+                    CONTACT WITH US
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <!-- Curriculum Modal -->
+    <div id="curriculum-modal" class="modal">
+        <div class="modal-content glass-card" style="padding: 2.5rem; max-width: 900px;">
+            <span class="close-modal" onclick="closeModal('curriculum-modal')">&times;</span>
+            <div class="text-center" style="margin-bottom: 32px;">
+                <span class="font-label-caps text-secondary" style="display: block; margin-bottom: 16px;">THE
+                    CURRICULUM</span>
+                <h2 class="font-display-lg uppercase" style="margin-bottom: 16px;">WEEKLY TRAINING SCHEDULE</h2>
+                <p class="font-body-lg" style="color: var(--on-surface-variant); max-width: 600px; margin: 0 auto;">Plan
+                    your elite transformation with our structured weekly curriculum.</p>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="curriculum-table">
+                    <thead>
+                        <tr>
+                            <th class="font-label-caps uppercase">DAY</th>
+                            <th class="font-label-caps uppercase">MORNING</th>
+                            <th class="font-label-caps uppercase">EVENING</th>
+                            <th class="font-label-caps uppercase">TIMING</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold uppercase">MONDAY</td>
+                            <td style="color: var(--on-surface-variant);">CROSSFIT</td>
+                            <td style="color: var(--on-surface-variant);">ZUMBA</td>
+                            <td style="color: var(--on-surface-variant); font-family: monospace;">7:00-8:00</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold uppercase">TUESDAY</td>
+                            <td style="color: var(--on-surface-variant);">ZUMBA</td>
+                            <td style="color: var(--on-surface-variant);">CROSSFIT</td>
+                            <td style="color: var(--on-surface-variant); font-family: monospace;">7:00-8:00</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold uppercase">WEDNESDAY</td>
+                            <td style="color: var(--on-surface-variant);">CROSSFIT</td>
+                            <td style="color: var(--on-surface-variant);">ZUMBA</td>
+                            <td style="color: var(--on-surface-variant); font-family: monospace;">7:00-8:00</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold uppercase">THURSDAY</td>
+                            <td style="color: var(--on-surface-variant);">ZUMBA</td>
+                            <td style="color: var(--on-surface-variant);">CROSSFIT</td>
+                            <td style="color: var(--on-surface-variant); font-family: monospace;">7:00-8:00</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold uppercase">FRIDAY</td>
+                            <td style="color: var(--on-surface-variant);">CROSSFIT</td>
+                            <td style="color: var(--on-surface-variant);">ZUMBA</td>
+                            <td style="color: var(--on-surface-variant); font-family: monospace;">7:00-8:00</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold uppercase">SATURDAY</td>
+                            <td style="color: var(--on-surface-variant);">ZUMBA</td>
+                            <td style="color: var(--on-surface-variant);">CROSSFIT</td>
+                            <td style="color: var(--on-surface-variant); font-family: monospace;">7:00-8:00</td>
+                        </tr>
+                        <tr class="sunday-row">
+                            <td class="font-bold uppercase text-secondary">SUNDAY</td>
+                            <td class="text-secondary font-bold uppercase text-center" colspan="3"
+                                style="letter-spacing: 0.1em;">REST & RECOVERY</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal">
+        <div class="modal-content glass-card" style="padding: 2.5rem; max-width: 672px;">
+            <span class="close-modal" onclick="closeModal('contact-modal')">&times;</span>
+            <div style="margin-bottom: 32px; text-align: center;">
+                <h2 class="font-display-lg uppercase" style="margin-bottom: 16px;">GET IN <span
+                        class="text-secondary">TOUCH</span></h2>
+                <p class="font-body-lg" style="color: var(--on-surface-variant); max-width: 600px; margin: 0 auto;">Take
+                    the first step towards your transformation. Connect with our elite consultants today.</p>
+            </div>
+
+            <div style="position: relative; overflow: hidden;">
+                <!-- Decorative glow -->
+                <div
+                    style="position: absolute; top: -6rem; right: -6rem; width: 16rem; height: 16rem; background-color: rgba(230, 208, 45, 0.1); border-radius: 50%; filter: blur(100px);">
+                </div>
+
+                <form id="contact-form" style="position: relative; z-index: 10; display: flex; flex-direction: column; gap: 24px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px;">
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label class="font-label-caps"
+                                style="color: var(--on-tertiary-container); font-size: 10px;">FULL NAME</label>
+                            <input type="text" id="contact-name" required placeholder="John Wick" class="contact-input input-glow" />
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label class="font-label-caps"
+                                style="color: var(--on-tertiary-container); font-size: 10px;">EMAIL ADDRESS</label>
+                            <input type="email" id="contact-email" required placeholder="Email address" class="contact-input input-glow" />
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label class="font-label-caps"
+                            style="color: var(--on-tertiary-container); font-size: 10px;">PHONE NUMBER</label>
+                        <input type="tel" id="contact-phone" required placeholder="+91 000 000 0000" class="contact-input input-glow" />
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label class="font-label-caps"
+                            style="color: var(--on-tertiary-container); font-size: 10px;">MESSAGE / GOALS</label>
+                        <textarea id="contact-message" rows="4" required placeholder="Tell us about your ultimate fitness objectives..."
+                            class="contact-input input-glow" style="resize: none;"></textarea>
+                    </div>
+
+                    <button type="submit" id="contact-submit-btn" class="contact-submit-btn font-label-caps uppercase"
+                        style="color: var(--background);">
+                        SUBMIT APPLICATION
+                    </button>
+
+                    <p class="font-body-sm"
+                        style="text-align: center; color: var(--on-tertiary-container); margin-top: 16px; font-style: italic;">
+                        * Selection is based on consultant availability and member alignment.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content glass-card" style="padding: 2.5rem; max-width: 672px;">
+            <span class="close-modal" onclick="closeModal('payment-modal')">&times;</span>
+            <div style="margin-bottom: 32px; text-align: center;">
+                <h2 class="font-display-lg uppercase" style="margin-bottom: 16px;">MEMBERSHIP <span
+                        class="text-secondary">PAYMENT</span></h2>
+                <p id="payment-plan-summary" class="font-body-lg"
+                    style="color: var(--on-surface-variant); max-width: 600px; margin: 0 auto;">Selected membership plan
+                    will appear here.</p>
+            </div>
+
+            <form id="payment-form" style="position: relative; z-index: 10; display: flex; flex-direction: column; gap: 24px;">
+                <input type="hidden" id="payment-plan-name">
+                <input type="hidden" id="payment-billing-cycle">
+                <input type="hidden" id="payment-amount">
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px;">
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label class="font-label-caps"
+                            style="color: var(--on-tertiary-container); font-size: 10px;">FULL NAME</label>
+                        <input type="text" id="payment-name" required placeholder="Your full name" class="contact-input input-glow" />
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label class="font-label-caps"
+                            style="color: var(--on-tertiary-container); font-size: 10px;">EMAIL ADDRESS</label>
+                        <input type="email" id="payment-email" required placeholder="Email address" class="contact-input input-glow" />
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <label class="font-label-caps"
+                        style="color: var(--on-tertiary-container); font-size: 10px;">PHONE NUMBER</label>
+                    <input type="tel" id="payment-phone" required placeholder="+91 000 000 0000" class="contact-input input-glow" />
+                </div>
+
+                <button type="submit" id="payment-submit-btn" class="contact-submit-btn font-label-caps uppercase"
+                    style="color: var(--background);">
+                    PAY NOW
+                </button>
+
+                <p class="font-body-sm"
+                    style="text-align: center; color: var(--on-tertiary-container); margin-top: 8px; font-style: italic;">
+                    Razorpay checkout opens after these details are saved.
+                </p>
+            </form>
+
+            <div id="payment-receipt" class="payment-receipt" hidden></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid fade-in">
+                <div class="footer-col">
+                    <img src="logo.png" alt="THE DREAM GYM" class="footer-logo">
+                    <p class="font-body-sm" style="color: var(--on-tertiary-container);">
+                        Elevating human performance through elite environments and uncompromising standards.
+                    </p>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="font-label-caps">Links</h4>
+                    <div class="footer-links font-body-sm">
+                        <a href="#">Home</a>
+                        <a href="#programs">Programs</a>
+                        <a href="#coaches">Coaches</a>
+                        <a href="#pricing">Membership</a>
+                        <a href="#gallery">Gallery</a>
+                        <a href="#" onclick="openModal('contact-modal'); return false;">Contact Us</a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="font-label-caps">Connect</h4>
+                    <div class="footer-connect font-body-sm">
+                        <a href="https://www.instagram.com/thedreamgym24?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm3.98-10.822a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" /></svg>
+                            Instagram
+                        </a>
+                        <a href="https://x.com/thedreamgym11" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                            X / Twitter
+                        </a>
+                        <a href="https://www.facebook.com/people/The-Dream-Gym/61557587000859/?_rdr" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.325V1.325C24 .593 23.407 0 22.675 0z"/></svg>
+                            Facebook
+                        </a>
+                        <a href="https://www.youtube.com/@TheDreamGYM-p4j" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 00-2.122 2.136C0 8.07 0 12 0 12s0 3.93.501 5.814a3.016 3.016 0 002.122 2.136c1.872.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                            YouTube
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="font-label-caps">Contact</h4>
+                    <div class="footer-contact font-body-sm">
+                        <div class="contact-item" style="align-items: flex-start;">
+                            <span class="material-symbols-outlined text-secondary">call</span>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <span>+91 83289 29165</span>
+                                <span>+91 72054 90335</span>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <span class="material-symbols-outlined text-secondary">mail</span>
+                            <span>info.thedreamgym@gmail.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright font-label-caps" style="line-height: 1.6; max-width: 400px;">
+                    © 2026 THE DREAM GYM.<br>
+                    All rights reserved and designed by AS Creates.
+                </div>
+                <div class="legal-links font-label-caps">
+                    <a href="privacy-policy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms &amp; Conditions</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="script.js?v=20260522"></script>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/918328929165" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff" viewBox="0 0 16 16">
+            <path
+                d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z" />
+        </svg>
+    </a>
+</body>
+
+</html>
