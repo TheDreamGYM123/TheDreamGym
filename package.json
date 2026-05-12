@@ -1,9 +1,12 @@
 {
   "name": "the-dream-gym-final",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "app.js",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
-    "start": "node server.js",
+    "start": "node app.js",
     "test": "node --check server.js && node --check database.js && node --check script.js && node --check dashboard.js"
   },
   "keywords": [],
