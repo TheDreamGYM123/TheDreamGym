@@ -20,6 +20,14 @@ const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '';
 const uploadsDir = path.join(__dirname, 'uploads');
 fs.mkdirSync(uploadsDir, { recursive: true });
 
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught exception:', error);
+});
+
+process.on('unhandledRejection', (reason) => {
+    console.error('Unhandled rejection:', reason);
+});
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -27,6 +35,14 @@ app.use(express.json());
 // Serve static files
 app.use(express.static(__dirname));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        service: 'the-dream-gym',
+        time: new Date().toISOString()
+    });
+});
 
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
