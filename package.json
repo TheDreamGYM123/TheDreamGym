@@ -1,12 +1,13 @@
 {
   "name": "the-dream-gym",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "index.js",
   "engines": {
     "node": "22.x"
   },
   "scripts": {
-    "start": "node app.js",
+    "start": "node index.js",
+    "build": "echo \"No build step required\"",
     "test": "node --check server.js && node --check database.js && node --check script.js && node --check dashboard.js"
   },
   "keywords": [],
@@ -15,7 +16,7 @@
   "description": "",
   "dependencies": {
     "cors": "^2.8.6",
-    "express": "^5.2.1",
+    "express": "^4.22.2",
     "multer": "^2.1.1",
     "sqlite3": "^6.0.1"
   }
