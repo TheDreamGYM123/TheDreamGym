@@ -213,6 +213,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
+    const runAfterFirstPaint = (callback) => {
+        const runner = () => {
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(callback, { timeout: 1400 });
+            } else {
+                setTimeout(callback, 600);
+            }
+        };
+
+        if (document.readyState === 'complete') {
+            runner();
+        } else {
+            window.addEventListener('load', runner, { once: true });
+        }
+    };
+
+    runAfterFirstPaint(async () => {
     // Load Reviews
     const reviewsContainer = document.getElementById('reviews-container');
     if (reviewsContainer) {
@@ -544,6 +561,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error("Failed to load about images", e);
         }
     }
+    });
 });
 
 // Modal Functions
