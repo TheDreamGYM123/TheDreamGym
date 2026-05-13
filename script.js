@@ -1,4 +1,17 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    const getInstagramUrl = (value) => {
+        const fallback = 'https://www.instagram.com/thedreamgym24/';
+        try {
+            const url = new URL(value || fallback);
+            if (!url.hostname.includes('instagram.com')) return fallback;
+            url.pathname = url.pathname.replace(/\/embed\/?$/, '/');
+            url.search = '';
+            return url.href;
+        } catch (error) {
+            return fallback;
+        }
+    };
+
     // Fetch dynamic data from backend
     try {
         const settingsRes = await fetch('/api/settings');
@@ -334,8 +347,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                 let contentHtml = '';
                 if (item.type === 'image') {
                     contentHtml = `<img src="${item.content}" alt="${item.title || 'Gallery Image'}" class="bento-img" loading="lazy" decoding="async">`;
-                } else if (item.type === 'youtube' || item.type === 'instagram') {
+                } else if (item.type === 'youtube') {
                     contentHtml = `<iframe src="${item.content}" class="bento-iframe" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="${item.title || 'Gallery media'}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                } else if (item.type === 'instagram') {
+                    contentHtml = `
+                        <a class="bento-social-link instagram-card" href="${getInstagramUrl(item.content)}" target="_blank" rel="noopener noreferrer">
+                            <span class="material-symbols-outlined">photo_camera</span>
+                            <strong class="font-label-caps">${item.title || 'Instagram'}</strong>
+                            <span>View on Instagram</span>
+                        </a>
+                    `;
                 } else if (item.type === 'text') {
                     contentHtml = `<div class="bento-text-content font-body-lg text-secondary">"${item.content}"</div>`;
                 }
