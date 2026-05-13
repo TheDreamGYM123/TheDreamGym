@@ -55,9 +55,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const staticCache = {
+    setHeaders: (res, filePath) => {
+        const ext = path.extname(filePath).toLowerCase();
+        if (ext && ext !== '.html') {
+            res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        }
+    }
+};
+
 // Serve static files
-app.use(express.static(__dirname));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(__dirname, staticCache));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), staticCache));
 
 app.get('/health', (req, res) => {
     res.json({

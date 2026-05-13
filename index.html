@@ -4,12 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="logo.png">
-    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#15130a">
+    <link rel="preload" as="image" href="Background-mobile.jpg" media="(max-width: 768px)" fetchpriority="high">
+    <link rel="preload" as="image" href="Background-hero.jpg" media="(min-width: 769px)" fetchpriority="high">
     <title>The Dream Gym</title>
     <meta name="description"
         content="Forge your strength, define your limits at The Dream Gym. Elite trainers, world-class equipment, and a premium training environment.">
-    <link rel="stylesheet" href="style.css?v=20260522">
+    <link rel="stylesheet" href="style.css?v=20260523">
 </head>
 
 <body>
@@ -61,7 +67,10 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-bg">
-            <img src="Background.jpeg" alt="Hero Background">
+            <picture>
+                <source media="(max-width: 768px)" srcset="Background-mobile.jpg">
+                <img src="Background-hero.jpg" alt="Hero Background" width="1280" height="956" fetchpriority="high" decoding="async">
+            </picture>
             <div class="hero-overlay"></div>
         </div>
 
@@ -234,14 +243,14 @@
                 <div class="about-circle"></div>
                 <div class="about-carousel">
                     <div class="carousel-track">
-                        <img src="Photo/IMG_1881.JPG.jpeg" alt="The Dream Gym interior 1" class="about-img">
-                        <img src="Photo/IMG_1882.JPG.jpeg" alt="The Dream Gym interior 2" class="about-img">
-                        <img src="Photo/IMG_1886.JPG.jpeg" alt="The Dream Gym interior 3" class="about-img">
-                        <img src="Photo/IMG_1917.JPG.jpeg" alt="The Dream Gym interior 4" class="about-img">
-                        <img src="Photo/IMG_9449.JPG.jpeg" alt="The Dream Gym interior 5" class="about-img">
-                        <img src="Photo/IMG_9450.JPG.jpeg" alt="The Dream Gym interior 6" class="about-img">
-                        <img src="Photo/IMG_6450.jpg" alt="The Dream Gym interior 7" class="about-img">
-                        <img src="Photo/IMG_7519.jpg" alt="The Dream Gym interior 8" class="about-img">
+                        <img src="Photo/IMG_1881.JPG.jpeg" alt="The Dream Gym interior 1" class="about-img" loading="lazy" decoding="async">
+                        <img src="Photo/IMG_1882.JPG.jpeg" alt="The Dream Gym interior 2" class="about-img" loading="lazy" decoding="async">
+                        <img src="Photo/IMG_1886.JPG.jpeg" alt="The Dream Gym interior 3" class="about-img" loading="lazy" decoding="async">
+                        <img src="Photo/IMG_1917.JPG.jpeg" alt="The Dream Gym interior 4" class="about-img" loading="lazy" decoding="async">
+                        <img src="Photo/IMG_9449.JPG.jpeg" alt="The Dream Gym interior 5" class="about-img" loading="lazy" decoding="async">
+                        <img src="Photo/IMG_9450.JPG.jpeg" alt="The Dream Gym interior 6" class="about-img" loading="lazy" decoding="async">
+                        <img src="Photo/IMG_6450.jpg" alt="The Dream Gym interior 7" class="about-img" loading="lazy" decoding="async">
+                        <img src="Photo/IMG_7519.jpg" alt="The Dream Gym interior 8" class="about-img" loading="lazy" decoding="async">
                     </div>
                 </div>
                 <div class="carousel-dots">
@@ -438,7 +447,7 @@
     <section id="cta" class="cta-section section-gap">
         <div class="cta-bg">
             <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCs1B1MUKlZ7XBBNUIVUj0-HkIJbUzaDV0491sdVzikte7eN5-6iZD2fQtGCebr7Ni1fHPBULkWV4euXJ13SMUVCKjYoI8skVhSrzQl0aJic2GC9POAspm0mZnfgwqRw7SbUlkZXsxqhEuI2Cb73usFZVGBqR667gvASLKsZv0sOAzvlud8zJtldvLWcn_IXlxzAAT0nGuqeGCFZjjfkIJ2ScHVzfY5VO__H0aujNFwiU4zAO6ld9oDF4E1aOpLA_uA3ucjd2DrZHo"
-                alt="CTA Background">
+                alt="CTA Background" loading="lazy" decoding="async">
             <div class="cta-overlay"></div>
         </div>
         <div class="container cta-content fade-in">
@@ -716,7 +725,7 @@
     </footer>
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script src="script.js?v=20260522"></script>
+    <script src="script.js?v=20260523"></script>
 
     <!-- WhatsApp Floating Button -->
     <a href="https://wa.me/918328929165" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">

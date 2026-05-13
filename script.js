@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             </div>
                         </div>
                         <div class="review-author" style="margin-top: 24px;">
-                            <img src="${review.image}" alt="${review.name}">
+                            <img src="${review.image}" alt="${review.name}" loading="lazy" decoding="async">
                             <div class="review-author-info">
                                 <div class="name">${review.name}</div>
                                 <div class="role">${review.role}</div>
@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 
                 let contentHtml = '';
                 if (item.type === 'image') {
-                    contentHtml = `<img src="${item.content}" alt="${item.title || 'Gallery Image'}" class="bento-img">`;
+                    contentHtml = `<img src="${item.content}" alt="${item.title || 'Gallery Image'}" class="bento-img" loading="lazy" decoding="async">`;
                 } else if (item.type === 'youtube' || item.type === 'instagram') {
                     contentHtml = `<iframe src="${item.content}" class="bento-iframe" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
                 } else if (item.type === 'text') {
@@ -472,7 +472,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const delayStr = trainer.delay ? `style="transition-delay: ${trainer.delay};"` : '';
                     coachesGrid.innerHTML += `
                         <div class="coach-card fade-in" ${delayStr}>
-                            <img src="${trainer.image_url}" alt="${trainer.name}" class="coach-img">
+                            <img src="${trainer.image_url}" alt="${trainer.name}" class="coach-img" loading="lazy" decoding="async">
                             <div class="coach-overlay"></div>
                             <div class="coach-info">
                                 <div class="font-headline-md">${trainer.name}</div>
@@ -504,7 +504,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 aboutCarouselDots.innerHTML = '';
                 
                 images.forEach((img, index) => {
-                    aboutCarouselTrack.innerHTML += `<img src="${img.image_url}" alt="Gym interior ${index + 1}" class="about-img">`;
+                    aboutCarouselTrack.innerHTML += `<img src="${img.image_url}" alt="Gym interior ${index + 1}" class="about-img" loading="lazy" decoding="async">`;
                     aboutCarouselDots.innerHTML += `<span class="dot ${index === 0 ? 'active' : ''}"></span>`;
                 });
                 
