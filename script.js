@@ -943,32 +943,35 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error('Razorpay key is not configured');
                 }
 
-                let razorpayOrder = null;
-                if (razorpayConfig.orders_enabled) {
-                    const orderRes = await fetch('/api/razorpay-order', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            payment_request_id: paymentRequest.id,
-                            amount: payload.amount,
-                            plan_name: payload.plan_name,
-                            billing_cycle: payload.billing_cycle
-                        })
-                    });
+                if (!razorpayConfig.orders_enabled) {
+                    throw new Error('Razorpay order creation is not configured');
+                }
 
-                    const orderData = await orderRes.json();
-                    if (!orderRes.ok) {
-                        throw new Error(orderData.error || 'Failed to create Razorpay order');
-                    }
-                    razorpayOrder = orderData;
+                const orderRes = await fetch('/api/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        payment_request_id: paymentRequest.id,
+                        amount: amountInPaise,
+                        currency: 'INR',
+                        receipt: `tdg_${paymentRequest.id}`,
+                        plan_name: payload.plan_name,
+                        billing_cycle: payload.billing_cycle
+                    })
+                });
+
+                const razorpayOrder = await orderRes.json();
+                if (!orderRes.ok) {
+                    throw new Error(razorpayOrder.error || 'Failed to create Razorpay order');
                 }
 
                 const checkoutOptions = {
                     key: razorpayConfig.key_id,
-                    amount: amountInPaise,
-                    currency: 'INR',
+                    amount: razorpayOrder.amount,
+                    currency: razorpayOrder.currency,
                     name: 'The Dream Gym',
                     description: `${payload.plan_name} ${payload.billing_cycle} Membership`,
+                    order_id: razorpayOrder.order_id,
                     prefill: {
                         name: payload.name,
                         email: payload.email,
@@ -984,41 +987,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     handler: async (response) => {
                         try {
-                            let paidAt = new Date().toISOString();
-                            if (razorpayOrder) {
-                                const verifyRes = await fetch('/api/razorpay-verify', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                        payment_request_id: paymentRequest.id,
-                                        razorpay_order_id: response.razorpay_order_id,
-                                        razorpay_payment_id: response.razorpay_payment_id,
-                                        razorpay_signature: response.razorpay_signature
-                                    })
-                                });
+                            const verifyRes = await fetch('/api/verify-payment', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    payment_request_id: paymentRequest.id,
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature
+                                })
+                            });
 
-                                const verifyData = await verifyRes.json();
-                                if (!verifyRes.ok) {
-                                    throw new Error(verifyData.error || 'Payment verification failed');
-                                }
-                                paidAt = verifyData.paid_at || paidAt;
-                            } else {
-                                const patchRes = await fetch(`/api/payment-requests/${paymentRequest.id}`, {
-                                    method: 'PATCH',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                        status: 'PAID_UNVERIFIED',
-                                        razorpay_payment_id: response.razorpay_payment_id
-                                    })
-                                });
-                                const patchData = await patchRes.json();
-                                if (!patchRes.ok) {
-                                    throw new Error(patchData.error || 'Payment status update failed');
-                                }
-                                paidAt = patchData.paid_at || paidAt;
+                            const verifyData = await verifyRes.json();
+                            if (!verifyRes.ok) {
+                                throw new Error(verifyData.error || 'Payment verification failed');
                             }
 
-                            btn.innerText = razorpayOrder ? 'PAYMENT SUCCESS!' : 'PAYMENT SAVED!';
+                            btn.innerText = 'PAYMENT SUCCESS!';
                             btn.style.backgroundColor = '#4caf50';
                             btn.style.color = 'white';
                             paymentForm.reset();
@@ -1033,9 +1018,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 billingCycle: payload.billing_cycle,
                                 amount: payload.amount,
                                 paymentId: response.razorpay_payment_id,
-                                orderId: response.razorpay_order_id || razorpayOrder?.id || '',
-                                status: razorpayOrder ? 'Paid' : 'Paid - Verification Pending',
-                                paidAt
+                                orderId: response.razorpay_order_id || razorpayOrder.order_id || '',
+                                status: 'Paid',
+                                paidAt: verifyData.paid_at || new Date().toISOString()
                             });
                         } catch (error) {
                             console.error('Payment verification error:', error);
@@ -1066,11 +1051,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 };
 
-                if (razorpayOrder) {
-                    checkoutOptions.order_id = razorpayOrder.id;
-                }
-
                 const checkout = new Razorpay(checkoutOptions);
+                checkout.on('payment.failed', async (response) => {
+                    await fetch(`/api/payment-requests/${paymentRequest.id}`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            status: 'FAILED',
+                            razorpay_payment_id: response.error?.metadata?.payment_id || ''
+                        })
+                    });
+
+                    btn.innerText = response.error?.description || 'PAYMENT FAILED';
+                    btn.style.backgroundColor = '#f44336';
+                    btn.style.color = 'white';
+                    setTimeout(() => {
+                        btn.innerText = originalText;
+                        btn.style.backgroundColor = 'var(--secondary)';
+                        btn.style.color = 'var(--background)';
+                        btn.disabled = false;
+                    }, 3500);
+                });
 
                 checkout.open();
             } catch (error) {

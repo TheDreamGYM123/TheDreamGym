@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const compression = require('compression');
 const multer = require('multer');
+const Razorpay = require('razorpay');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
@@ -15,10 +16,11 @@ if (fs.existsSync(envPath)) {
     });
 }
 
-const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_test_SoOsL7LyE3YBwh';
+const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || '';
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '';
 const uploadsDir = path.join(__dirname, 'uploads');
 fs.mkdirSync(uploadsDir, { recursive: true });
+let razorpayClient = null;
 
 process.on('uncaughtException', (error) => {
     console.error('Uncaught exception:', error);
@@ -113,6 +115,69 @@ const updatePaymentRequest = (id, fields) => new Promise((resolve, reject) => {
         else resolve();
     });
 });
+
+const getRazorpayClient = () => {
+    if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET) {
+        const error = new Error('Razorpay keys are not configured');
+        error.statusCode = 503;
+        throw error;
+    }
+
+    if (!razorpayClient) {
+        razorpayClient = new Razorpay({
+            key_id: RAZORPAY_KEY_ID,
+            key_secret: RAZORPAY_KEY_SECRET
+        });
+    }
+
+    return razorpayClient;
+};
+
+const toPaiseFromSubunit = (amount) => {
+    const value = Number(amount);
+    return Number.isInteger(value) ? value : 0;
+};
+
+const handleRazorpayError = (res, error, fallbackMessage) => {
+    const statusCode = error.statusCode || error.status || 500;
+    const safeStatus = statusCode === 401 ? 401 : 500;
+    const message = error.error?.description || error.message || fallbackMessage;
+    res.status(safeStatus).json({ error: message });
+};
+
+const createRazorpayOrder = async ({ amountInPaise, currency = 'INR', receipt, payment_request_id, plan_name, billing_cycle }) => {
+    if (!amountInPaise || amountInPaise < 100) {
+        const error = new Error('Amount must be at least 100 paise');
+        error.statusCode = 400;
+        throw error;
+    }
+
+    const client = getRazorpayClient();
+    const safeReceipt = String(receipt || `tdg_${payment_request_id || 'order'}_${Date.now()}`).slice(0, 40);
+
+    return client.orders.create({
+        amount: amountInPaise,
+        currency: currency || 'INR',
+        receipt: safeReceipt,
+        notes: {
+            payment_request_id: payment_request_id ? String(payment_request_id) : '',
+            plan: plan_name || '',
+            billing_cycle: billing_cycle || ''
+        }
+    });
+};
+
+const verifyRazorpaySignature = ({ razorpay_order_id, razorpay_payment_id, razorpay_signature }) => {
+    const expectedSignature = crypto
+        .createHmac('sha256', RAZORPAY_KEY_SECRET)
+        .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+        .digest('hex');
+
+    const expected = Buffer.from(expectedSignature, 'hex');
+    const actual = Buffer.from(String(razorpay_signature), 'hex');
+
+    return expected.length === actual.length && crypto.timingSafeEqual(expected, actual);
+};
 
 // --- API ROUTES ---
 
@@ -378,43 +443,58 @@ app.get('/api/razorpay-key', (req, res) => {
     });
 });
 
-// POST Razorpay Order
+// POST Razorpay Standard Checkout Order
+app.post('/api/create-order', async (req, res) => {
+    const { amount, currency = 'INR', receipt, payment_request_id, plan_name, billing_cycle } = req.body;
+    const amountInPaise = toPaiseFromSubunit(amount);
+
+    try {
+        const order = await createRazorpayOrder({
+            amountInPaise,
+            currency,
+            receipt,
+            payment_request_id,
+            plan_name,
+            billing_cycle
+        });
+
+        if (payment_request_id) {
+            await updatePaymentRequest(payment_request_id, {
+                status: 'ORDER_CREATED',
+                razorpay_order_id: order.id
+            });
+        }
+
+        res.json({
+            order_id: order.id,
+            amount: order.amount,
+            currency: order.currency,
+            receipt: order.receipt
+        });
+    } catch (error) {
+        if (error.statusCode === 400) return res.status(400).json({ error: error.message });
+        if (error.statusCode === 503) return res.status(503).json({ error: error.message });
+        handleRazorpayError(res, error, 'Unable to create Razorpay order');
+    }
+});
+
+// Backwards-compatible order endpoint used by older frontend builds.
 app.post('/api/razorpay-order', async (req, res) => {
     const { payment_request_id, amount, plan_name, billing_cycle } = req.body;
     const amountInPaise = toPaise(amount);
 
-    if (!payment_request_id || !amountInPaise) {
-        return res.status(400).json({ error: 'Missing valid payment order fields' });
-    }
-
-    if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET) {
-        return res.status(503).json({ error: 'Razorpay server keys are not configured' });
+    if (!payment_request_id) {
+        return res.status(400).json({ error: 'Missing payment request id' });
     }
 
     try {
-        const auth = Buffer.from(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`).toString('base64');
-        const razorpayRes = await fetch('https://api.razorpay.com/v1/orders', {
-            method: 'POST',
-            headers: {
-                Authorization: `Basic ${auth}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                amount: amountInPaise,
-                currency: 'INR',
-                receipt: `tdg_${payment_request_id}_${Date.now()}`,
-                notes: {
-                    payment_request_id: String(payment_request_id),
-                    plan: plan_name || '',
-                    billing_cycle: billing_cycle || ''
-                }
-            })
+        const order = await createRazorpayOrder({
+            amountInPaise,
+            currency: 'INR',
+            payment_request_id,
+            plan_name,
+            billing_cycle
         });
-
-        const order = await razorpayRes.json();
-        if (!razorpayRes.ok) {
-            return res.status(razorpayRes.status).json({ error: order.error?.description || 'Unable to create Razorpay order' });
-        }
 
         await updatePaymentRequest(payment_request_id, {
             status: 'ORDER_CREATED',
@@ -423,15 +503,16 @@ app.post('/api/razorpay-order', async (req, res) => {
 
         res.json(order);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        if (error.statusCode === 400) return res.status(400).json({ error: error.message });
+        if (error.statusCode === 503) return res.status(503).json({ error: error.message });
+        handleRazorpayError(res, error, 'Unable to create Razorpay order');
     }
 });
 
-// POST Razorpay Payment Verification
-app.post('/api/razorpay-verify', async (req, res) => {
+const handleVerifyPayment = async (req, res) => {
     const { payment_request_id, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
-    if (!payment_request_id || !razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
         return res.status(400).json({ error: 'Missing Razorpay verification fields' });
     }
 
@@ -439,22 +520,20 @@ app.post('/api/razorpay-verify', async (req, res) => {
         return res.status(503).json({ error: 'Razorpay secret is not configured' });
     }
 
-    const expectedSignature = crypto
-        .createHmac('sha256', RAZORPAY_KEY_SECRET)
-        .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-        .digest('hex');
-
-    if (expectedSignature !== razorpay_signature) {
-        await updatePaymentRequest(payment_request_id, {
-            status: 'FAILED',
-            razorpay_order_id,
-            razorpay_payment_id,
-            razorpay_signature
-        });
+    if (!verifyRazorpaySignature({ razorpay_order_id, razorpay_payment_id, razorpay_signature })) {
+        if (payment_request_id) {
+            await updatePaymentRequest(payment_request_id, {
+                status: 'FAILED',
+                razorpay_order_id,
+                razorpay_payment_id,
+                razorpay_signature
+            });
+        }
         return res.status(400).json({ error: 'Invalid Razorpay payment signature' });
     }
 
-        const paidAt = new Date().toISOString();
+    const paidAt = new Date().toISOString();
+    if (payment_request_id) {
         await updatePaymentRequest(payment_request_id, {
             status: 'PAID',
             razorpay_order_id,
@@ -462,9 +541,16 @@ app.post('/api/razorpay-verify', async (req, res) => {
             razorpay_signature,
             paid_at: paidAt
         });
+    }
 
     res.json({ success: true, paid_at: paidAt });
-});
+};
+
+// POST Razorpay Standard Checkout Payment Verification
+app.post('/api/verify-payment', handleVerifyPayment);
+
+// Backwards-compatible verification endpoint used by older frontend builds.
+app.post('/api/razorpay-verify', handleVerifyPayment);
 
 // DELETE Payment Request
 app.delete('/api/payment-requests/:id', (req, res) => {
