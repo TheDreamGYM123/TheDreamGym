@@ -1366,6 +1366,10 @@ nav {
   background-color: var(--surface-container-low);
 }
 
+.location-section.section-gap {
+  padding-bottom: 0;
+}
+
 .location-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1434,23 +1438,53 @@ nav {
 
 @media (max-width: 640px) {
   .location-section > .text-center {
-    margin-bottom: 32px !important;
+    margin-bottom: 26px !important;
     padding: 0 var(--margin-mobile);
+  }
+
+  .location-section > .text-center h2 {
+    margin-bottom: 12px !important;
+  }
+
+  .location-section > .text-center p {
+    font-size: 15px;
+    line-height: 1.55;
   }
 
   .new-location-container {
     padding: 0 var(--margin-mobile);
-    gap: 20px;
+    gap: 16px;
   }
 
   .new-location-card {
-    padding: 28px 20px;
-    gap: 24px;
+    padding: 20px;
+    gap: 16px;
+    background:
+      linear-gradient(145deg, rgba(34, 32, 21, 0.92), rgba(21, 19, 10, 0.82));
+    border: 1px solid rgba(230, 208, 45, 0.14);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
   }
 
   .location-detail,
   .loc-item {
-    gap: 12px;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .loc-icon-wrapper {
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+  }
+
+  .loc-title {
+    margin-bottom: 6px !important;
+  }
+
+  .loc-text {
+    font-size: 13px;
+    line-height: 1.55 !important;
   }
 
   .btn-directions,
@@ -2130,17 +2164,35 @@ footer {
 @media (max-width: 640px) {
   .new-location-container {
     padding: 0 var(--margin-mobile);
-    gap: 20px;
+    gap: 16px;
   }
 
   .new-location-card {
-    padding: 28px 0;
-    gap: 24px;
+    padding: 20px;
+    gap: 16px;
   }
 
   .new-map-container {
-    min-height: 300px;
+    min-height: 240px;
     border-radius: 16px;
+    border-color: rgba(230, 208, 45, 0.14);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
+  }
+
+  .map-load-panel {
+    gap: 10px;
+    padding: 22px;
+    background:
+      linear-gradient(rgba(21, 19, 10, 0.46), rgba(21, 19, 10, 0.82)),
+      url("map-placeholder.jpg") center/cover;
+  }
+
+  .map-load-panel .material-symbols-outlined {
+    font-size: 34px;
+  }
+
+  .map-load-panel button {
+    padding: 11px 18px;
   }
 }
 
