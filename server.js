@@ -68,7 +68,10 @@ app.use(express.json());
 const staticCache = {
     setHeaders: (res, filePath) => {
         const ext = path.extname(filePath).toLowerCase();
-        if (ext && ext !== '.html') {
+        const fileName = path.basename(filePath).toLowerCase();
+        if (fileName === 'robots.txt' || fileName === 'sitemap.xml' || ext === '.html') {
+            res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+        } else if (ext) {
             res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
         }
     }
