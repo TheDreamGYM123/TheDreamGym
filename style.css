@@ -2099,6 +2099,37 @@ footer {
   filter: invert(90%) hue-rotate(180deg) grayscale(20%);
 }
 
+.map-load-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 28px;
+  text-align: center;
+  background:
+    linear-gradient(rgba(21, 19, 10, 0.76), rgba(21, 19, 10, 0.86)),
+    url("Background-mobile.jpg") center/cover;
+  color: var(--on-surface);
+}
+
+.map-load-panel .material-symbols-outlined {
+  color: var(--secondary);
+  font-size: 42px;
+}
+
+.map-load-panel button {
+  border: 1px solid var(--secondary);
+  border-radius: 999px;
+  background: var(--secondary);
+  color: var(--on-primary);
+  cursor: pointer;
+  padding: 12px 22px;
+  font-weight: 800;
+}
+
 @media (max-width: 640px) {
   .new-location-container {
     padding: 0 var(--margin-mobile);

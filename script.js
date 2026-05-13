@@ -65,8 +65,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: '#pricing', element: document.getElementById('pricing') },
         { id: '#location', element: document.getElementById('location') }
     ];
+    let scrollTicking = false;
 
     window.addEventListener('scroll', () => {
+        if (scrollTicking) return;
+        scrollTicking = true;
+        requestAnimationFrame(() => {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         
         // Add background when scrolled
@@ -109,7 +113,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 link.classList.add('active');
             }
         });
-    });
+            scrollTicking = false;
+        });
+    }, { passive: true });
 
     // Mobile Menu Logic
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -133,6 +139,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 mobileMenu.classList.remove('open');
                 document.body.style.overflow = '';
             });
+        });
+    }
+
+    const mapPanel = document.querySelector('.map-load-panel');
+    if (mapPanel) {
+        mapPanel.addEventListener('click', () => {
+            if (mapPanel.dataset.loaded === 'true') return;
+            const iframe = document.createElement('iframe');
+            iframe.src = mapPanel.dataset.mapSrc;
+            iframe.title = 'The Dream Gym location map';
+            iframe.loading = 'lazy';
+            iframe.referrerPolicy = 'no-referrer-when-downgrade';
+            mapPanel.dataset.loaded = 'true';
+            mapPanel.replaceWith(iframe);
         });
     }
 
@@ -179,50 +199,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     fadeElements.forEach(el => {
         fadeObserver.observe(el);
     });
-
-    // About Section Carousel
-    const track = document.querySelector('.carousel-track');
-    if (track) {
-        const carousel = document.querySelector('.about-carousel');
-        const dots = document.querySelectorAll('.carousel-dots .dot');
-        let currentIndex = 0;
-        const totalImages = track.querySelectorAll('.about-img').length;
-
-        function updateCarousel(index, behavior = 'auto') {
-            if (carousel) {
-                carousel.scrollTo({
-                    left: carousel.clientWidth * index,
-                    behavior
-                });
-            }
-            dots.forEach(dot => dot.classList.remove('active'));
-            if (dots[index]) dots[index].classList.add('active');
-        }
-
-        function nextSlide() {
-            currentIndex = (currentIndex + 1) % totalImages;
-            updateCarousel(currentIndex);
-        }
-
-        let slideInterval = setInterval(nextSlide, 3000);
-
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                currentIndex = index;
-                updateCarousel(currentIndex, 'smooth');
-                clearInterval(slideInterval);
-                slideInterval = setInterval(nextSlide, 3000);
-            });
-        });
-
-        if (carousel) {
-            carousel.addEventListener('scroll', () => {
-                currentIndex = Math.round(carousel.scrollLeft / carousel.clientWidth);
-                dots.forEach(dot => dot.classList.remove('active'));
-                if (dots[currentIndex]) dots[currentIndex].classList.add('active');
-            }, { passive: true });
-        }
-    }
 
     // Toggle About Text
     window.toggleAboutText = () => {
@@ -342,7 +318,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (item.type === 'image') {
                     contentHtml = `<img src="${item.content}" alt="${item.title || 'Gallery Image'}" class="bento-img" loading="lazy" decoding="async">`;
                 } else if (item.type === 'youtube' || item.type === 'instagram') {
-                    contentHtml = `<iframe src="${item.content}" class="bento-iframe" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                    contentHtml = `<iframe src="${item.content}" class="bento-iframe" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="${item.title || 'Gallery media'}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
                 } else if (item.type === 'text') {
                     contentHtml = `<div class="bento-text-content font-body-lg text-secondary">"${item.content}"</div>`;
                 }
@@ -542,7 +518,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (index !== currentSlide && index < slides.length) {
                         updateActiveDot(index);
                     }
-                });
+                }, { passive: true });
 
                 // Handle dot clicks
                 dots.forEach((dot, index) => {
@@ -618,6 +594,22 @@ function openPaymentModal({ planName, billingCycle, amount }) {
     }
 
     openModal('payment-modal');
+}
+
+let razorpayScriptPromise;
+function loadRazorpayScript() {
+    if (window.Razorpay) return Promise.resolve();
+    if (!razorpayScriptPromise) {
+        razorpayScriptPromise = new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.async = true;
+            script.onload = resolve;
+            script.onerror = () => reject(new Error('Failed to load Razorpay checkout script'));
+            document.head.appendChild(script);
+        });
+    }
+    return razorpayScriptPromise;
 }
 
 function escapeHtml(value) {
@@ -920,11 +912,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const paymentRequest = await res.json();
                 const amountInPaise = Number(String(payload.amount).replace(/[^\d.]/g, '')) * 100;
 
-                if (!window.Razorpay) {
-                    throw new Error('Razorpay checkout script is not loaded');
-                }
-
                 btn.innerText = 'PREPARING PAYMENT...';
+                await loadRazorpayScript();
 
                 const configRes = await fetch('/api/razorpay-key');
                 if (!configRes.ok) {
