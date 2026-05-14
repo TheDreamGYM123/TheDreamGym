@@ -69,7 +69,7 @@ const staticCache = {
     setHeaders: (res, filePath) => {
         const ext = path.extname(filePath).toLowerCase();
         const fileName = path.basename(filePath).toLowerCase();
-        if (fileName === 'robots.txt' || fileName === 'sitemap.xml' || ext === '.html') {
+        if (fileName === 'robots.txt' || fileName === 'sitemap.xml' || fileName === 'dashboard.js' || ext === '.html') {
             res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
         } else if (ext) {
             res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
@@ -123,6 +123,13 @@ const getPaymentRequest = (id) => new Promise((resolve, reject) => {
     db.get("SELECT * FROM payment_requests WHERE id = ?", [id], (err, row) => {
         if (err) reject(err);
         else resolve(row);
+    });
+});
+
+const listPaymentRequests = () => new Promise((resolve, reject) => {
+    db.all("SELECT * FROM payment_requests ORDER BY created_at DESC", (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows);
     });
 });
 
@@ -249,6 +256,27 @@ const syncCapturedPayment = async (paymentRequestId) => {
         razorpay_payment_id: capturedPayment.id,
         paid_at: paidAt
     };
+};
+
+const syncOpenPaymentRequests = async (paymentRequests) => {
+    if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET) return;
+
+    const candidates = paymentRequests
+        .filter(request =>
+            request.razorpay_order_id &&
+            !request.razorpay_payment_id &&
+            request.status === 'ORDER_CREATED'
+        )
+        .slice(0, 10);
+
+    if (candidates.length === 0) return;
+
+    const results = await Promise.allSettled(candidates.map(request => syncCapturedPayment(request.id)));
+    results.forEach((result, index) => {
+        if (result.status === 'rejected') {
+            console.warn(`Unable to auto-sync payment request ${candidates[index].id}:`, result.reason.message);
+        }
+    });
 };
 
 // --- API ROUTES ---
@@ -481,11 +509,14 @@ app.delete('/api/contacts/:id', (req, res) => {
 });
 
 // GET Payment Requests
-app.get('/api/payment-requests', (req, res) => {
-    db.all("SELECT * FROM payment_requests ORDER BY created_at DESC", (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(rows);
-    });
+app.get('/api/payment-requests', async (req, res) => {
+    try {
+        const rows = await listPaymentRequests();
+        await syncOpenPaymentRequests(rows);
+        res.json(await listPaymentRequests());
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // POST Payment Request
