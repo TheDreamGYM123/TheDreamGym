@@ -127,6 +127,15 @@ class JsonDatabase {
                 return;
             }
 
+            const rowByIdMatch = sql.match(/SELECT \* FROM (\w+) WHERE id = \?/i);
+            if (rowByIdMatch) {
+                const rows = this.data[rowByIdMatch[1]] || [];
+                const id = Number(params[0]);
+                const row = rows.find(item => Number(item.id) === id);
+                callback(null, row ? clone(row) : undefined);
+                return;
+            }
+
             callback(null, undefined);
         } catch (error) {
             callback(error);

@@ -730,6 +730,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <button onclick="showAdminPaymentReceipt(${request.id})" ${request.razorpay_payment_id ? '' : 'disabled'} class="text-on-surface hover:text-secondary disabled:opacity-40 disabled:cursor-not-allowed transition-colors px-4 py-2 border border-outline-variant rounded hover:border-secondary">
                             <span class="material-symbols-outlined align-middle mr-1">receipt_long</span> Receipt
                         </button>
+                        ${request.razorpay_order_id && !request.razorpay_payment_id ? `
+                            <button onclick="syncPaymentRequest(${request.id})" class="text-on-surface hover:text-secondary transition-colors px-4 py-2 border border-outline-variant rounded hover:border-secondary">
+                                <span class="material-symbols-outlined align-middle mr-1">sync</span> Sync Payment
+                            </button>
+                        ` : ''}
                         <button onclick="deletePaymentRequest(${request.id})" class="text-on-surface-variant hover:text-red-400 transition-colors px-4 py-2 border border-outline-variant rounded hover:border-red-400">
                             <span class="material-symbols-outlined align-middle mr-1">delete</span> Delete
                         </button>
@@ -749,6 +754,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             loadPaymentRequests();
         } catch (error) {
             console.error('Failed to delete payment request', error);
+        }
+    };
+
+    window.syncPaymentRequest = async (id) => {
+        try {
+            const res = await fetch(`/api/payment-requests/${id}/sync`, { method: 'POST' });
+            const result = await res.json();
+            if (!res.ok) throw new Error(result.error || 'Payment sync failed');
+
+            alert(result.already_paid ? 'Payment is already marked as paid.' : 'Payment synced successfully.');
+            loadPaymentRequests();
+        } catch (error) {
+            alert(error.message || 'No captured payment found for this order yet.');
+            console.error('Failed to sync payment request', error);
         }
     };
 

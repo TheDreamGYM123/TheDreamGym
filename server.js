@@ -119,6 +119,13 @@ const updatePaymentRequest = (id, fields) => new Promise((resolve, reject) => {
     });
 });
 
+const getPaymentRequest = (id) => new Promise((resolve, reject) => {
+    db.get("SELECT * FROM payment_requests WHERE id = ?", [id], (err, row) => {
+        if (err) reject(err);
+        else resolve(row);
+    });
+});
+
 const getRazorpayClient = () => {
     if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET) {
         const error = new Error('Razorpay keys are not configured');
@@ -180,6 +187,68 @@ const verifyRazorpaySignature = ({ razorpay_order_id, razorpay_payment_id, razor
     const actual = Buffer.from(String(razorpay_signature), 'hex');
 
     return expected.length === actual.length && crypto.timingSafeEqual(expected, actual);
+};
+
+const syncCapturedPayment = async (paymentRequestId) => {
+    const paymentRequest = await getPaymentRequest(paymentRequestId);
+    if (!paymentRequest) {
+        const error = new Error('Payment request not found');
+        error.statusCode = 404;
+        throw error;
+    }
+
+    if (!paymentRequest.razorpay_order_id) {
+        const error = new Error('No Razorpay order is linked to this request');
+        error.statusCode = 400;
+        throw error;
+    }
+
+    if (paymentRequest.status === 'PAID' && paymentRequest.razorpay_payment_id) {
+        return {
+            alreadyPaid: true,
+            paymentRequest,
+            razorpay_payment_id: paymentRequest.razorpay_payment_id,
+            paid_at: paymentRequest.paid_at
+        };
+    }
+
+    const client = getRazorpayClient();
+    const payments = await client.orders.fetchPayments(paymentRequest.razorpay_order_id);
+    const capturedPayment = (payments.items || []).find(payment => payment.status === 'captured' || payment.captured);
+
+    if (!capturedPayment) {
+        return {
+            synced: false,
+            paymentRequest,
+            message: 'No captured Razorpay payment found for this order yet'
+        };
+    }
+
+    const expectedAmount = toPaise(paymentRequest.amount);
+    if (expectedAmount && Number(capturedPayment.amount) !== expectedAmount) {
+        const error = new Error('Captured payment amount does not match this request');
+        error.statusCode = 409;
+        throw error;
+    }
+
+    const paidAt = capturedPayment.created_at
+        ? new Date(capturedPayment.created_at * 1000).toISOString()
+        : new Date().toISOString();
+
+    await updatePaymentRequest(paymentRequestId, {
+        status: 'PAID',
+        razorpay_order_id: paymentRequest.razorpay_order_id,
+        razorpay_payment_id: capturedPayment.id,
+        razorpay_signature: null,
+        paid_at: paidAt
+    });
+
+    return {
+        synced: true,
+        paymentRequest,
+        razorpay_payment_id: capturedPayment.id,
+        paid_at: paidAt
+    };
 };
 
 // --- API ROUTES ---
@@ -554,6 +623,40 @@ app.post('/api/verify-payment', handleVerifyPayment);
 
 // Backwards-compatible verification endpoint used by older frontend builds.
 app.post('/api/razorpay-verify', handleVerifyPayment);
+
+// POST Recover captured Razorpay payment if the checkout page was refreshed/closed.
+app.post('/api/payment-requests/:id/sync', async (req, res) => {
+    try {
+        const result = await syncCapturedPayment(req.params.id);
+
+        if (result.alreadyPaid) {
+            return res.json({
+                success: true,
+                already_paid: true,
+                razorpay_payment_id: result.razorpay_payment_id,
+                paid_at: result.paid_at
+            });
+        }
+
+        if (!result.synced) {
+            return res.status(404).json({
+                success: false,
+                error: result.message
+            });
+        }
+
+        res.json({
+            success: true,
+            razorpay_payment_id: result.razorpay_payment_id,
+            paid_at: result.paid_at
+        });
+    } catch (error) {
+        if ([400, 404, 409, 503].includes(error.statusCode)) {
+            return res.status(error.statusCode).json({ error: error.message });
+        }
+        handleRazorpayError(res, error, 'Unable to sync Razorpay payment');
+    }
+});
 
 // DELETE Payment Request
 app.delete('/api/payment-requests/:id', (req, res) => {
