@@ -307,6 +307,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (fullText) fullText.hidden = isExpanded;
                     button.setAttribute('aria-expanded', String(!isExpanded));
                     button.innerText = isExpanded ? 'Read more' : 'Read less';
+
+                    if (isExpanded) {
+                        resumeReviewAutoScroll();
+                    } else {
+                        pauseReviewAutoScroll();
+                    }
                 });
             });
             
@@ -316,18 +322,70 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const prevBtn = document.getElementById('review-prev');
         const nextBtn = document.getElementById('review-next');
+        let reviewAutoScrollTimer = null;
+        let reviewAutoScrollPaused = false;
+
+        const getReviewScrollStep = () => {
+            const card = reviewsContainer.querySelector('.review-card');
+            if (!card) return 0;
+
+            const styles = window.getComputedStyle(reviewsContainer);
+            const gap = parseFloat(styles.columnGap || styles.gap) || 0;
+            return card.offsetWidth + gap;
+        };
+
+        const scrollToNextReview = () => {
+            const cardWidth = getReviewScrollStep();
+            if (!cardWidth) return;
+
+            const maxScrollLeft = reviewsContainer.scrollWidth - reviewsContainer.clientWidth;
+            const isAtEnd = reviewsContainer.scrollLeft + cardWidth >= maxScrollLeft - 8;
+            reviewsContainer.scrollTo({
+                left: isAtEnd ? 0 : reviewsContainer.scrollLeft + cardWidth,
+                behavior: 'smooth'
+            });
+        };
+
+        const startReviewAutoScroll = () => {
+            if (reviewAutoScrollTimer || reviewAutoScrollPaused) return;
+            reviewAutoScrollTimer = setInterval(scrollToNextReview, 2000);
+        };
+
+        const stopReviewAutoScroll = () => {
+            if (!reviewAutoScrollTimer) return;
+            clearInterval(reviewAutoScrollTimer);
+            reviewAutoScrollTimer = null;
+        };
+
+        const pauseReviewAutoScroll = () => {
+            reviewAutoScrollPaused = true;
+            stopReviewAutoScroll();
+        };
+
+        const resumeReviewAutoScroll = () => {
+            const hasExpandedReview = reviewsContainer.querySelector('.review-toggle[aria-expanded="true"]');
+            if (hasExpandedReview) return;
+            reviewAutoScrollPaused = false;
+            startReviewAutoScroll();
+        };
 
         if (prevBtn && nextBtn) {
             prevBtn.addEventListener('click', () => {
-                const cardWidth = reviewsContainer.querySelector('.review-card').offsetWidth + 24; // width + gap
+                stopReviewAutoScroll();
+                const cardWidth = getReviewScrollStep();
                 reviewsContainer.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+                startReviewAutoScroll();
             });
 
             nextBtn.addEventListener('click', () => {
-                const cardWidth = reviewsContainer.querySelector('.review-card').offsetWidth + 24;
+                stopReviewAutoScroll();
+                const cardWidth = getReviewScrollStep();
                 reviewsContainer.scrollBy({ left: cardWidth, behavior: 'smooth' });
+                startReviewAutoScroll();
             });
         }
+
+        startReviewAutoScroll();
     }
 
     // Load Gallery
