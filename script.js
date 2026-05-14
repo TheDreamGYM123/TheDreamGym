@@ -324,31 +324,35 @@ document.addEventListener('DOMContentLoaded', async () => {
         const nextBtn = document.getElementById('review-next');
         let reviewAutoScrollTimer = null;
         let reviewAutoScrollPaused = false;
+        let activeReviewIndex = 0;
+        const reviewAutoScrollDelay = 3000;
 
-        const getReviewScrollStep = () => {
-            const card = reviewsContainer.querySelector('.review-card');
-            if (!card) return 0;
+        const getReviewCards = () => Array.from(reviewsContainer.querySelectorAll('.review-card'));
 
-            const styles = window.getComputedStyle(reviewsContainer);
-            const gap = parseFloat(styles.columnGap || styles.gap) || 0;
-            return card.offsetWidth + gap;
-        };
+        const scrollToReview = (index) => {
+            const cards = getReviewCards();
+            if (cards.length === 0) return;
 
-        const scrollToNextReview = () => {
-            const cardWidth = getReviewScrollStep();
-            if (!cardWidth) return;
-
-            const maxScrollLeft = reviewsContainer.scrollWidth - reviewsContainer.clientWidth;
-            const isAtEnd = reviewsContainer.scrollLeft + cardWidth >= maxScrollLeft - 8;
+            activeReviewIndex = (index + cards.length) % cards.length;
+            const cardLeft = cards[activeReviewIndex].getBoundingClientRect().left;
+            const containerLeft = reviewsContainer.getBoundingClientRect().left;
             reviewsContainer.scrollTo({
-                left: isAtEnd ? 0 : reviewsContainer.scrollLeft + cardWidth,
+                left: reviewsContainer.scrollLeft + cardLeft - containerLeft,
                 behavior: 'smooth'
             });
         };
 
+        const scrollToNextReview = () => {
+            scrollToReview(activeReviewIndex + 1);
+        };
+
+        const scrollToPreviousReview = () => {
+            scrollToReview(activeReviewIndex - 1);
+        };
+
         const startReviewAutoScroll = () => {
-            if (reviewAutoScrollTimer || reviewAutoScrollPaused) return;
-            reviewAutoScrollTimer = setInterval(scrollToNextReview, 2000);
+            if (reviewAutoScrollTimer || reviewAutoScrollPaused || getReviewCards().length < 2) return;
+            reviewAutoScrollTimer = setInterval(scrollToNextReview, reviewAutoScrollDelay);
         };
 
         const stopReviewAutoScroll = () => {
@@ -372,15 +376,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (prevBtn && nextBtn) {
             prevBtn.addEventListener('click', () => {
                 stopReviewAutoScroll();
-                const cardWidth = getReviewScrollStep();
-                reviewsContainer.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+                scrollToPreviousReview();
                 startReviewAutoScroll();
             });
 
             nextBtn.addEventListener('click', () => {
                 stopReviewAutoScroll();
-                const cardWidth = getReviewScrollStep();
-                reviewsContainer.scrollBy({ left: cardWidth, behavior: 'smooth' });
+                scrollToNextReview();
                 startReviewAutoScroll();
             });
         }
