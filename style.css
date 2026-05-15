@@ -3615,3 +3615,124 @@ footer {
     width: calc(100% - 20px);
   }
 }
+
+.pricing-section .membership-fee-panel,
+#plans-modal .catalog-membership-hero,
+.pricing-section .home-privilege-pack,
+#plans-modal .catalog-privilege-pack {
+  max-width: 1120px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#plans-modal .catalog-membership-hero {
+  min-height: 200px;
+  padding: clamp(28px, 3.6vw, 48px);
+}
+
+#plans-modal .catalog-privilege-pack {
+  padding: clamp(24px, 3vw, 40px);
+}
+
+.home-membership-price,
+.catalog-membership-price {
+  gap: 12px;
+}
+
+.home-membership-price strong,
+.catalog-membership-price strong {
+  display: block;
+  color: var(--secondary);
+  font-family: var(--font-display);
+  font-size: clamp(56px, 7.4vw, 86px);
+  line-height: 0.9;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.membership-fee-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: auto !important;
+  min-width: 220px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f7e12c, #c9a800);
+  color: #15130a;
+  padding: 14px 22px;
+  box-shadow: 0 14px 28px rgba(230, 208, 45, 0.18);
+}
+
+.membership-fee-btn::after {
+  content: "arrow_forward";
+  font-family: "Material Symbols Outlined";
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.membership-fee-btn:hover {
+  background: var(--on-surface);
+  color: var(--background);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+  .pricing-section .membership-fee-panel,
+  #plans-modal .catalog-membership-hero {
+    width: min(100%, 350px);
+    max-width: calc(100% - 20px);
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 24px 18px;
+    text-align: center;
+  }
+
+  .home-membership-copy,
+  .catalog-membership-hero > div:first-child,
+  .home-membership-price,
+  .catalog-membership-price {
+    align-items: center;
+    min-width: 0;
+  }
+
+  .home-membership-copy span,
+  .catalog-membership-hero h3 {
+    font-size: clamp(25px, 8vw, 32px);
+    line-height: 1.05;
+  }
+
+  .home-membership-copy p,
+  .catalog-membership-hero p {
+    max-width: 260px;
+    align-self: center;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+
+  .home-membership-price strong,
+  .catalog-membership-price strong {
+    font-size: clamp(52px, 17vw, 68px);
+  }
+
+  .membership-fee-btn {
+    width: min(100%, 260px) !important;
+    min-width: 0;
+    padding: 13px 18px;
+  }
+
+  .pricing-section .home-privilege-pack,
+  #plans-modal .catalog-privilege-pack {
+    width: min(100%, 350px);
+    max-width: calc(100% - 20px);
+    padding: 22px 18px;
+  }
+
+  .catalog-benefit-card {
+    min-height: 82px;
+    padding: 18px;
+  }
+}

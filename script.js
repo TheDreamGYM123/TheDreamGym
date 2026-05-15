@@ -490,11 +490,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div>
                         <h3>One-Time Membership Fee</h3>
                         <p class="font-label-caps">${plan.badge || 'Architects of performance initiation'}</p>
-                        <button class="btn-pricing membership-fee-btn" data-plan-name="${plan.name}" data-billing-cycle="${plan.period}" data-amount="${plan.price}">PAY MEMBERSHIP FEE</button>
                     </div>
                     <div class="catalog-membership-price">
                         ${renderCutPrice(plan.cut_price)}
-                        <strong><span>₹</span>${formatPlanAmount(plan.price)}</strong>
+                        <strong>₹${formatPlanAmount(plan.price)}</strong>
+                        <button class="btn-pricing membership-fee-btn" data-plan-name="${plan.name}" data-billing-cycle="${plan.period}" data-amount="${plan.price}">PAY MEMBERSHIP FEE</button>
                     </div>
                 </div>
             ` : '';
@@ -522,11 +522,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <div class="home-membership-copy">
                             <span class="font-label-caps">One-time membership fee</span>
                             <p>${membershipPlan.badge || 'Architects of performance initiation'}</p>
-                            <button class="btn-pricing membership-fee-btn" data-plan-name="${membershipPlan.name}" data-billing-cycle="${membershipPlan.period}" data-amount="${membershipPlan.price}">PAY MEMBERSHIP FEE</button>
                         </div>
                         <div class="home-membership-price">
                             ${renderCutPrice(membershipPlan.cut_price)}
-                            <strong><span>₹</span>${formatPlanAmount(membershipPlan.price)}</strong>
+                            <strong>₹${formatPlanAmount(membershipPlan.price)}</strong>
+                            <button class="btn-pricing membership-fee-btn" data-plan-name="${membershipPlan.name}" data-billing-cycle="${membershipPlan.period}" data-amount="${membershipPlan.price}">PAY MEMBERSHIP FEE</button>
                         </div>
                     `;
                 }
