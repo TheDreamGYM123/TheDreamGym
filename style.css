@@ -3750,6 +3750,10 @@ footer {
   padding: clamp(18px, 2.1vw, 26px);
 }
 
+.pricing-section .home-privilege-pack {
+  max-width: 940px;
+}
+
 #plans-modal .catalog-membership-hero,
 #plans-modal .catalog-privilege-pack {
   max-width: 860px;
@@ -3848,6 +3852,10 @@ footer {
     width: min(100%, 310px);
     max-width: calc(100% - 22px);
     padding: 18px 14px;
+  }
+
+  .pricing-section .home-privilege-pack {
+    width: min(100%, 340px);
   }
 
   .membership-fee-btn-desktop {
