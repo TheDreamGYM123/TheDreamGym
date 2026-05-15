@@ -255,6 +255,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </h4>
                     <div class="text-xs uppercase tracking-widest text-secondary mb-2">${escapeAdminHtml(plan.category || 'plan')}</div>
                     <div class="text-sm text-on-surface-variant mb-1">Price: Rs ${escapeAdminHtml(plan.price || '')}</div>
+                    ${plan.cut_price ? `<div class="text-sm text-on-surface-variant mb-1">Cut Price: Rs ${escapeAdminHtml(plan.cut_price)}</div>` : ''}
                     <div class="text-sm text-on-surface-variant">Badge: ${escapeAdminHtml(plan.badge || 'None')}</div>
                 </div>
             `).join('');
@@ -273,6 +274,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('edit-pricing-category').value = plan.category || 'subscription';
         document.getElementById('edit-pricing-period').value = plan.period || '';
         document.getElementById('edit-pricing-price').value = plan.price || '';
+        document.getElementById('edit-pricing-cut-price').value = plan.cut_price || '';
         document.getElementById('edit-pricing-badge').value = plan.badge || '';
         document.getElementById('edit-pricing-sort-order').value = plan.sort_order || 0;
         document.getElementById('edit-pricing-popular').checked = Number(plan.is_popular) === 1;
@@ -302,6 +304,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const category = document.getElementById('edit-pricing-category').value;
             const period = document.getElementById('edit-pricing-period').value;
             const price = document.getElementById('edit-pricing-price').value;
+            const cut_price = document.getElementById('edit-pricing-cut-price').value;
             const badge = document.getElementById('edit-pricing-badge').value;
             const sort_order = document.getElementById('edit-pricing-sort-order').value;
             const is_popular = document.getElementById('edit-pricing-popular').checked ? 1 : 0;
@@ -318,6 +321,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         category,
                         period,
                         price,
+                        cut_price,
                         badge,
                         is_popular,
                         sort_order,

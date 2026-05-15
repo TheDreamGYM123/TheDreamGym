@@ -23,7 +23,7 @@
     <title>The Dream Gym</title>
     <meta name="description"
         content="Forge your strength, define your limits at The Dream Gym. Elite trainers, world-class equipment, and a premium training environment.">
-    <link rel="stylesheet" href="style.css?v=20260533">
+    <link rel="stylesheet" href="style.css?v=20260534">
 </head>
 
 <body>
@@ -323,36 +323,34 @@
         <div class="pricing-bg"></div>
         <div class="container">
             <div class="pricing-header fade-in">
-                <h2 class="font-display-xl uppercase">INVEST IN <span class="text-secondary">YOURSELF</span></h2>
-                <div style="width: 80px; height: 4px; background-color: var(--secondary); margin: 16px auto 32px auto;"></div>
-                <p class="font-body-lg" style="color: var(--on-surface-variant); max-width: 600px; margin: 0 auto;">
-                    Choose the commitment that matches your goal: flexible gym access, longer-term savings, or focused
-                    personal training.</p>
+                <div>
+                    <h2 class="font-display-xl uppercase">INVEST IN <span class="text-secondary">YOURSELF</span></h2>
+                    <div class="pricing-title-line"></div>
+                    <p class="font-body-lg">
+                        Choose the commitment that matches your goal: flexible gym access, longer-term savings, or focused
+                        personal training.
+                    </p>
+                </div>
+                <button class="pricing-explore-link font-label-caps" onclick="openModal('plans-modal')">
+                    EXPLORE ALL MEMBERSHIP OPTIONS
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
             </div>
-
+            <div class="pricing-grid fade-in">
+                <!-- Populated dynamically by script.js -->
+            </div>
             <div class="membership-fee-panel fade-in">
                 <div>
                     <span class="font-label-caps">One-time membership fee</span>
-                    <strong>₹1,499</strong>
+                    <strong>Rs 1,499</strong>
                 </div>
                 <p>Registration is separate from the training plans below.</p>
                 <button class="btn-pricing membership-fee-btn" data-plan-name="Membership Fee" data-billing-cycle="One-time" data-amount="1499">PAY MEMBERSHIP FEE</button>
             </div>
-
             <div class="pricing-freebies fade-in" aria-label="Free benefits">
                 <span class="font-label-caps">Free with eligible plans</span>
                 <strong>Zumba</strong>
                 <strong>Aerobics</strong>
-            </div>
-
-            <div class="pricing-grid fade-in">
-                <!-- Populated dynamically by script.js -->
-            </div>
-
-            <div class="pricing-explore-wrap fade-in">
-                <button class="btn-cta-outline font-display-md" onclick="openModal('plans-modal')">
-                    EXPLORE ALL MEMBERSHIP OPTIONS
-                </button>
             </div>
         </div>
     </section>
@@ -760,7 +758,7 @@
         </div>
     </footer>
 
-    <script src="script.js?v=20260533"></script>
+    <script src="script.js?v=20260534"></script>
 
     <!-- WhatsApp Floating Button -->
     <a href="https://wa.me/918328929165" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">

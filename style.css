@@ -1428,6 +1428,58 @@ nav {
   min-height: 100%;
 }
 
+.pricing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 32px;
+  text-align: left;
+  margin-bottom: 40px;
+}
+
+.pricing-header h2 {
+  max-width: 760px;
+  line-height: 0.95;
+}
+
+.pricing-title-line {
+  width: 96px;
+  height: 5px;
+  margin: 22px 0 0;
+  background: var(--secondary);
+}
+
+.pricing-header p {
+  max-width: 620px;
+  margin-top: 24px;
+  color: var(--on-surface-variant);
+}
+
+.pricing-explore-link {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  padding: 12px 0;
+  margin-top: 10px;
+}
+
+.pricing-explore-link .material-symbols-outlined {
+  font-size: 26px;
+  transition: transform 0.25s ease;
+}
+
+.pricing-explore-link:hover .material-symbols-outlined {
+  transform: translateX(5px);
+}
+
 .pricing-explore-wrap {
   display: flex;
   justify-content: center;
@@ -1465,12 +1517,98 @@ nav {
 }
 
 .membership-fee-panel {
-  max-width: 980px;
+  max-width: 100%;
+  margin: 42px 0 0;
+  padding: 34px 30px;
+  grid-template-columns: minmax(260px, 0.9fr) 1fr;
   border-radius: 10px;
   background:
     linear-gradient(135deg, rgba(230, 208, 45, 0.18), rgba(30, 28, 17, 0.92)),
     radial-gradient(circle at 90% 20%, rgba(230, 208, 45, 0.18), transparent 34%);
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+}
+
+.membership-fee-panel .membership-fee-btn {
+  grid-column: 1;
+  grid-row: 2;
+  width: 100%;
+  max-width: 430px;
+}
+
+.membership-fee-panel p {
+  align-self: center;
+  font-size: clamp(18px, 2vw, 24px);
+  line-height: 1.45;
+}
+
+.pricing-freebies {
+  max-width: 100%;
+  margin: 26px 0 0;
+  justify-content: flex-start;
+  gap: 18px;
+}
+
+.pricing-freebies span {
+  width: 100%;
+}
+
+.pricing-freebies strong {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--secondary);
+  padding: 0;
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4vw, 54px);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.pricing-period-label {
+  color: var(--on-surface);
+  font-weight: 800;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.pricing-cut-price {
+  color: var(--on-surface-variant);
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: line-through;
+  margin-bottom: 8px;
+}
+
+.pricing-card .pricing-amount {
+  font-size: clamp(44px, 4.8vw, 64px);
+  white-space: nowrap;
+}
+
+.all-pricing-plans-grid .pricing-card-row {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.all-pricing-plans-grid .pricing-card {
+  padding: 24px;
+  gap: 22px;
+  overflow: hidden;
+}
+
+.all-pricing-plans-grid .pricing-plan-name {
+  min-height: 36px;
+  font-size: 14px;
+  letter-spacing: 0.28em;
+}
+
+.all-pricing-plans-grid .pricing-amount {
+  font-size: clamp(36px, 3vw, 48px);
+  white-space: nowrap;
+}
+
+.all-pricing-plans-grid .pricing-features {
+  gap: 16px;
 }
 
 @media (max-width: 1024px) {
@@ -1479,6 +1617,23 @@ nav {
     max-width: 560px;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .pricing-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .membership-fee-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .membership-fee-panel .membership-fee-btn {
+    grid-row: auto;
+  }
+
+  .all-pricing-plans-grid .pricing-card-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .plans-modal-content {
@@ -1506,6 +1661,36 @@ nav {
     text-align: center;
     padding-left: 18px;
     padding-right: 18px;
+  }
+
+  .pricing-header {
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .pricing-title-line {
+    width: 76px;
+    height: 4px;
+  }
+
+  .pricing-explore-link {
+    width: 100%;
+    justify-content: space-between;
+    white-space: normal;
+    line-height: 1.35;
+  }
+
+  .membership-fee-panel {
+    margin-top: 30px;
+    padding: 24px 18px;
+  }
+
+  .membership-fee-panel p {
+    font-size: 16px;
+  }
+
+  .pricing-freebies {
+    gap: 10px 16px;
   }
 
   .plans-modal-content {

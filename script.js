@@ -462,12 +462,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             const popularPlans = trainingPlans.filter(plan => Number(plan.is_popular) === 1).slice(0, 3);
             const homepagePlans = (popularPlans.length ? popularPlans : trainingPlans).slice(0, 3);
             const formatPlanAmount = (amount) => Number(String(amount).replace(/[^\d.]/g, '') || 0).toLocaleString('en-IN');
+            const renderCutPrice = (amount) => {
+                const value = Number(String(amount || '').replace(/[^\d.]/g, '') || 0);
+                return value ? `<div class="pricing-cut-price">Rs ${value.toLocaleString('en-IN')}</div>` : '';
+            };
             const renderPlanCard = (plan, featured = false) => `
                 <div class="pricing-card ${featured ? 'elite' : ''}">
                     ${featured ? '<div class="elite-glow"></div><div class="font-label-caps elite-badge">POPULAR</div>' : ''}
                     <div>
                         <div class="font-label-caps pricing-plan-name uppercase">${plan.name}</div>
+                        <div class="pricing-period-label">${plan.period || ''}</div>
                         <div class="pricing-plan-badge">${plan.badge || plan.period}</div>
+                        ${renderCutPrice(plan.cut_price)}
                         <div class="pricing-amount text-secondary">Rs ${formatPlanAmount(plan.price)}<span class="font-label-caps"> / ${String(plan.period || '').toUpperCase()}</span></div>
                     </div>
                     <ul class="pricing-features font-body-sm">
