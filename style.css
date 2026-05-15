@@ -1793,6 +1793,368 @@ nav {
   }
 }
 
+/* Membership catalog refinements */
+.pricing-section .membership-fee-panel {
+  position: relative;
+  isolation: isolate;
+  max-width: 100%;
+  min-height: 210px;
+  margin: 28px 0 30px;
+  padding: clamp(28px, 4vw, 48px);
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 32px;
+  overflow: hidden;
+  border: 1px solid rgba(230, 208, 45, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(18, 18, 10, 0.98) 0%, rgba(18, 18, 10, 0.94) 52%, rgba(18, 18, 10, 0.68) 100%),
+    radial-gradient(circle at 86% 48%, rgba(230, 208, 45, 0.16), transparent 30%),
+    linear-gradient(135deg, rgba(230, 208, 45, 0.08), rgba(255, 255, 255, 0));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02), 0 26px 80px rgba(0, 0, 0, 0.34);
+}
+
+.pricing-section .membership-fee-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: min(46%, 560px);
+  background:
+    linear-gradient(90deg, transparent, rgba(230, 208, 45, 0.12), transparent 18%),
+    repeating-linear-gradient(90deg, transparent 0 32px, rgba(230, 208, 45, 0.08) 33px 36px, transparent 37px 52px);
+  opacity: 0.5;
+  z-index: -1;
+}
+
+.home-membership-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.home-membership-copy span,
+.catalog-membership-hero p {
+  color: var(--on-surface);
+  font-size: clamp(28px, 3.2vw, 44px);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.home-membership-copy p {
+  color: rgba(239, 237, 224, 0.62);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.home-membership-price,
+.catalog-membership-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  min-width: 250px;
+}
+
+.home-membership-price .pricing-cut-price,
+.catalog-membership-price .pricing-cut-price {
+  margin: 0;
+  color: rgba(239, 237, 224, 0.68);
+  font-size: clamp(18px, 1.5vw, 24px);
+}
+
+.home-membership-price strong,
+.catalog-membership-price strong {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  color: var(--secondary);
+  font-family: var(--font-display);
+  font-size: clamp(58px, 8vw, 92px);
+  line-height: 0.88;
+}
+
+.home-membership-price strong span,
+.catalog-membership-price strong span {
+  color: var(--secondary);
+  font-family: var(--font-body);
+  font-size: clamp(14px, 1.6vw, 20px);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.pricing-section .membership-fee-panel .membership-fee-btn {
+  width: min(100%, 340px);
+  min-width: 0;
+  margin-top: 4px;
+}
+
+.pricing-section .pricing-freebies {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.82fr) repeat(2, minmax(180px, 1fr));
+  align-items: stretch;
+  gap: 20px;
+  margin: 30px 0 0;
+  padding: clamp(24px, 3.6vw, 42px);
+  border-radius: 8px;
+  background: rgba(38, 37, 27, 0.92);
+  border: 1px solid rgba(230, 208, 45, 0.12);
+}
+
+.pricing-section .pricing-freebies span {
+  display: flex;
+  align-items: center;
+  width: auto;
+  color: var(--on-surface);
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3.2vw, 40px);
+  line-height: 1.08;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.pricing-section .pricing-freebies strong {
+  display: flex;
+  align-items: center;
+  min-height: 130px;
+  padding: 30px;
+  border: 1px solid rgba(230, 208, 45, 0.12);
+  background: rgba(18, 18, 10, 0.22);
+  color: var(--on-surface);
+  font-family: var(--font-body);
+  font-size: clamp(28px, 3.2vw, 38px);
+  font-weight: 900;
+  text-transform: none;
+}
+
+.plans-modal-content {
+  width: min(96vw, 1560px);
+  max-height: 92vh;
+  padding: clamp(26px, 3vw, 46px);
+  border-color: rgba(230, 208, 45, 0.18);
+  background:
+    radial-gradient(circle at 78% 8%, rgba(230, 208, 45, 0.12), transparent 24%),
+    linear-gradient(180deg, rgba(18, 18, 10, 0.98), rgba(13, 13, 7, 0.98));
+}
+
+.plans-modal-header {
+  margin-bottom: clamp(30px, 4vw, 56px);
+}
+
+.plans-modal-header h2 {
+  margin: 12px auto;
+  color: var(--on-surface);
+  font-size: clamp(44px, 7vw, 112px);
+  line-height: 0.9;
+  white-space: normal;
+}
+
+.plans-modal-header p {
+  max-width: 780px;
+  color: rgba(239, 237, 224, 0.74);
+}
+
+.catalog-membership-hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(24px, 5vw, 70px);
+  align-items: center;
+  min-height: 220px;
+  padding: clamp(30px, 4.2vw, 58px);
+  overflow: hidden;
+  border: 1px solid rgba(230, 208, 45, 0.2);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(18, 18, 10, 0.98), rgba(18, 18, 10, 0.88) 58%, rgba(18, 18, 10, 0.56)),
+    repeating-linear-gradient(90deg, transparent 0 48px, rgba(230, 208, 45, 0.1) 50px 53px, transparent 55px 78px);
+}
+
+.catalog-membership-hero h3 {
+  margin: 0 0 16px;
+  color: var(--on-surface);
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1;
+}
+
+.catalog-membership-hero p {
+  margin: 0 0 26px;
+  color: rgba(239, 237, 224, 0.6);
+  font-family: var(--font-body);
+  font-size: clamp(12px, 1.2vw, 16px);
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.catalog-plan-card {
+  background: linear-gradient(180deg, rgba(24, 24, 15, 0.98), rgba(18, 18, 10, 0.96));
+}
+
+.catalog-plan-card.elite {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(230, 208, 45, 0.24), transparent 48%),
+    linear-gradient(180deg, rgba(48, 47, 23, 0.98), rgba(24, 24, 15, 0.98));
+}
+
+.all-pricing-plans-grid .pricing-group-heading {
+  text-align: center;
+  margin: 0 auto 22px;
+}
+
+.all-pricing-plans-grid .pricing-group-heading h3 {
+  margin-top: 10px;
+}
+
+.all-pricing-plans-grid .pricing-card-row {
+  gap: 22px;
+}
+
+.catalog-privilege-pack {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.85fr) repeat(2, minmax(220px, 1fr));
+  gap: 30px;
+  align-items: stretch;
+  padding: clamp(28px, 4vw, 58px);
+  border-radius: 8px;
+  background: rgba(38, 37, 27, 0.96);
+}
+
+.catalog-privilege-pack h3 {
+  margin: 0 0 18px;
+  color: var(--on-surface);
+  font-size: clamp(30px, 3.2vw, 44px);
+  line-height: 1.05;
+}
+
+.catalog-privilege-pack p {
+  margin: 0;
+  color: rgba(239, 237, 224, 0.78);
+  font-size: clamp(15px, 1.4vw, 20px);
+  line-height: 1.45;
+}
+
+.catalog-benefit-card {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  min-height: 170px;
+  padding: 34px;
+  border: 1px solid rgba(230, 208, 45, 0.12);
+  background: rgba(18, 18, 10, 0.22);
+}
+
+.catalog-benefit-card > span {
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  border-radius: 8px;
+  background: rgba(230, 208, 45, 0.14);
+  color: var(--secondary);
+  font-size: 42px;
+  flex: 0 0 auto;
+}
+
+.catalog-benefit-card strong {
+  display: block;
+  color: var(--on-surface);
+  font-size: clamp(24px, 2.4vw, 32px);
+}
+
+.catalog-benefit-card small {
+  display: block;
+  margin-top: 10px;
+  color: var(--secondary);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1024px) {
+  .pricing-section .pricing-freebies,
+  .catalog-privilege-pack {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing-section .pricing-freebies strong {
+    min-height: 96px;
+  }
+
+  .catalog-membership-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-membership-price {
+    align-items: flex-start;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .pricing-section .membership-fee-panel {
+    min-height: 0;
+    grid-template-columns: 1fr;
+    padding: 24px;
+  }
+
+  .pricing-section .membership-fee-panel::before {
+    width: 100%;
+    opacity: 0.22;
+  }
+
+  .home-membership-copy {
+    gap: 14px;
+  }
+
+  .home-membership-copy span {
+    font-size: 28px;
+  }
+
+  .home-membership-price {
+    align-items: flex-start;
+    min-width: 0;
+  }
+
+  .home-membership-price strong,
+  .catalog-membership-price strong {
+    font-size: clamp(54px, 18vw, 78px);
+  }
+
+  .pricing-section .pricing-freebies {
+    padding: 22px;
+  }
+
+  .pricing-section .pricing-freebies strong,
+  .catalog-benefit-card {
+    min-height: 88px;
+    padding: 22px;
+  }
+
+  .plans-modal-content {
+    width: calc(100% - 20px);
+    padding: 26px 14px;
+  }
+
+  .catalog-membership-hero {
+    min-height: 0;
+    padding: 24px;
+  }
+
+  .catalog-benefit-card {
+    gap: 18px;
+  }
+
+  .catalog-benefit-card > span {
+    width: 70px;
+    height: 70px;
+    font-size: 34px;
+  }
+}
+
 /* Gallery */
 .gallery-section {
   text-align: center;
@@ -3247,4 +3609,15 @@ footer {
         width: 44px;
         height: 44px;
     }
+}
+
+#plans-modal .plans-modal-content {
+  width: min(calc(100vw - 48px), 1560px);
+  max-width: none;
+}
+
+@media (max-width: 640px) {
+  #plans-modal .plans-modal-content {
+    width: calc(100% - 20px);
+  }
 }

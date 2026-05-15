@@ -252,6 +252,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <h4 class="font-bold text-lg mb-2 flex justify-between gap-3 text-on-surface">
                         <span>${escapeAdminHtml(plan.name)} ${plan.period ? '- ' + escapeAdminHtml(plan.period) : ''}</span>
                         ${plan.is_popular ? '<span class="text-xs bg-secondary text-on-secondary font-bold px-2 py-1 rounded">POPULAR</span>' : ''}
+                        ${plan.show_home ? '<span class="text-xs bg-green-400 text-black font-bold px-2 py-1 rounded">HOME</span>' : ''}
                     </h4>
                     <div class="text-xs uppercase tracking-widest text-secondary mb-2">${escapeAdminHtml(plan.category || 'plan')}</div>
                     <div class="text-sm text-on-surface-variant mb-1">Price: ₹${escapeAdminHtml(plan.price || '')}</div>
@@ -278,6 +279,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('edit-pricing-badge').value = plan.badge || '';
         document.getElementById('edit-pricing-sort-order').value = plan.sort_order || 0;
         document.getElementById('edit-pricing-popular').checked = Number(plan.is_popular) === 1;
+        document.getElementById('edit-pricing-show-home').checked = Number(plan.show_home) === 1;
         
         let features = plan.features;
         if (typeof features === 'string') {
@@ -308,6 +310,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const badge = document.getElementById('edit-pricing-badge').value;
             const sort_order = document.getElementById('edit-pricing-sort-order').value;
             const is_popular = document.getElementById('edit-pricing-popular').checked ? 1 : 0;
+            const show_home = document.getElementById('edit-pricing-show-home').checked ? 1 : 0;
             const featuresText = document.getElementById('edit-features').value;
             
             const featuresArray = featuresText.split(',').map(s => s.trim()).filter(s => s);
@@ -324,6 +327,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         cut_price,
                         badge,
                         is_popular,
+                        show_home,
                         sort_order,
                         features: featuresArray
                     })

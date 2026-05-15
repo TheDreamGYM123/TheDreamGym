@@ -11,15 +11,15 @@ const initialData = {
         hero_video_url: ''
     },
     pricing: [
-        { id: 1, name: 'Membership Fee', category: 'membership', period: 'One-time', price: '1499', cut_price: '', badge: 'Registration', features: '["Registration is separate from the training plans below."]', is_popular: 0, sort_order: 0 },
-        { id: 2, name: 'Subscription', category: 'subscription', period: '1 Month', price: '2500', cut_price: '', badge: 'Flexible start', features: '["Full gym access", "Zumba and aerobics access", "Strength and cardio floor"]', is_popular: 0, sort_order: 1 },
-        { id: 3, name: 'Subscription', category: 'subscription', period: '3 Months', price: '7000', cut_price: '', badge: 'Save ₹500', features: '["Full gym access", "Better consistency window", "Zumba and aerobics access"]', is_popular: 1, sort_order: 2 },
-        { id: 4, name: 'Subscription', category: 'subscription', period: '6 Months', price: '10000', cut_price: '', badge: 'Best value', features: '["Full gym access", "Long-term transformation focus", "Zumba and aerobics access"]', is_popular: 1, sort_order: 3 },
-        { id: 5, name: 'Subscription', category: 'subscription', period: '1 Year', price: '17000', cut_price: '', badge: 'Maximum savings', features: '["Full gym access", "Year-round fitness routine", "Zumba and aerobics access"]', is_popular: 0, sort_order: 4 },
-        { id: 6, name: 'Personal Training', category: 'personal-training', period: '1 Month', price: '12000', cut_price: '', badge: 'Focused start', features: '["Personal trainer guidance", "Form correction", "Goal-based workout plan"]', is_popular: 0, sort_order: 5 },
-        { id: 7, name: 'Personal Training', category: 'personal-training', period: '3 Months', price: '30000', cut_price: '', badge: 'Progress block', features: '["Personal trainer guidance", "Monthly progress tracking", "Goal-based workout plan"]', is_popular: 0, sort_order: 6 },
-        { id: 8, name: 'Personal Training', category: 'personal-training', period: '6 Months', price: '50000', cut_price: '', badge: 'Transformation', features: '["Personal trainer guidance", "Progress tracking", "Advanced training plan"]', is_popular: 1, sort_order: 7 },
-        { id: 9, name: 'Personal Training', category: 'personal-training', period: '1 Year', price: '90000', cut_price: '', badge: 'Elite coaching', features: '["Personal trainer guidance", "Long-term coaching structure", "Advanced training plan"]', is_popular: 0, sort_order: 8 }
+        { id: 1, name: 'Membership Fee', category: 'membership', period: 'One-time', price: '1499', cut_price: '2999', badge: 'Architects of performance initiation', features: '["Registration is separate from the training plans below."]', is_popular: 0, show_home: 0, sort_order: 0 },
+        { id: 2, name: 'Subscription', category: 'subscription', period: '1 Month', price: '2500', cut_price: '3000', badge: 'Foundation', features: '["Full gym access", "Zumba and aerobics access", "Strength and cardio floor"]', is_popular: 0, show_home: 1, sort_order: 1 },
+        { id: 3, name: 'Subscription', category: 'subscription', period: '3 Months', price: '7000', cut_price: '8000', badge: 'Momentum', features: '["Full gym access", "Better consistency window", "Zumba and aerobics access"]', is_popular: 0, show_home: 0, sort_order: 2 },
+        { id: 4, name: 'Subscription', category: 'subscription', period: '6 Months', price: '10000', cut_price: '12000', badge: 'Transformation', features: '["Full gym access", "Long-term transformation focus", "Zumba and aerobics access"]', is_popular: 1, show_home: 1, sort_order: 3 },
+        { id: 5, name: 'Subscription', category: 'subscription', period: '1 Year', price: '17000', cut_price: '20000', badge: 'Legacy', features: '["Full gym access", "Year-round fitness routine", "Zumba and aerobics access"]', is_popular: 0, show_home: 0, sort_order: 4 },
+        { id: 6, name: 'Personal Training', category: 'personal-training', period: '1 Month', price: '12000', cut_price: '15000', badge: 'Monthly revolution', features: '["Personal trainer guidance", "Form correction", "Goal-based workout plan"]', is_popular: 0, show_home: 0, sort_order: 5 },
+        { id: 7, name: 'Personal Training', category: 'personal-training', period: '3 Months', price: '30000', cut_price: '35000', badge: 'Peak performance', features: '["Personal trainer guidance", "Monthly progress tracking", "Goal-based workout plan"]', is_popular: 0, show_home: 0, sort_order: 6 },
+        { id: 8, name: 'Personal Training', category: 'personal-training', period: '6 Months', price: '50000', cut_price: '60000', badge: 'Elite habit', features: '["Personal trainer guidance", "Progress tracking", "Advanced training plan"]', is_popular: 1, show_home: 1, sort_order: 7 },
+        { id: 9, name: 'Personal Training', category: 'personal-training', period: '1 Year', price: '90000', cut_price: '110000', badge: 'Unstoppable force', features: '["Personal trainer guidance", "Long-term coaching structure", "Advanced training plan"]', is_popular: 0, show_home: 0, sort_order: 8 }
     ],
     gallery: [
         { id: 1, type: 'image', content: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBlNg-mQEb-GK81LYxDXHT93YC6-iChggxvYqAvXFMW1AS5wLgRFu65X98B4fTKRAU8tJHVETBloL2aArawzPdKEZB1v6zeAGY_XwrUYD05MTfL7OZSbPOdlTR7gyiKfQ2WLqJQuJWeYrOnz0O5ywnijoum3VQ3XHhdfefldRly2xVPor1DcCPlLoIO4K21hV5X7N4refI20AszZnqgtmYaorEFN-3aiVDrIDE-joWie1Lwgv7zIIfzn2e62zy_EzMEmNAkZGFFa2k', title: '12 WEEK SHRED', grid_column: 'span 2', grid_row: 'span 1' },
@@ -92,12 +92,26 @@ class JsonDatabase {
                 data.counters.pricing = initialData.counters.pricing;
             } else {
                 data.pricing = data.pricing.map(plan => {
+                    const defaultPlan = initialData.pricing.find(item => Number(item.id) === Number(plan.id)) || {};
                     const nextPlan = {
-                        cut_price: '',
-                        badge: '',
-                        sort_order: 0,
+                        cut_price: defaultPlan.cut_price || '',
+                        badge: defaultPlan.badge || '',
+                        show_home: defaultPlan.show_home || 0,
+                        sort_order: defaultPlan.sort_order || 0,
                         ...plan
                     };
+
+                    if (!nextPlan.cut_price && defaultPlan.cut_price) {
+                        nextPlan.cut_price = defaultPlan.cut_price;
+                    }
+
+                    if (nextPlan.category === 'membership' && (!nextPlan.badge || nextPlan.badge === 'Registration')) {
+                        nextPlan.badge = defaultPlan.badge || 'Architects of performance initiation';
+                    }
+
+                    if ((nextPlan.show_home === undefined || nextPlan.show_home === null) && defaultPlan.show_home !== undefined) {
+                        nextPlan.show_home = defaultPlan.show_home;
+                    }
 
                     if (
                         nextPlan.category === 'membership'

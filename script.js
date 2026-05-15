@@ -459,15 +459,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             const plans = await res.json();
             const membershipPlan = plans.find(plan => plan.category === 'membership');
             const trainingPlans = plans.filter(plan => plan.category !== 'membership');
+            const homepageMarkedPlans = trainingPlans.filter(plan => Number(plan.show_home) === 1).slice(0, 3);
             const popularPlans = trainingPlans.filter(plan => Number(plan.is_popular) === 1).slice(0, 3);
-            const homepagePlans = (popularPlans.length ? popularPlans : trainingPlans).slice(0, 3);
+            const homepagePlans = (homepageMarkedPlans.length ? homepageMarkedPlans : (popularPlans.length ? popularPlans : trainingPlans)).slice(0, 3);
             const formatPlanAmount = (amount) => Number(String(amount).replace(/[^\d.]/g, '') || 0).toLocaleString('en-IN');
             const renderCutPrice = (amount) => {
                 const value = Number(String(amount || '').replace(/[^\d.]/g, '') || 0);
                 return value ? `<div class="pricing-cut-price">₹${value.toLocaleString('en-IN')}</div>` : '';
             };
-            const renderPlanCard = (plan, featured = false) => `
-                <div class="pricing-card ${featured ? 'elite' : ''}">
+            const renderPlanCard = (plan, featured = false, catalog = false) => `
+                <div class="pricing-card ${featured ? 'elite' : ''} ${catalog ? 'catalog-plan-card' : ''}">
                     ${featured ? '<div class="elite-glow"></div><div class="font-label-caps elite-badge">POPULAR</div>' : ''}
                     <div>
                         <div class="font-label-caps pricing-plan-name uppercase">${plan.name}</div>
@@ -484,17 +485,49 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </button>
                 </div>
             `;
+            const renderMembershipHero = (plan) => plan ? `
+                <div class="catalog-membership-hero">
+                    <div>
+                        <h3>One-Time Membership Fee</h3>
+                        <p class="font-label-caps">${plan.badge || 'Architects of performance initiation'}</p>
+                        <button class="btn-pricing membership-fee-btn" data-plan-name="${plan.name}" data-billing-cycle="${plan.period}" data-amount="${plan.price}">PAY MEMBERSHIP FEE</button>
+                    </div>
+                    <div class="catalog-membership-price">
+                        ${renderCutPrice(plan.cut_price)}
+                        <strong><span>₹</span>${formatPlanAmount(plan.price)}</strong>
+                    </div>
+                </div>
+            ` : '';
+            const renderPrivilegePack = () => `
+                <div class="catalog-privilege-pack">
+                    <div>
+                        <h3>The Privilege Pack</h3>
+                        <p>Membership at The Dream Gym isn't just about equipment. It's about access to the flow state through collective energy.</p>
+                    </div>
+                    <div class="catalog-benefit-card">
+                        <span class="material-symbols-outlined">self_improvement</span>
+                        <div><strong>Zumba</strong><small>Included service</small></div>
+                    </div>
+                    <div class="catalog-benefit-card">
+                        <span class="material-symbols-outlined">air</span>
+                        <div><strong>Aerobics</strong><small>Included service</small></div>
+                    </div>
+                </div>
+            `;
 
             if (membershipPlan) {
                 const membershipPanel = document.querySelector('.membership-fee-panel');
                 if (membershipPanel) {
                     membershipPanel.innerHTML = `
-                        <div>
+                        <div class="home-membership-copy">
                             <span class="font-label-caps">One-time membership fee</span>
-                            <strong>₹${formatPlanAmount(membershipPlan.price)}</strong>
+                            <p>${membershipPlan.badge || 'Architects of performance initiation'}</p>
+                            <button class="btn-pricing membership-fee-btn" data-plan-name="${membershipPlan.name}" data-billing-cycle="${membershipPlan.period}" data-amount="${membershipPlan.price}">PAY MEMBERSHIP FEE</button>
                         </div>
-                        <p>${(membershipPlan.features || []).join(' ') || 'Registration is separate from the training plans below.'}</p>
-                        <button class="btn-pricing membership-fee-btn" data-plan-name="${membershipPlan.name}" data-billing-cycle="${membershipPlan.period}" data-amount="${membershipPlan.price}">PAY MEMBERSHIP FEE</button>
+                        <div class="home-membership-price">
+                            ${renderCutPrice(membershipPlan.cut_price)}
+                            <strong><span>₹</span>${formatPlanAmount(membershipPlan.price)}</strong>
+                        </div>
                     `;
                 }
             }
@@ -506,7 +539,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     subscription: 'Subscription Plans',
                     'personal-training': 'Personal Training Plans'
                 };
-                allPlansGrid.innerHTML = Object.entries(groupLabels).map(([category, title]) => {
+                const planGroupsHtml = Object.entries(groupLabels).map(([category, title]) => {
                     const categoryPlans = trainingPlans.filter(plan => plan.category === category);
                     if (categoryPlans.length === 0) return '';
                     return `
@@ -516,11 +549,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 <h3 class="font-display-md uppercase">${title}</h3>
                             </div>
                             <div class="pricing-card-row">
-                                ${categoryPlans.map(plan => renderPlanCard(plan, Number(plan.is_popular) === 1)).join('')}
+                                ${categoryPlans.map(plan => renderPlanCard(plan, Number(plan.is_popular) === 1, true)).join('')}
                             </div>
                         </div>
                     `;
                 }).join('');
+                allPlansGrid.innerHTML = `
+                    ${renderMembershipHero(membershipPlan)}
+                    ${planGroupsHtml}
+                    ${renderPrivilegePack()}
+                `;
             }
 
             const newPlanElements = document.querySelectorAll('.pricing-card, .pricing-plan-group');
