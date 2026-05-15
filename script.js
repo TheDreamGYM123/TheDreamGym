@@ -499,23 +499,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                 </div>
             ` : '';
-            const renderPrivilegePack = () => `
-                <div class="catalog-privilege-pack">
-                    <div>
-                        <h3>The Privilege Pack</h3>
-                        <p>Membership at The Dream Gym isn't just about equipment. It's about access to the flow state through collective energy.</p>
-                    </div>
-                    <div class="catalog-benefit-card">
-                        <span class="material-symbols-outlined">self_improvement</span>
-                        <div><strong>Zumba</strong><small>Included service</small></div>
-                    </div>
-                    <div class="catalog-benefit-card">
-                        <span class="material-symbols-outlined">air</span>
-                        <div><strong>Aerobics</strong><small>Included service</small></div>
-                    </div>
-                </div>
-            `;
-
             if (membershipPlan) {
                 const membershipPanel = document.querySelector('.membership-fee-panel');
                 if (membershipPanel) {
@@ -559,7 +542,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 allPlansGrid.innerHTML = `
                     ${renderMembershipHero(membershipPlan)}
                     ${planGroupsHtml}
-                    ${renderPrivilegePack()}
                 `;
                 setupPlansAutoScroll(allPlansGrid);
             }
