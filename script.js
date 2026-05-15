@@ -464,7 +464,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const formatPlanAmount = (amount) => Number(String(amount).replace(/[^\d.]/g, '') || 0).toLocaleString('en-IN');
             const renderCutPrice = (amount) => {
                 const value = Number(String(amount || '').replace(/[^\d.]/g, '') || 0);
-                return value ? `<div class="pricing-cut-price">Rs ${value.toLocaleString('en-IN')}</div>` : '';
+                return value ? `<div class="pricing-cut-price">₹${value.toLocaleString('en-IN')}</div>` : '';
             };
             const renderPlanCard = (plan, featured = false) => `
                 <div class="pricing-card ${featured ? 'elite' : ''}">
@@ -474,7 +474,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <div class="pricing-period-label">${plan.period || ''}</div>
                         <div class="pricing-plan-badge">${plan.badge || plan.period}</div>
                         ${renderCutPrice(plan.cut_price)}
-                        <div class="pricing-amount text-secondary">Rs ${formatPlanAmount(plan.price)}<span class="font-label-caps"> / ${String(plan.period || '').toUpperCase()}</span></div>
+                        <div class="pricing-amount text-secondary">₹${formatPlanAmount(plan.price)}<span class="font-label-caps"> / ${String(plan.period || '').toUpperCase()}</span></div>
                     </div>
                     <ul class="pricing-features font-body-sm">
                         ${(plan.features || []).map(feature => `<li><span class="material-symbols-outlined text-secondary">check_circle</span> ${feature}</li>`).join('')}
@@ -491,7 +491,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     membershipPanel.innerHTML = `
                         <div>
                             <span class="font-label-caps">One-time membership fee</span>
-                            <strong>Rs ${formatPlanAmount(membershipPlan.price)}</strong>
+                            <strong>₹${formatPlanAmount(membershipPlan.price)}</strong>
                         </div>
                         <p>${(membershipPlan.features || []).join(' ') || 'Registration is separate from the training plans below.'}</p>
                         <button class="btn-pricing membership-fee-btn" data-plan-name="${membershipPlan.name}" data-billing-cycle="${membershipPlan.period}" data-amount="${membershipPlan.price}">PAY MEMBERSHIP FEE</button>
@@ -692,7 +692,7 @@ function openPaymentModal({ planName, billingCycle, amount }) {
     if (cycleInput) cycleInput.value = billingCycle || 'Monthly';
     if (amountInput) amountInput.value = amount || '';
     if (summary) {
-        summary.innerText = `${planName || 'Membership'} - ${billingCycle || 'Monthly'} - Rs ${amount || ''}`;
+        summary.innerText = `${planName || 'Membership'} - ${billingCycle || 'Monthly'} - ₹${amount || ''}`;
     }
     if (receipt) {
         receipt.hidden = true;
@@ -761,7 +761,7 @@ function showPaymentReceipt(receiptData) {
             <div class="receipt-line"><span>Name</span><strong>${escapeHtml(receiptData.name)}</strong></div>
             <div class="receipt-line"><span>Transaction ID</span><strong>${escapeHtml(receiptData.paymentId)}</strong></div>
             <div class="receipt-line"><span>Plan</span><strong>${escapeHtml(receiptData.plan)} (${escapeHtml(receiptData.billingCycle)})</strong></div>
-            <div class="receipt-line"><span>Amount</span><strong>Rs ${escapeHtml(receiptData.amount)}</strong></div>
+            <div class="receipt-line"><span>Amount</span><strong>₹${escapeHtml(receiptData.amount)}</strong></div>
             <div class="receipt-line"><span>Payment Time</span><strong>${escapeHtml(formatIndiaTime(receiptData.paidAt))}</strong></div>
             <div class="receipt-line"><span>Order ID</span><strong>${escapeHtml(receiptData.orderId || 'Not created in demo mode')}</strong></div>
         </div>
