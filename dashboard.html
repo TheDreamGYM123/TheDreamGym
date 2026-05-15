@@ -216,7 +216,7 @@
 
                 <div class="space-y-4">
                     <h3 class="text-lg font-bold text-on-surface">Existing Plans</h3>
-                    <div id="pricing-list" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div id="pricing-list" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                         <!-- Loaded dynamically -->
                     </div>
                 </div>
@@ -224,24 +224,40 @@
                 <div id="pricing-edit-form" class="hidden mt-8 bg-surface-container-highest p-6 rounded-lg space-y-4">
                     <h3 class="text-lg font-bold text-on-surface" id="pricing-edit-title">Edit Plan</h3>
                     <input type="hidden" id="edit-pricing-id">
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Monthly Price</label>
-                            <input type="text" id="edit-monthly-price" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary">
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Plan Name</label>
+                            <input type="text" id="edit-pricing-name" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Monthly Cut Price</label>
-                            <input type="text" id="edit-monthly-cut-price" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary">
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Category</label>
+                            <select id="edit-pricing-category" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary">
+                                <option value="membership">Membership Fee</option>
+                                <option value="subscription">Subscription</option>
+                                <option value="personal-training">Personal Training</option>
+                            </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Yearly Price</label>
-                            <input type="text" id="edit-yearly-price" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary">
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Duration / Period</label>
+                            <input type="text" id="edit-pricing-period" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Yearly Cut Price</label>
-                            <input type="text" id="edit-yearly-cut-price" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary">
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Price</label>
+                            <input type="text" id="edit-pricing-price" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Badge</label>
+                            <input type="text" id="edit-pricing-badge" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Sort Order</label>
+                            <input type="number" id="edit-pricing-sort-order" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary">
                         </div>
                     </div>
+                    <label class="flex items-center gap-3 text-on-surface font-bold">
+                        <input type="checkbox" id="edit-pricing-popular" class="rounded border-outline-variant bg-background text-secondary focus:ring-secondary">
+                        Show this plan in the 3 popular homepage cards
+                    </label>
                     <div>
                         <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Features (Comma separated)</label>
                         <textarea id="edit-features" class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary" rows="3"></textarea>
@@ -415,5 +431,5 @@
     </main>
 </div>
 
-<script src="dashboard.js?v=20260530"></script>
+<script src="dashboard.js?v=20260533"></script>
 </body></html>

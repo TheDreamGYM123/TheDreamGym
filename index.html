@@ -23,7 +23,7 @@
     <title>The Dream Gym</title>
     <meta name="description"
         content="Forge your strength, define your limits at The Dream Gym. Elite trainers, world-class equipment, and a premium training environment.">
-    <link rel="stylesheet" href="style.css?v=20260532">
+    <link rel="stylesheet" href="style.css?v=20260533">
 </head>
 
 <body>
@@ -348,6 +348,12 @@
             <div class="pricing-grid fade-in">
                 <!-- Populated dynamically by script.js -->
             </div>
+
+            <div class="pricing-explore-wrap fade-in">
+                <button class="btn-cta-outline font-display-md" onclick="openModal('plans-modal')">
+                    EXPLORE ALL MEMBERSHIP OPTIONS
+                </button>
+            </div>
         </div>
     </section>
 
@@ -554,6 +560,21 @@
         </div>
     </div>
 
+    <!-- Full Plans Modal -->
+    <div id="plans-modal" class="modal">
+        <div class="modal-content glass-card plans-modal-content">
+            <span class="close-modal" onclick="closeModal('plans-modal')">&times;</span>
+            <div class="plans-modal-header">
+                <span class="font-label-caps text-secondary">ALL TRAINING OPTIONS</span>
+                <h2 class="font-display-lg uppercase">CHOOSE YOUR PERFECT PLAN</h2>
+                <p class="font-body-lg">Compare every subscription and personal training option in one place.</p>
+            </div>
+            <div id="all-pricing-plans-grid" class="all-pricing-plans-grid">
+                <!-- Populated dynamically by script.js -->
+            </div>
+        </div>
+    </div>
+
     <!-- Contact Modal -->
     <div id="contact-modal" class="modal">
         <div class="modal-content glass-card" style="padding: 2.5rem; max-width: 672px;">
@@ -739,7 +760,7 @@
         </div>
     </footer>
 
-    <script src="script.js?v=20260532"></script>
+    <script src="script.js?v=20260533"></script>
 
     <!-- WhatsApp Floating Button -->
     <a href="https://wa.me/918328929165" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">

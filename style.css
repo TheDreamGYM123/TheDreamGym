@@ -1417,6 +1417,117 @@ nav {
   }
 }
 
+.pricing-section .pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 32px;
+}
+
+.pricing-section .pricing-grid .pricing-card {
+  min-height: 100%;
+}
+
+.pricing-explore-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.plans-modal-content {
+  max-width: 1160px;
+  padding: 36px;
+}
+
+.plans-modal-header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 32px;
+}
+
+.plans-modal-header h2 {
+  margin: 12px 0;
+}
+
+.plans-modal-header p {
+  color: var(--on-surface-variant);
+}
+
+.all-pricing-plans-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 42px;
+}
+
+.all-pricing-plans-grid .pricing-group-heading {
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+.membership-fee-panel {
+  max-width: 980px;
+  border-radius: 10px;
+  background:
+    linear-gradient(135deg, rgba(230, 208, 45, 0.18), rgba(30, 28, 17, 0.92)),
+    radial-gradient(circle at 90% 20%, rgba(230, 208, 45, 0.18), transparent 34%);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+}
+
+@media (max-width: 1024px) {
+  .pricing-section .pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .plans-modal-content {
+    padding: 30px 22px;
+  }
+}
+
+@media (max-width: 640px) {
+  .pricing-section .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0;
+    margin: 24px 0 0;
+    overflow: visible;
+  }
+
+  .pricing-section .pricing-grid .pricing-card {
+    flex: initial;
+    margin: 0;
+  }
+
+  .pricing-explore-wrap .btn-cta-outline {
+    width: 100%;
+    text-align: center;
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .plans-modal-content {
+    width: calc(100% - 24px);
+    max-height: 88vh;
+    padding: 28px 16px;
+  }
+
+  .plans-modal-header {
+    text-align: left;
+    margin-bottom: 24px;
+  }
+
+  .all-pricing-plans-grid {
+    gap: 32px;
+  }
+
+  .all-pricing-plans-grid .pricing-card-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Gallery */
 .gallery-section {
   text-align: center;
@@ -2652,6 +2763,39 @@ footer {
 
 .curriculum-table .sunday-row:hover {
   background-color: rgba(230, 208, 45, 0.05);
+}
+
+@media (max-width: 640px) {
+  #curriculum-modal .modal-content {
+    width: calc(100% - 24px) !important;
+    padding: 28px 16px !important;
+    max-height: 88vh;
+  }
+
+  #curriculum-modal .text-center {
+    text-align: left !important;
+    margin-bottom: 22px !important;
+  }
+
+  #curriculum-modal h2 {
+    font-size: 32px;
+    line-height: 1.05;
+  }
+
+  #curriculum-modal p {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .curriculum-table {
+    min-width: 520px;
+  }
+
+  .curriculum-table th,
+  .curriculum-table td {
+    padding: 14px 12px;
+    font-size: 13px;
+  }
 }
 
 /* Reviews Section */

@@ -249,12 +249,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             pricingList.innerHTML = currentPricingPlans.map(plan => `
                 <div class="bg-surface-container-highest border ${plan.is_popular ? 'border-secondary' : 'border-outline-variant'} rounded-lg p-6 cursor-pointer hover:border-secondary transition-colors" onclick="editPricing(${plan.id})">
-                    <h4 class="font-bold text-lg mb-2 flex justify-between text-on-surface">
-                        ${plan.name} 
+                    <h4 class="font-bold text-lg mb-2 flex justify-between gap-3 text-on-surface">
+                        <span>${escapeAdminHtml(plan.name)} ${plan.period ? '- ' + escapeAdminHtml(plan.period) : ''}</span>
                         ${plan.is_popular ? '<span class="text-xs bg-secondary text-on-secondary font-bold px-2 py-1 rounded">POPULAR</span>' : ''}
                     </h4>
-                    <div class="text-sm text-on-surface-variant mb-1">Monthly: ₹${plan.monthly_price}</div>
-                    <div class="text-sm text-on-surface-variant">Yearly: ₹${plan.yearly_price}</div>
+                    <div class="text-xs uppercase tracking-widest text-secondary mb-2">${escapeAdminHtml(plan.category || 'plan')}</div>
+                    <div class="text-sm text-on-surface-variant mb-1">Price: Rs ${escapeAdminHtml(plan.price || '')}</div>
+                    <div class="text-sm text-on-surface-variant">Badge: ${escapeAdminHtml(plan.badge || 'None')}</div>
                 </div>
             `).join('');
         } catch (error) {
@@ -267,11 +268,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!plan) return;
         
         document.getElementById('edit-pricing-id').value = plan.id;
-        document.getElementById('pricing-edit-title').innerText = `Edit Plan: ${plan.name}`;
-        document.getElementById('edit-monthly-price').value = plan.monthly_price;
-        document.getElementById('edit-monthly-cut-price').value = plan.monthly_cut_price;
-        document.getElementById('edit-yearly-price').value = plan.yearly_price;
-        document.getElementById('edit-yearly-cut-price').value = plan.yearly_cut_price;
+        document.getElementById('pricing-edit-title').innerText = `Edit Plan: ${plan.name} ${plan.period || ''}`;
+        document.getElementById('edit-pricing-name').value = plan.name || '';
+        document.getElementById('edit-pricing-category').value = plan.category || 'subscription';
+        document.getElementById('edit-pricing-period').value = plan.period || '';
+        document.getElementById('edit-pricing-price').value = plan.price || '';
+        document.getElementById('edit-pricing-badge').value = plan.badge || '';
+        document.getElementById('edit-pricing-sort-order').value = plan.sort_order || 0;
+        document.getElementById('edit-pricing-popular').checked = Number(plan.is_popular) === 1;
         
         let features = plan.features;
         if (typeof features === 'string') {
@@ -294,10 +298,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (savePricingBtn) {
         savePricingBtn.addEventListener('click', async () => {
             const id = document.getElementById('edit-pricing-id').value;
-            const monthly_price = document.getElementById('edit-monthly-price').value;
-            const monthly_cut_price = document.getElementById('edit-monthly-cut-price').value;
-            const yearly_price = document.getElementById('edit-yearly-price').value;
-            const yearly_cut_price = document.getElementById('edit-yearly-cut-price').value;
+            const name = document.getElementById('edit-pricing-name').value;
+            const category = document.getElementById('edit-pricing-category').value;
+            const period = document.getElementById('edit-pricing-period').value;
+            const price = document.getElementById('edit-pricing-price').value;
+            const badge = document.getElementById('edit-pricing-badge').value;
+            const sort_order = document.getElementById('edit-pricing-sort-order').value;
+            const is_popular = document.getElementById('edit-pricing-popular').checked ? 1 : 0;
             const featuresText = document.getElementById('edit-features').value;
             
             const featuresArray = featuresText.split(',').map(s => s.trim()).filter(s => s);
@@ -307,10 +314,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        monthly_price,
-                        monthly_cut_price,
-                        yearly_price,
-                        yearly_cut_price,
+                        name,
+                        category,
+                        period,
+                        price,
+                        badge,
+                        is_popular,
+                        sort_order,
                         features: featuresArray
                     })
                 });

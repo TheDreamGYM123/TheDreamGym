@@ -306,17 +306,20 @@ app.get('/api/pricing', (req, res) => {
         if (err) return res.status(500).json({ error: err.message });
         rows.forEach(row => {
             try { row.features = JSON.parse(row.features); } catch (e) { row.features = []; }
+            row.is_popular = Number(row.is_popular) ? 1 : 0;
+            row.sort_order = Number(row.sort_order || row.id || 0);
         });
+        rows.sort((a, b) => a.sort_order - b.sort_order);
         res.json(rows);
     });
 });
 
 // PUT Pricing (Update a plan)
 app.put('/api/pricing/:id', (req, res) => {
-    const { monthly_price, monthly_cut_price, yearly_price, yearly_cut_price, features } = req.body;
+    const { name, category, period, price, badge, features, is_popular, sort_order } = req.body;
     const featuresStr = JSON.stringify(features);
-    db.run(`UPDATE pricing SET monthly_price=?, monthly_cut_price=?, yearly_price=?, yearly_cut_price=?, features=? WHERE id=?`,
-        [monthly_price, monthly_cut_price, yearly_price, yearly_cut_price, featuresStr, req.params.id],
+    db.run(`UPDATE pricing SET name=?, category=?, period=?, price=?, badge=?, features=?, is_popular=?, sort_order=? WHERE id=?`,
+        [name, category, period, price, badge, featuresStr, is_popular ? 1 : 0, sort_order || 0, req.params.id],
         (err) => {
             if (err) return res.status(500).json({ error: err.message });
             res.json({ success: true });

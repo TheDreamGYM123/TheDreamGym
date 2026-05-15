@@ -454,74 +454,84 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Load Pricing
     const pricingGrid = document.querySelector('.pricing-grid');
     if (pricingGrid) {
-        const pricingGroups = [
-            {
-                title: 'Subscription',
-                eyebrow: 'Gym membership',
-                description: 'Best for regular gym access, strength training, cardio, and group energy.',
-                plans: [
-                    { period: '1 Month', amount: 2500, badge: 'Flexible start', features: ['Full gym access', 'Zumba and aerobics access', 'Strength and cardio floor'] },
-                    { period: '3 Months', amount: 7000, badge: 'Save Rs 500', features: ['Full gym access', 'Better consistency window', 'Zumba and aerobics access'] },
-                    { period: '6 Months', amount: 10000, badge: 'Best value', featured: true, features: ['Full gym access', 'Long-term transformation focus', 'Zumba and aerobics access'] },
-                    { period: '1 Year', amount: 17000, badge: 'Maximum savings', features: ['Full gym access', 'Year-round fitness routine', 'Zumba and aerobics access'] }
-                ]
-            },
-            {
-                title: 'Personal Training',
-                eyebrow: 'Coach-led plan',
-                description: 'Best for faster progress, guided form correction, and a structured goal plan.',
-                plans: [
-                    { period: '1 Month', amount: 12000, badge: 'Focused start', features: ['Personal trainer guidance', 'Form correction', 'Goal-based workout plan'] },
-                    { period: '3 Months', amount: 30000, badge: 'Progress block', features: ['Personal trainer guidance', 'Monthly progress tracking', 'Goal-based workout plan'] },
-                    { period: '6 Months', amount: 50000, badge: 'Transformation', featured: true, features: ['Personal trainer guidance', 'Progress tracking', 'Advanced training plan'] },
-                    { period: '1 Year', amount: 90000, badge: 'Elite coaching', features: ['Personal trainer guidance', 'Long-term coaching structure', 'Advanced training plan'] }
-                ]
-            }
-        ];
-
-        const formatPlanAmount = (amount) => amount.toLocaleString('en-IN');
-
-        pricingGrid.innerHTML = pricingGroups.map(group => `
-            <div class="pricing-plan-group">
-                <div class="pricing-group-heading">
-                    <span class="font-label-caps">${group.eyebrow}</span>
-                    <h3 class="font-display-md uppercase">${group.title}</h3>
-                    <p>${group.description}</p>
+        try {
+            const res = await fetch('/api/pricing');
+            const plans = await res.json();
+            const membershipPlan = plans.find(plan => plan.category === 'membership');
+            const trainingPlans = plans.filter(plan => plan.category !== 'membership');
+            const popularPlans = trainingPlans.filter(plan => Number(plan.is_popular) === 1).slice(0, 3);
+            const homepagePlans = (popularPlans.length ? popularPlans : trainingPlans).slice(0, 3);
+            const formatPlanAmount = (amount) => Number(String(amount).replace(/[^\d.]/g, '') || 0).toLocaleString('en-IN');
+            const renderPlanCard = (plan, featured = false) => `
+                <div class="pricing-card ${featured ? 'elite' : ''}">
+                    ${featured ? '<div class="elite-glow"></div><div class="font-label-caps elite-badge">POPULAR</div>' : ''}
+                    <div>
+                        <div class="font-label-caps pricing-plan-name uppercase">${plan.name}</div>
+                        <div class="pricing-plan-badge">${plan.badge || plan.period}</div>
+                        <div class="pricing-amount text-secondary">Rs ${formatPlanAmount(plan.price)}<span class="font-label-caps"> / ${String(plan.period || '').toUpperCase()}</span></div>
+                    </div>
+                    <ul class="pricing-features font-body-sm">
+                        ${(plan.features || []).map(feature => `<li><span class="material-symbols-outlined text-secondary">check_circle</span> ${feature}</li>`).join('')}
+                    </ul>
+                    <button class="${featured ? 'btn-pricing-elite font-label-caps font-display-md' : 'btn-pricing font-label-caps'}" data-plan-name="${plan.name}" data-billing-cycle="${plan.period}" data-amount="${plan.price}">
+                        ${featured ? 'GET STARTED' : 'SELECT PLAN'}
+                    </button>
                 </div>
-                <div class="pricing-card-row">
-                    ${group.plans.map(plan => `
-                        <div class="pricing-card ${plan.featured ? 'elite' : ''}">
-                            ${plan.featured ? '<div class="elite-glow"></div><div class="font-label-caps elite-badge">POPULAR</div>' : ''}
-                            <div>
-                                <div class="font-label-caps pricing-plan-name uppercase">${plan.period}</div>
-                                <div class="pricing-plan-badge">${plan.badge}</div>
-                                <div class="pricing-amount text-secondary">Rs ${formatPlanAmount(plan.amount)}<span class="font-label-caps"> / ${plan.period.toUpperCase()}</span></div>
-                            </div>
-                            <ul class="pricing-features font-body-sm">
-                                ${plan.features.map(feature => `<li><span class="material-symbols-outlined text-secondary">check_circle</span> ${feature}</li>`).join('')}
-                            </ul>
-                            <button class="${plan.featured ? 'btn-pricing-elite font-label-caps font-display-md' : 'btn-pricing font-label-caps'}" data-plan-name="${group.title}" data-billing-cycle="${plan.period}" data-amount="${plan.amount}">
-                                ${plan.featured ? 'GET STARTED' : 'SELECT PLAN'}
-                            </button>
+            `;
+
+            if (membershipPlan) {
+                const membershipPanel = document.querySelector('.membership-fee-panel');
+                if (membershipPanel) {
+                    membershipPanel.innerHTML = `
+                        <div>
+                            <span class="font-label-caps">One-time membership fee</span>
+                            <strong>Rs ${formatPlanAmount(membershipPlan.price)}</strong>
                         </div>
-                    `).join('')}
-                </div>
-            </div>
-        `).join('');
+                        <p>${(membershipPlan.features || []).join(' ') || 'Registration is separate from the training plans below.'}</p>
+                        <button class="btn-pricing membership-fee-btn" data-plan-name="${membershipPlan.name}" data-billing-cycle="${membershipPlan.period}" data-amount="${membershipPlan.price}">PAY MEMBERSHIP FEE</button>
+                    `;
+                }
+            }
 
-        const newPlanElements = pricingGrid.querySelectorAll('.pricing-card, .pricing-plan-group');
-        newPlanElements.forEach(el => fadeObserver.observe(el));
+            pricingGrid.innerHTML = homepagePlans.map((plan, index) => renderPlanCard(plan, index === 1)).join('');
+            const allPlansGrid = document.getElementById('all-pricing-plans-grid');
+            if (allPlansGrid) {
+                const groupLabels = {
+                    subscription: 'Subscription Plans',
+                    'personal-training': 'Personal Training Plans'
+                };
+                allPlansGrid.innerHTML = Object.entries(groupLabels).map(([category, title]) => {
+                    const categoryPlans = trainingPlans.filter(plan => plan.category === category);
+                    if (categoryPlans.length === 0) return '';
+                    return `
+                        <div class="pricing-plan-group">
+                            <div class="pricing-group-heading">
+                                <span class="font-label-caps">${category === 'subscription' ? 'Gym membership' : 'Coach-led plan'}</span>
+                                <h3 class="font-display-md uppercase">${title}</h3>
+                            </div>
+                            <div class="pricing-card-row">
+                                ${categoryPlans.map(plan => renderPlanCard(plan, Number(plan.is_popular) === 1)).join('')}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
 
-        document.querySelectorAll('.pricing-card button, .membership-fee-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                openPaymentModal({
-                    planName: button.dataset.planName,
-                    billingCycle: button.dataset.billingCycle,
-                    amount: button.dataset.amount
+            const newPlanElements = document.querySelectorAll('.pricing-card, .pricing-plan-group');
+            newPlanElements.forEach(el => fadeObserver.observe(el));
+
+            document.querySelectorAll('.pricing-card button, .membership-fee-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    openPaymentModal({
+                        planName: button.dataset.planName,
+                        billingCycle: button.dataset.billingCycle,
+                        amount: button.dataset.amount
+                    });
                 });
             });
-        });
-
+        } catch (e) {
+            console.error("Failed to load pricing", e);
+        }
     }
 
     // Load Trainers
