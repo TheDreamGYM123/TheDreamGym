@@ -454,83 +454,74 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Load Pricing
     const pricingGrid = document.querySelector('.pricing-grid');
     if (pricingGrid) {
-        try {
-            const res = await fetch('/api/pricing');
-            const pricingItems = await res.json();
-            
-            pricingGrid.innerHTML = '';
-            pricingItems.forEach(item => {
-                let featuresHtml = '';
-                if (item.features && Array.isArray(item.features)) {
-                    featuresHtml = item.features.map(f => `<li><span class="material-symbols-outlined text-secondary">check_circle</span> ${f}</li>`).join('');
-                }
-                
-                const isElite = item.is_popular === 1;
-                const monthlyAmount = item.monthly_price;
-                const yearlyAmount = item.yearly_price;
-                const cardClass = isElite ? 'pricing-card elite' : 'pricing-card';
-                const btnClass = isElite ? 'btn-pricing-elite font-label-caps font-display-md' : 'btn-pricing font-label-caps';
-                const eliteExtras = isElite ? `
-                    <div class="elite-glow"></div>
-                    <div class="font-label-caps elite-badge">MOST POPULAR</div>
-                ` : '';
-                
-                pricingGrid.innerHTML += `
-                <div class="${cardClass}">
-                    ${eliteExtras}
-                    <div>
-                        <div class="font-label-caps pricing-plan-name uppercase">${item.name}</div>
-                        <div class="monthly-price">
-                            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px;">
-                                <div style="text-decoration: line-through; opacity: 0.5; font-size: 20px;">₹${item.monthly_cut_price}</div>
-                                <div class="pricing-amount text-secondary" style="font-size: 56px;">₹${item.monthly_price}<span class="font-label-caps" style="font-size: 14px; color: var(--on-surface);"> / MONTH</span></div>
-                            </div>
-                        </div>
-                        <div class="yearly-price">
-                            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px;">
-                                <div style="text-decoration: line-through; opacity: 0.5; font-size: 20px;">₹${item.yearly_cut_price}</div>
-                                <div class="pricing-amount text-secondary" style="font-size: 56px;">₹${item.yearly_price}<span class="font-label-caps" style="font-size: 14px; color: var(--on-surface);"> / YR</span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <ul class="pricing-features font-body-sm" ${!isElite ? 'style="color: var(--on-surface-variant);"' : ''}>
-                        ${featuresHtml}
-                    </ul>
-                    <button class="${btnClass}" data-plan-name="${item.name}" data-monthly-amount="${monthlyAmount}" data-yearly-amount="${yearlyAmount}" ${isElite ? 'style="font-size: 16px; color: var(--background);"' : ''}>${isElite ? 'GET STARTED' : 'SELECT PLAN'}</button>
-                </div>
-                `;
-            });
-            
-            const newFadeElements = pricingGrid.querySelectorAll('.pricing-card');
-            newFadeElements.forEach(el => fadeObserver.observe(el));
+        const pricingGroups = [
+            {
+                title: 'Subscription',
+                eyebrow: 'Gym membership',
+                description: 'Best for regular gym access, strength training, cardio, and group energy.',
+                plans: [
+                    { period: '1 Month', amount: 2500, badge: 'Flexible start', features: ['Full gym access', 'Zumba and aerobics access', 'Strength and cardio floor'] },
+                    { period: '3 Months', amount: 7000, badge: 'Save Rs 500', features: ['Full gym access', 'Better consistency window', 'Zumba and aerobics access'] },
+                    { period: '6 Months', amount: 10000, badge: 'Best value', featured: true, features: ['Full gym access', 'Long-term transformation focus', 'Zumba and aerobics access'] },
+                    { period: '1 Year', amount: 17000, badge: 'Maximum savings', features: ['Full gym access', 'Year-round fitness routine', 'Zumba and aerobics access'] }
+                ]
+            },
+            {
+                title: 'Personal Training',
+                eyebrow: 'Coach-led plan',
+                description: 'Best for faster progress, guided form correction, and a structured goal plan.',
+                plans: [
+                    { period: '1 Month', amount: 12000, badge: 'Focused start', features: ['Personal trainer guidance', 'Form correction', 'Goal-based workout plan'] },
+                    { period: '3 Months', amount: 30000, badge: 'Progress block', features: ['Personal trainer guidance', 'Monthly progress tracking', 'Goal-based workout plan'] },
+                    { period: '6 Months', amount: 50000, badge: 'Transformation', featured: true, features: ['Personal trainer guidance', 'Progress tracking', 'Advanced training plan'] },
+                    { period: '1 Year', amount: 90000, badge: 'Elite coaching', features: ['Personal trainer guidance', 'Long-term coaching structure', 'Advanced training plan'] }
+                ]
+            }
+        ];
 
-            pricingGrid.querySelectorAll('.btn-pricing, .btn-pricing-elite').forEach(button => {
-                button.addEventListener('click', () => {
-                    const isYearly = pricingToggle && pricingToggle.checked;
-                    openPaymentModal({
-                        planName: button.dataset.planName,
-                        billingCycle: isYearly ? 'Yearly' : 'Monthly',
-                        amount: isYearly ? button.dataset.yearlyAmount : button.dataset.monthlyAmount
-                    });
+        const formatPlanAmount = (amount) => amount.toLocaleString('en-IN');
+
+        pricingGrid.innerHTML = pricingGroups.map(group => `
+            <div class="pricing-plan-group">
+                <div class="pricing-group-heading">
+                    <span class="font-label-caps">${group.eyebrow}</span>
+                    <h3 class="font-display-md uppercase">${group.title}</h3>
+                    <p>${group.description}</p>
+                </div>
+                <div class="pricing-card-row">
+                    ${group.plans.map(plan => `
+                        <div class="pricing-card ${plan.featured ? 'elite' : ''}">
+                            ${plan.featured ? '<div class="elite-glow"></div><div class="font-label-caps elite-badge">POPULAR</div>' : ''}
+                            <div>
+                                <div class="font-label-caps pricing-plan-name uppercase">${plan.period}</div>
+                                <div class="pricing-plan-badge">${plan.badge}</div>
+                                <div class="pricing-amount text-secondary">Rs ${formatPlanAmount(plan.amount)}<span class="font-label-caps"> / ${plan.period.toUpperCase()}</span></div>
+                            </div>
+                            <ul class="pricing-features font-body-sm">
+                                ${plan.features.map(feature => `<li><span class="material-symbols-outlined text-secondary">check_circle</span> ${feature}</li>`).join('')}
+                            </ul>
+                            <button class="${plan.featured ? 'btn-pricing-elite font-label-caps font-display-md' : 'btn-pricing font-label-caps'}" data-plan-name="${group.title}" data-billing-cycle="${plan.period}" data-amount="${plan.amount}">
+                                ${plan.featured ? 'GET STARTED' : 'SELECT PLAN'}
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
+
+        const newPlanElements = pricingGrid.querySelectorAll('.pricing-card, .pricing-plan-group');
+        newPlanElements.forEach(el => fadeObserver.observe(el));
+
+        document.querySelectorAll('.pricing-card button, .membership-fee-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                openPaymentModal({
+                    planName: button.dataset.planName,
+                    billingCycle: button.dataset.billingCycle,
+                    amount: button.dataset.amount
                 });
             });
+        });
 
-            const centerPopularPlan = () => {
-                if (!window.matchMedia('(max-width: 640px)').matches) return;
-
-                const popularCard = pricingGrid.querySelector('.pricing-card.elite');
-                if (!popularCard) return;
-
-                const scrollTarget = popularCard.offsetLeft - ((pricingGrid.clientWidth - popularCard.clientWidth) / 2);
-                pricingGrid.scrollTo({ left: Math.max(0, scrollTarget), behavior: 'auto' });
-            };
-
-            requestAnimationFrame(centerPopularPlan);
-            setTimeout(centerPopularPlan, 250);
-            
-        } catch (e) {
-            console.error("Failed to load pricing", e);
-        }
     }
 
     // Load Trainers

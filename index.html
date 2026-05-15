@@ -23,7 +23,7 @@
     <title>The Dream Gym</title>
     <meta name="description"
         content="Forge your strength, define your limits at The Dream Gym. Elite trainers, world-class equipment, and a premium training environment.">
-    <link rel="stylesheet" href="style.css?v=20260528">
+    <link rel="stylesheet" href="style.css?v=20260532">
 </head>
 
 <body>
@@ -326,19 +326,23 @@
                 <h2 class="font-display-xl uppercase">INVEST IN <span class="text-secondary">YOURSELF</span></h2>
                 <div style="width: 80px; height: 4px; background-color: var(--secondary); margin: 16px auto 32px auto;"></div>
                 <p class="font-body-lg" style="color: var(--on-surface-variant); max-width: 600px; margin: 0 auto;">
-                    Luxury performance. Elite coaching. Uncompromising standards designed for those who demand
-                    excellence.</p>
+                    Choose the commitment that matches your goal: flexible gym access, longer-term savings, or focused
+                    personal training.</p>
             </div>
 
-            <div class="pricing-toggle-wrap fade-in">
-                <input type="checkbox" id="pricing-toggle" class="pricing-toggle">
-                <label for="pricing-toggle" class="toggle-label">
-                    <span class="font-label-caps toggle-text text-secondary" id="monthly-text">Monthly</span>
-                    <div class="toggle-container">
-                        <div class="toggle-knob"></div>
-                    </div>
-                    <span class="font-label-caps toggle-text" id="yearly-text" style="opacity: 0.5;">Annually</span>
-                </label>
+            <div class="membership-fee-panel fade-in">
+                <div>
+                    <span class="font-label-caps">One-time membership fee</span>
+                    <strong>₹1,499</strong>
+                </div>
+                <p>Registration is separate from the training plans below.</p>
+                <button class="btn-pricing membership-fee-btn" data-plan-name="Membership Fee" data-billing-cycle="One-time" data-amount="1499">PAY MEMBERSHIP FEE</button>
+            </div>
+
+            <div class="pricing-freebies fade-in" aria-label="Free benefits">
+                <span class="font-label-caps">Free with eligible plans</span>
+                <strong>Zumba</strong>
+                <strong>Aerobics</strong>
             </div>
 
             <div class="pricing-grid fade-in">
@@ -735,7 +739,7 @@
         </div>
     </footer>
 
-    <script src="script.js?v=20260531"></script>
+    <script src="script.js?v=20260532"></script>
 
     <!-- WhatsApp Floating Button -->
     <a href="https://wa.me/918328929165" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
