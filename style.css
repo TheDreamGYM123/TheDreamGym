@@ -1702,7 +1702,12 @@ nav {
   }
 
   .pricing-header {
-    gap: 20px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "title action"
+      "copy copy";
+    align-items: start;
+    gap: 18px 12px;
     margin-bottom: 30px;
   }
 
@@ -1712,11 +1717,26 @@ nav {
   }
 
   .pricing-explore-link {
-    width: fit-content;
-    max-width: 240px;
-    justify-content: flex-start;
+    width: 104px;
+    max-width: 104px;
+    justify-content: flex-end;
+    align-self: start;
+    text-align: right;
     white-space: normal;
-    line-height: 1.35;
+    line-height: 1.15;
+    letter-spacing: 0.12em;
+    font-size: 11px;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .pricing-explore-link .material-symbols-outlined {
+    font-size: 22px;
+    flex: 0 0 auto;
+  }
+
+  .pricing-explore-text {
+    max-width: 64px;
   }
 
   .membership-fee-panel {
