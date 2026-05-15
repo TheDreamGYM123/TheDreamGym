@@ -731,6 +731,27 @@ function openModal(modalId) {
     }
 }
 
+function openMembershipPlans(event) {
+    if (event) event.preventDefault();
+
+    const pricingSection = document.getElementById('pricing');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (mobileMenu) {
+        mobileMenu.classList.remove('open');
+    }
+
+    if (pricingSection) {
+        pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        window.location.hash = 'pricing';
+    }
+
+    window.setTimeout(() => {
+        openModal('plans-modal');
+    }, 450);
+}
+
 function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
