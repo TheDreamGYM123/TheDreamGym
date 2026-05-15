@@ -1458,6 +1458,7 @@ nav {
   max-width: 620px;
   margin-top: 24px;
   color: var(--on-surface-variant);
+  text-align: center;
 }
 
 .pricing-explore-link {
