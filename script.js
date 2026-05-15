@@ -490,11 +490,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div>
                         <h3>One-Time Membership Fee</h3>
                         <p class="font-label-caps">${plan.badge || 'Architects of performance initiation'}</p>
+                        <button class="btn-pricing membership-fee-btn membership-fee-btn-desktop" data-plan-name="${plan.name}" data-billing-cycle="${plan.period}" data-amount="${plan.price}">PAY MEMBERSHIP FEE</button>
                     </div>
                     <div class="catalog-membership-price">
                         ${renderCutPrice(plan.cut_price)}
                         <strong>₹${formatPlanAmount(plan.price)}</strong>
-                        <button class="btn-pricing membership-fee-btn" data-plan-name="${plan.name}" data-billing-cycle="${plan.period}" data-amount="${plan.price}">PAY MEMBERSHIP FEE</button>
+                        <button class="btn-pricing membership-fee-btn membership-fee-btn-mobile" data-plan-name="${plan.name}" data-billing-cycle="${plan.period}" data-amount="${plan.price}">PAY MEMBERSHIP FEE</button>
                     </div>
                 </div>
             ` : '';
@@ -522,11 +523,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <div class="home-membership-copy">
                             <span class="font-label-caps">One-time membership fee</span>
                             <p>${membershipPlan.badge || 'Architects of performance initiation'}</p>
+                            <button class="btn-pricing membership-fee-btn membership-fee-btn-desktop" data-plan-name="${membershipPlan.name}" data-billing-cycle="${membershipPlan.period}" data-amount="${membershipPlan.price}">PAY MEMBERSHIP FEE</button>
                         </div>
                         <div class="home-membership-price">
                             ${renderCutPrice(membershipPlan.cut_price)}
                             <strong>₹${formatPlanAmount(membershipPlan.price)}</strong>
-                            <button class="btn-pricing membership-fee-btn" data-plan-name="${membershipPlan.name}" data-billing-cycle="${membershipPlan.period}" data-amount="${membershipPlan.price}">PAY MEMBERSHIP FEE</button>
+                            <button class="btn-pricing membership-fee-btn membership-fee-btn-mobile" data-plan-name="${membershipPlan.name}" data-billing-cycle="${membershipPlan.period}" data-amount="${membershipPlan.price}">PAY MEMBERSHIP FEE</button>
                         </div>
                     `;
                 }
@@ -559,6 +561,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     ${planGroupsHtml}
                     ${renderPrivilegePack()}
                 `;
+                setupPlansAutoScroll(allPlansGrid);
             }
 
             const newPlanElements = document.querySelectorAll('.pricing-card, .pricing-plan-group');
@@ -689,6 +692,53 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     });
 });
+
+function setupPlansAutoScroll(container) {
+    const rows = container.querySelectorAll('.pricing-card-row');
+    rows.forEach(row => {
+        if (row.dataset.autoScrollReady === 'true') return;
+        row.dataset.autoScrollReady = 'true';
+
+        let stopped = false;
+        let intervalId = null;
+        let lastPosition = 0;
+        let isAutoScrolling = false;
+
+        const stopAutoScroll = () => {
+            stopped = true;
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+        };
+
+        ['pointerdown', 'touchstart', 'wheel', 'keydown', 'focusin'].forEach(eventName => {
+            row.addEventListener(eventName, stopAutoScroll, { passive: true });
+        });
+
+        intervalId = setInterval(() => {
+            const modal = row.closest('.modal');
+            if (stopped || !modal || !modal.classList.contains('active') || row.scrollWidth <= row.clientWidth + 8) return;
+
+            const card = row.querySelector('.pricing-card');
+            const gap = parseFloat(getComputedStyle(row).gap) || 18;
+            const step = card ? card.getBoundingClientRect().width + gap : row.clientWidth * 0.8;
+            const maxScroll = row.scrollWidth - row.clientWidth;
+            const nextPosition = row.scrollLeft + step >= maxScroll - 8 ? 0 : row.scrollLeft + step;
+
+            lastPosition = nextPosition;
+            isAutoScrolling = true;
+            row.scrollTo({ left: nextPosition, behavior: 'smooth' });
+            setTimeout(() => { isAutoScrolling = false; }, 900);
+        }, 2800);
+
+        row.addEventListener('scroll', () => {
+            if (!isAutoScrolling && Math.abs(row.scrollLeft - lastPosition) > 24) {
+                stopAutoScroll();
+            }
+        }, { passive: true });
+    });
+}
 
 // Modal Functions
 function openModal(modalId) {

@@ -3731,8 +3731,178 @@ footer {
     padding: 22px 18px;
   }
 
-  .catalog-benefit-card {
+.catalog-benefit-card {
     min-height: 82px;
     padding: 18px;
+  }
+}
+
+.pricing-section .membership-fee-panel,
+#plans-modal .catalog-membership-hero {
+  max-width: 980px;
+  min-height: 178px;
+  padding: clamp(24px, 3vw, 38px);
+}
+
+.pricing-section .home-privilege-pack,
+#plans-modal .catalog-privilege-pack {
+  max-width: 960px;
+  padding: clamp(22px, 2.7vw, 34px);
+}
+
+#plans-modal .catalog-membership-hero,
+#plans-modal .catalog-privilege-pack {
+  max-width: 980px;
+}
+
+.catalog-privilege-pack {
+  grid-template-columns: minmax(230px, 0.78fr) repeat(2, minmax(190px, 1fr));
+  gap: 18px;
+}
+
+.catalog-privilege-pack h3 {
+  font-size: clamp(25px, 2.4vw, 34px);
+}
+
+.catalog-privilege-pack p {
+  font-size: clamp(14px, 1.15vw, 17px);
+}
+
+.catalog-benefit-card {
+  min-height: 124px;
+  padding: 22px;
+  gap: 18px;
+}
+
+.catalog-benefit-card > span {
+  width: 66px;
+  height: 66px;
+  font-size: 32px;
+}
+
+.catalog-benefit-card strong,
+.pricing-section .home-privilege-pack .catalog-benefit-card strong {
+  font-size: clamp(21px, 1.7vw, 26px);
+}
+
+.home-membership-copy {
+  gap: 12px;
+}
+
+.home-membership-copy span,
+.catalog-membership-hero h3 {
+  font-size: clamp(26px, 2.7vw, 38px);
+}
+
+.home-membership-copy p,
+.catalog-membership-hero p {
+  max-width: 360px;
+  margin-bottom: 8px;
+}
+
+.membership-fee-btn-mobile {
+  display: none;
+}
+
+.membership-fee-btn-desktop {
+  display: inline-flex;
+}
+
+.home-membership-price strong,
+.catalog-membership-price strong {
+  font-size: clamp(52px, 6.4vw, 76px);
+}
+
+.all-pricing-plans-grid .pricing-card-row {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 12px 2px 20px;
+}
+
+.all-pricing-plans-grid .pricing-card-row::-webkit-scrollbar {
+  display: none;
+}
+
+.all-pricing-plans-grid .pricing-card-row .pricing-card {
+  flex: 0 0 calc((100% - 54px) / 4);
+  min-width: 238px;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 640px) {
+  .pricing-section .membership-fee-panel,
+  #plans-modal .catalog-membership-hero {
+    width: min(100%, 330px);
+    max-width: calc(100% - 22px);
+    min-height: 0;
+  }
+
+  .pricing-section .home-privilege-pack,
+  #plans-modal .catalog-privilege-pack {
+    width: min(100%, 330px);
+    max-width: calc(100% - 22px);
+    padding: 20px 16px;
+  }
+
+  .membership-fee-btn-desktop {
+    display: none;
+  }
+
+  .membership-fee-btn-mobile {
+    display: inline-flex;
+  }
+
+  .catalog-benefit-card {
+    min-height: 78px;
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .catalog-benefit-card > span {
+    width: 58px;
+    height: 58px;
+    font-size: 28px;
+  }
+
+  .coaches-title h2 {
+    font-size: clamp(38px, 13vw, 54px);
+    line-height: 0.95;
+  }
+
+  .coaches-title p {
+    max-width: 320px !important;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .coaches-grid {
+    gap: 14px;
+    padding-bottom: 8px;
+  }
+
+  .coach-card {
+    flex-basis: min(74vw, 280px);
+    border-radius: 10px;
+    aspect-ratio: 4 / 5;
+  }
+
+  .coach-info {
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+  }
+
+  .coach-info .font-headline-md {
+    font-size: clamp(24px, 7vw, 31px);
+    line-height: 1;
+  }
+
+  .coach-info .font-label-caps {
+    font-size: 11px;
+    line-height: 1.2;
   }
 }
