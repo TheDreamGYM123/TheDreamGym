@@ -1430,12 +1430,18 @@ nav {
 }
 
 .pricing-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "title action"
+    "copy copy";
   gap: 32px;
   text-align: left;
   margin-bottom: 40px;
+}
+
+.pricing-title-block {
+  grid-area: title;
 }
 
 .pricing-header h2 {
@@ -1455,8 +1461,10 @@ nav {
 }
 
 .pricing-header p {
-  max-width: 620px;
-  margin-top: 24px;
+  grid-area: copy;
+  max-width: 760px;
+  width: 100%;
+  margin: 0 auto;
   color: var(--on-surface-variant);
   text-align: center;
 }
@@ -1475,6 +1483,11 @@ nav {
   cursor: pointer;
   padding: 12px 0;
   margin-top: 10px;
+  grid-area: action;
+}
+
+.pricing-explore-text {
+  display: inline-block;
 }
 
 .pricing-explore-link .material-symbols-outlined {
@@ -1642,8 +1655,11 @@ nav {
   }
 
   .pricing-header {
-    flex-direction: column;
-    align-items: flex-start;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "title"
+      "action"
+      "copy";
   }
 
   .membership-fee-panel {
@@ -1696,8 +1712,9 @@ nav {
   }
 
   .pricing-explore-link {
-    width: 100%;
-    justify-content: space-between;
+    width: fit-content;
+    max-width: 240px;
+    justify-content: flex-start;
     white-space: normal;
     line-height: 1.35;
   }
