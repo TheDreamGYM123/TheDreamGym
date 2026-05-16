@@ -162,14 +162,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Reviews logic
     const reviewsList = document.getElementById('reviews-list');
     const addReviewForm = document.getElementById('add-review-form');
+    const reviewFormTitle = document.getElementById('review-form-title');
+    const reviewSubmitBtn = document.getElementById('review-submit-btn');
+    const cancelReviewEditBtn = document.getElementById('cancel-review-edit');
+    let currentReviews = [];
 
     const loadReviews = async () => {
         if (!reviewsList) return;
         try {
             const response = await fetch('/api/reviews');
-            const reviews = await response.json();
+            currentReviews = await response.json();
             reviewsList.innerHTML = '';
-            reviews.forEach(review => {
+            currentReviews.forEach(review => {
                 const div = document.createElement('div');
                 div.className = 'flex items-center justify-between p-4 bg-surface-container-highest rounded-lg border border-outline-variant/30';
                 div.innerHTML = `
@@ -181,15 +185,44 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <div class="text-sm mt-1 max-w-lg truncate" title="${review.content}">${review.content}</div>
                         </div>
                     </div>
-                    <button class="text-red-400 hover:text-red-300 transition-colors" onclick="deleteReview(${review.id})">
-                        <span class="material-symbols-outlined">delete</span>
-                    </button>
+                    <div class="flex gap-2">
+                        <button class="text-on-surface-variant hover:text-secondary transition-colors px-3 py-2 border border-outline-variant rounded" onclick="editReview(${review.id})">
+                            <span class="material-symbols-outlined align-middle mr-1">edit</span> Edit
+                        </button>
+                        <button class="text-red-400 hover:text-red-300 transition-colors px-3 py-2 border border-outline-variant rounded hover:border-red-400" onclick="deleteReview(${review.id})">
+                            <span class="material-symbols-outlined align-middle mr-1">delete</span> Delete
+                        </button>
+                    </div>
                 `;
                 reviewsList.appendChild(div);
             });
         } catch (error) {
             console.error('Failed to load reviews', error);
         }
+    };
+
+    const resetReviewForm = () => {
+        document.getElementById('review-edit-id').value = '';
+        if (addReviewForm) addReviewForm.reset();
+        if (reviewFormTitle) reviewFormTitle.innerText = 'Add New Review';
+        if (reviewSubmitBtn) reviewSubmitBtn.innerText = 'Add Review';
+        if (cancelReviewEditBtn) cancelReviewEditBtn.classList.add('hidden');
+    };
+
+    window.editReview = (id) => {
+        const review = currentReviews.find(item => Number(item.id) === Number(id));
+        if (!review || !addReviewForm) return;
+
+        document.getElementById('review-edit-id').value = review.id;
+        document.getElementById('review-name').value = review.name || '';
+        document.getElementById('review-role').value = review.role || '';
+        document.getElementById('review-content').value = review.content || '';
+        document.getElementById('review-rating').value = review.rating || 5;
+        document.getElementById('review-image').value = review.image || '';
+        if (reviewFormTitle) reviewFormTitle.innerText = `Edit Review: ${review.name || ''}`;
+        if (reviewSubmitBtn) reviewSubmitBtn.innerText = 'Save Review';
+        if (cancelReviewEditBtn) cancelReviewEditBtn.classList.remove('hidden');
+        addReviewForm.scrollIntoView({ behavior: 'smooth' });
     };
 
     window.deleteReview = async (id) => {
@@ -202,9 +235,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
+    if (cancelReviewEditBtn) {
+        cancelReviewEditBtn.addEventListener('click', resetReviewForm);
+    }
+
     if (addReviewForm) {
         addReviewForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const editId = document.getElementById('review-edit-id').value;
             const name = document.getElementById('review-name').value;
             const role = document.getElementById('review-role').value;
             const content = document.getElementById('review-content').value;
@@ -219,15 +257,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 formData.append('rating', rating);
                 formData.append('image_url', image);
 
-                await fetch('/api/reviews', {
-                    method: 'POST',
+                await fetch(editId ? `/api/reviews/${editId}` : '/api/reviews', {
+                    method: editId ? 'PUT' : 'POST',
                     body: formData
                 });
                 
-                addReviewForm.reset();
+                resetReviewForm();
                 loadReviews();
             } catch (error) {
-                console.error('Failed to add review', error);
+                console.error('Failed to save review', error);
             }
         });
     }
@@ -246,20 +284,54 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const response = await fetch('/api/pricing');
             currentPricingPlans = await response.json();
-            
-            pricingList.innerHTML = currentPricingPlans.map(plan => `
-                <div class="bg-surface-container-highest border ${plan.is_popular ? 'border-secondary' : 'border-outline-variant'} rounded-lg p-6 cursor-pointer hover:border-secondary transition-colors" onclick="editPricing(${plan.id})">
-                    <h4 class="font-bold text-lg mb-2 flex justify-between gap-3 text-on-surface">
-                        <span>${escapeAdminHtml(plan.name)} ${plan.period ? '- ' + escapeAdminHtml(plan.period) : ''}</span>
-                        ${plan.is_popular ? '<span class="text-xs bg-secondary text-on-secondary font-bold px-2 py-1 rounded">POPULAR</span>' : ''}
-                        ${plan.show_home ? '<span class="text-xs bg-green-400 text-black font-bold px-2 py-1 rounded">HOME</span>' : ''}
-                    </h4>
-                    <div class="text-xs uppercase tracking-widest text-secondary mb-2">${escapeAdminHtml(plan.category || 'plan')}</div>
-                    <div class="text-sm text-on-surface-variant mb-1">Price: ₹${escapeAdminHtml(plan.price || '')}</div>
-                    ${plan.cut_price ? `<div class="text-sm text-on-surface-variant mb-1">Cut Price: ₹${escapeAdminHtml(plan.cut_price)}</div>` : ''}
-                    <div class="text-sm text-on-surface-variant">Badge: ${escapeAdminHtml(plan.badge || 'None')}</div>
-                </div>
-            `).join('');
+
+            const groups = [
+                { category: 'membership', title: 'Membership Fee' },
+                { category: 'subscription', title: 'Subscription Plans' },
+                { category: 'personal-training', title: 'Personal Training Plans' }
+            ];
+
+            pricingList.innerHTML = groups.map(group => {
+                const plans = currentPricingPlans.filter(plan => plan.category === group.category);
+                return `
+                    <div class="bg-surface-container-highest/50 border border-outline-variant/30 rounded-xl p-5">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-secondary font-display font-bold uppercase tracking-wide">${group.title}</h4>
+                            <span class="text-xs text-on-surface-variant">${plans.length} item${plans.length === 1 ? '' : 's'}</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${plans.map(plan => {
+                                const active = plan.is_active === undefined || Number(plan.is_active) === 1;
+                                return `
+                                    <div class="bg-surface-container-highest border ${active ? (plan.is_popular ? 'border-secondary' : 'border-outline-variant') : 'border-red-500/40 opacity-70'} rounded-lg p-5">
+                                        <div class="flex items-start justify-between gap-3 mb-3">
+                                            <div>
+                                                <h5 class="font-bold text-lg text-on-surface">${escapeAdminHtml(plan.name)} ${plan.period ? '- ' + escapeAdminHtml(plan.period) : ''}</h5>
+                                                <div class="text-xs uppercase tracking-widest ${active ? 'text-green-400' : 'text-red-400'} mt-1">${active ? 'Enabled' : 'Disabled'}</div>
+                                            </div>
+                                            <div class="flex flex-wrap justify-end gap-2">
+                                                ${plan.is_popular ? '<span class="text-xs bg-secondary text-on-secondary font-bold px-2 py-1 rounded">POPULAR</span>' : ''}
+                                                ${plan.show_home ? '<span class="text-xs bg-green-400 text-black font-bold px-2 py-1 rounded">HOME</span>' : ''}
+                                            </div>
+                                        </div>
+                                        <div class="text-sm text-on-surface-variant mb-1">Price: ₹${escapeAdminHtml(plan.price || '')}</div>
+                                        ${plan.cut_price ? `<div class="text-sm text-on-surface-variant mb-1">Cut Price: ₹${escapeAdminHtml(plan.cut_price)}</div>` : ''}
+                                        <div class="text-sm text-on-surface-variant mb-4">Badge: ${escapeAdminHtml(plan.badge || 'None')}</div>
+                                        <div class="flex flex-wrap gap-2">
+                                            <button onclick="editPricing(${plan.id})" class="text-on-surface hover:text-secondary transition-colors px-3 py-2 border border-outline-variant rounded hover:border-secondary">
+                                                <span class="material-symbols-outlined align-middle mr-1">edit</span> Edit
+                                            </button>
+                                            <button onclick="togglePricingActive(${plan.id})" class="${active ? 'text-red-400 hover:border-red-400' : 'text-green-400 hover:border-green-400'} transition-colors px-3 py-2 border border-outline-variant rounded">
+                                                <span class="material-symbols-outlined align-middle mr-1">${active ? 'visibility_off' : 'visibility'}</span> ${active ? 'Disable' : 'Enable'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('') || '<p class="text-on-surface-variant italic">No plans in this section.</p>'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         } catch (error) {
             console.error('Failed to load pricing', error);
         }
@@ -280,6 +352,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('edit-pricing-sort-order').value = plan.sort_order || 0;
         document.getElementById('edit-pricing-popular').checked = Number(plan.is_popular) === 1;
         document.getElementById('edit-pricing-show-home').checked = Number(plan.show_home) === 1;
+        document.getElementById('edit-pricing-active').checked = plan.is_active === undefined || Number(plan.is_active) === 1;
         
         let features = plan.features;
         if (typeof features === 'string') {
@@ -289,6 +362,33 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         pricingEditForm.classList.remove('hidden');
         pricingEditForm.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    window.togglePricingActive = async (id) => {
+        const plan = currentPricingPlans.find(p => p.id === id);
+        if (!plan) return;
+
+        const nextActive = !(plan.is_active === undefined || Number(plan.is_active) === 1);
+        let features = plan.features;
+        if (typeof features === 'string') {
+            try { features = JSON.parse(features); } catch(e) { features = []; }
+        }
+
+        try {
+            await fetch(`/api/pricing/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ...plan,
+                    is_active: nextActive ? 1 : 0,
+                    features: Array.isArray(features) ? features : []
+                })
+            });
+            loadPricing();
+        } catch (error) {
+            console.error('Failed to toggle pricing plan', error);
+            alert('Failed to update plan visibility');
+        }
     };
 
     const cancelPricingBtn = document.getElementById('cancel-pricing-btn');
@@ -311,6 +411,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const sort_order = document.getElementById('edit-pricing-sort-order').value;
             const is_popular = document.getElementById('edit-pricing-popular').checked ? 1 : 0;
             const show_home = document.getElementById('edit-pricing-show-home').checked ? 1 : 0;
+            const is_active = document.getElementById('edit-pricing-active').checked ? 1 : 0;
             const featuresText = document.getElementById('edit-features').value;
             
             const featuresArray = featuresText.split(',').map(s => s.trim()).filter(s => s);
@@ -328,6 +429,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         badge,
                         is_popular,
                         show_home,
+                        is_active,
                         sort_order,
                         features: featuresArray
                     })
@@ -524,13 +626,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Trainers Management
     const trainersList = document.getElementById('trainers-list');
     const addTrainerForm = document.getElementById('add-trainer-form');
+    const trainerFormTitle = document.getElementById('trainer-form-title');
+    const trainerSubmitBtn = document.getElementById('trainer-submit-btn');
+    const cancelTrainerEditBtn = document.getElementById('cancel-trainer-edit');
+    let currentTrainers = [];
 
     const loadTrainers = async () => {
         if (!trainersList) return;
         try {
             const res = await fetch('/api/trainers');
-            const trainers = await res.json();
-            trainersList.innerHTML = trainers.length === 0 ? '<p class="text-on-surface-variant italic">No trainers yet.</p>' : trainers.map(t => `
+            currentTrainers = await res.json();
+            trainersList.innerHTML = currentTrainers.length === 0 ? '<p class="text-on-surface-variant italic">No trainers yet.</p>' : currentTrainers.map(t => `
                 <div class="bg-surface-container-highest border border-outline-variant rounded-lg p-6 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
                     <div class="flex items-center gap-4">
                         <img src="${t.image_url}" alt="${t.name}" class="w-16 h-16 rounded-lg object-cover bg-surface-container">
@@ -540,14 +646,43 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <div class="text-xs text-on-surface-variant mt-1">Delay: ${t.delay}</div>
                         </div>
                     </div>
-                    <button onclick="deleteTrainer(${t.id})" class="text-on-surface-variant hover:text-red-400 transition-colors mt-4 md:mt-0 px-4 py-2 border border-outline-variant rounded hover:border-red-400">
-                        <span class="material-symbols-outlined align-middle mr-1">delete</span> Delete
-                    </button>
+                    <div class="flex gap-2 mt-4 md:mt-0">
+                        <button onclick="editTrainer(${t.id})" class="text-on-surface-variant hover:text-secondary transition-colors px-4 py-2 border border-outline-variant rounded hover:border-secondary">
+                            <span class="material-symbols-outlined align-middle mr-1">edit</span> Edit
+                        </button>
+                        <button onclick="deleteTrainer(${t.id})" class="text-on-surface-variant hover:text-red-400 transition-colors px-4 py-2 border border-outline-variant rounded hover:border-red-400">
+                            <span class="material-symbols-outlined align-middle mr-1">delete</span> Delete
+                        </button>
+                    </div>
                 </div>
             `).join('');
         } catch (error) {
             console.error('Failed to load trainers', error);
         }
+    };
+
+    const resetTrainerForm = () => {
+        document.getElementById('trainer-edit-id').value = '';
+        if (addTrainerForm) addTrainerForm.reset();
+        if (trainerFormTitle) trainerFormTitle.innerText = 'Add New Trainer';
+        if (trainerSubmitBtn) trainerSubmitBtn.innerText = 'Add Trainer';
+        if (cancelTrainerEditBtn) cancelTrainerEditBtn.classList.add('hidden');
+    };
+
+    window.editTrainer = (id) => {
+        const trainer = currentTrainers.find(item => Number(item.id) === Number(id));
+        if (!trainer || !addTrainerForm) return;
+
+        document.getElementById('trainer-edit-id').value = trainer.id;
+        document.getElementById('trainer-name').value = trainer.name || '';
+        document.getElementById('trainer-role').value = trainer.role || '';
+        document.getElementById('trainer-image-url').value = trainer.image_url || '';
+        document.getElementById('trainer-file').value = '';
+        document.getElementById('trainer-delay').value = trainer.delay || '0s';
+        if (trainerFormTitle) trainerFormTitle.innerText = `Edit Trainer: ${trainer.name || ''}`;
+        if (trainerSubmitBtn) trainerSubmitBtn.innerText = 'Save Trainer';
+        if (cancelTrainerEditBtn) cancelTrainerEditBtn.classList.remove('hidden');
+        addTrainerForm.scrollIntoView({ behavior: 'smooth' });
     };
 
     window.deleteTrainer = async (id) => {
@@ -560,9 +695,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
+    if (cancelTrainerEditBtn) {
+        cancelTrainerEditBtn.addEventListener('click', resetTrainerForm);
+    }
+
     if (addTrainerForm) {
         addTrainerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const editId = document.getElementById('trainer-edit-id').value;
             const name = document.getElementById('trainer-name').value;
             const role = document.getElementById('trainer-role').value;
             const imageUrl = document.getElementById('trainer-image-url').value;
@@ -582,14 +722,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (delay) formData.append('delay', delay);
 
             try {
-                await fetch('/api/trainers', {
-                    method: 'POST',
+                await fetch(editId ? `/api/trainers/${editId}` : '/api/trainers', {
+                    method: editId ? 'PUT' : 'POST',
                     body: formData
                 });
-                addTrainerForm.reset();
+                resetTrainerForm();
                 loadTrainers();
             } catch (error) {
-                console.error('Failed to add trainer', error);
+                console.error('Failed to save trainer', error);
             }
         });
     }

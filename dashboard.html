@@ -162,8 +162,9 @@
 
                 <!-- Add New Review Form -->
                 <div class="space-y-4 mb-8 bg-surface-container-highest p-6 rounded-lg">
-                    <h3 class="text-lg font-bold text-on-surface">Add New Review</h3>
+                    <h3 class="text-lg font-bold text-on-surface" id="review-form-title">Add New Review</h3>
                     <form id="add-review-form" class="space-y-4">
+                        <input type="hidden" id="review-edit-id">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Name</label>
@@ -188,8 +189,11 @@
                                 <input type="text" id="review-image" required class="w-full bg-background border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="https://...">
                             </div>
                         </div>
-                        <button type="submit" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)] transition-all">
+                        <button type="submit" id="review-submit-btn" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)] transition-all">
                             Add Review
+                        </button>
+                        <button type="button" id="cancel-review-edit" class="hidden ml-3 bg-surface-container text-on-surface font-bold uppercase tracking-widest px-6 py-3 rounded-lg border border-outline-variant hover:bg-surface-container-highest">
+                            Cancel Edit
                         </button>
                     </form>
                 </div>
@@ -216,7 +220,7 @@
 
                 <div class="space-y-4">
                     <h3 class="text-lg font-bold text-on-surface">Existing Plans</h3>
-                    <div id="pricing-list" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    <div id="pricing-list" class="space-y-6">
                         <!-- Loaded dynamically -->
                     </div>
                 </div>
@@ -265,6 +269,10 @@
                     <label class="flex items-center gap-3 text-on-surface font-bold">
                         <input type="checkbox" id="edit-pricing-show-home" class="rounded border-outline-variant bg-background text-secondary focus:ring-secondary">
                         Show this plan on the homepage cards
+                    </label>
+                    <label class="flex items-center gap-3 text-on-surface font-bold">
+                        <input type="checkbox" id="edit-pricing-active" class="rounded border-outline-variant bg-background text-secondary focus:ring-secondary">
+                        Enable this plan on the website
                     </label>
                     <div>
                         <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Features (Comma separated)</label>
@@ -397,8 +405,9 @@
                 </div>
 
                 <div class="bg-surface-container-highest p-6 rounded-lg border border-outline-variant/30 mb-8">
-                    <h3 class="text-lg font-bold text-on-surface mb-4">Add New Trainer</h3>
+                    <h3 class="text-lg font-bold text-on-surface mb-4" id="trainer-form-title">Add New Trainer</h3>
                     <form id="add-trainer-form" class="space-y-4">
+                        <input type="hidden" id="trainer-edit-id">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-bold text-on-surface-variant uppercase mb-2">Trainer Name</label>
@@ -421,8 +430,11 @@
                                 <input type="text" id="trainer-delay" class="w-full bg-background border border-outline-variant/50 rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="e.g. 0s, 0.1s, 0.2s">
                             </div>
                         </div>
-                        <button type="submit" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)] transition-all">
+                        <button type="submit" id="trainer-submit-btn" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)] transition-all">
                             Add Trainer
+                        </button>
+                        <button type="button" id="cancel-trainer-edit" class="hidden ml-3 bg-surface-container text-on-surface font-bold uppercase tracking-widest px-6 py-3 rounded-lg border border-outline-variant hover:bg-surface-container-highest">
+                            Cancel Edit
                         </button>
                     </form>
                 </div>
@@ -439,5 +451,5 @@
     </main>
 </div>
 
-<script src="dashboard.js?v=20260539"></script>
+<script src="dashboard.js?v=20260546"></script>
 </body></html>

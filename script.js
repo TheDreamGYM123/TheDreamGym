@@ -457,8 +457,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const res = await fetch('/api/pricing');
             const plans = await res.json();
-            const membershipPlan = plans.find(plan => plan.category === 'membership');
-            const trainingPlans = plans.filter(plan => plan.category !== 'membership');
+            const activePlans = plans.filter(plan => plan.is_active === undefined || Number(plan.is_active) === 1);
+            const membershipPlan = activePlans.find(plan => plan.category === 'membership');
+            const trainingPlans = activePlans.filter(plan => plan.category !== 'membership');
             const homepageMarkedPlans = trainingPlans.filter(plan => Number(plan.show_home) === 1).slice(0, 3);
             const popularPlans = trainingPlans.filter(plan => Number(plan.is_popular) === 1).slice(0, 3);
             const homepagePlans = (homepageMarkedPlans.length ? homepageMarkedPlans : (popularPlans.length ? popularPlans : trainingPlans)).slice(0, 3);
@@ -502,6 +503,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (membershipPlan) {
                 const membershipPanel = document.querySelector('.membership-fee-panel');
                 if (membershipPanel) {
+                    membershipPanel.style.display = '';
                     membershipPanel.innerHTML = `
                         <div class="home-membership-copy">
                             <span class="font-label-caps">One-time membership fee</span>
@@ -515,6 +517,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>
                     `;
                 }
+            } else {
+                const membershipPanel = document.querySelector('.membership-fee-panel');
+                if (membershipPanel) membershipPanel.style.display = 'none';
             }
 
             pricingGrid.innerHTML = homepagePlans.map((plan, index) => renderPlanCard(plan, index === 1)).join('');

@@ -308,6 +308,7 @@ app.get('/api/pricing', (req, res) => {
             try { row.features = JSON.parse(row.features); } catch (e) { row.features = []; }
             row.is_popular = Number(row.is_popular) ? 1 : 0;
             row.show_home = Number(row.show_home) ? 1 : 0;
+            row.is_active = row.is_active === undefined || row.is_active === null ? 1 : (Number(row.is_active) ? 1 : 0);
             row.sort_order = Number(row.sort_order ?? row.id ?? 0);
             row.cut_price = row.cut_price || '';
         });
@@ -318,10 +319,10 @@ app.get('/api/pricing', (req, res) => {
 
 // PUT Pricing (Update a plan)
 app.put('/api/pricing/:id', (req, res) => {
-    const { name, category, period, price, cut_price, badge, features, is_popular, show_home, sort_order } = req.body;
+    const { name, category, period, price, cut_price, badge, features, is_popular, show_home, is_active, sort_order } = req.body;
     const featuresStr = JSON.stringify(features);
-    db.run(`UPDATE pricing SET name=?, category=?, period=?, price=?, cut_price=?, badge=?, features=?, is_popular=?, show_home=?, sort_order=? WHERE id=?`,
-        [name, category, period, price, cut_price || '', badge, featuresStr, is_popular ? 1 : 0, show_home ? 1 : 0, sort_order || 0, req.params.id],
+    db.run(`UPDATE pricing SET name=?, category=?, period=?, price=?, cut_price=?, badge=?, features=?, is_popular=?, show_home=?, is_active=?, sort_order=? WHERE id=?`,
+        [name, category, period, price, cut_price || '', badge, featuresStr, is_popular ? 1 : 0, show_home ? 1 : 0, is_active === undefined ? 1 : (is_active ? 1 : 0), sort_order || 0, req.params.id],
         (err) => {
             if (err) return res.status(500).json({ error: err.message });
             res.json({ success: true });
@@ -384,6 +385,30 @@ app.post('/api/reviews', upload.single('image'), (req, res) => {
             if (err) return res.status(500).json({ error: err.message });
             res.json({ id: this.lastID, name, role, content, rating, image });
         });
+});
+
+// PUT Reviews
+app.put('/api/reviews/:id', upload.single('image'), (req, res) => {
+    const { name, role, content, rating } = req.body;
+    let image = req.body.image_url;
+
+    if (req.file) {
+        image = '/uploads/' + req.file.filename;
+    }
+
+    if (image) {
+        db.run(`UPDATE reviews SET name = ?, role = ?, content = ?, rating = ?, image = ? WHERE id = ?`,
+            [name, role, content, rating, image, req.params.id], (err) => {
+                if (err) return res.status(500).json({ error: err.message });
+                res.json({ success: true });
+            });
+    } else {
+        db.run(`UPDATE reviews SET name = ?, role = ?, content = ?, rating = ? WHERE id = ?`,
+            [name, role, content, rating, req.params.id], (err) => {
+                if (err) return res.status(500).json({ error: err.message });
+                res.json({ success: true });
+            });
+    }
 });
 
 // DELETE Reviews
