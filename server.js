@@ -333,6 +333,7 @@ app.put('/api/pricing/:id', (req, res) => {
 app.get('/api/gallery', (req, res) => {
     db.all("SELECT * FROM gallery", (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
+        rows.sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
         res.json(rows);
     });
 });
@@ -354,6 +355,29 @@ app.post('/api/gallery', upload.single('image'), (req, res) => {
         });
 });
 
+// PUT Gallery (Edit item)
+app.put('/api/gallery/:id', upload.single('image'), (req, res) => {
+    const { type, title, grid_column, grid_row } = req.body;
+    let content = req.body.content;
+
+    if (type === 'image' && req.file) {
+        content = '/uploads/' + req.file.filename;
+    }
+
+    db.get("SELECT * FROM gallery WHERE id = ?", [req.params.id], (getErr, currentItem) => {
+        if (getErr) return res.status(500).json({ error: getErr.message });
+        if (!currentItem) return res.status(404).json({ error: 'Gallery item not found' });
+
+        const nextContent = content || currentItem.content;
+        db.run(`UPDATE gallery SET type = ?, content = ?, title = ?, grid_column = ?, grid_row = ? WHERE id = ?`,
+            [type, nextContent, title, grid_column, grid_row, req.params.id],
+            (err) => {
+                if (err) return res.status(500).json({ error: err.message });
+                res.json({ success: true });
+            });
+    });
+});
+
 // DELETE Gallery
 app.delete('/api/gallery/:id', (req, res) => {
     db.run("DELETE FROM gallery WHERE id = ?", [req.params.id], (err) => {
@@ -366,6 +390,7 @@ app.delete('/api/gallery/:id', (req, res) => {
 app.get('/api/reviews', (req, res) => {
     db.all("SELECT * FROM reviews", (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
+        rows.sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
         res.json(rows);
     });
 });

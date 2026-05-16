@@ -297,8 +297,9 @@
                 </div>
 
                 <div class="space-y-4 mb-8 bg-surface-container-highest p-6 rounded-lg">
-                    <h3 class="text-lg font-bold text-on-surface">Add New Gallery Item</h3>
+                    <h3 class="text-lg font-bold text-on-surface" id="gallery-form-title">Add New Gallery Item</h3>
                     <form id="add-gallery-form" class="space-y-4">
+                        <input type="hidden" id="gallery-edit-id">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Item Type</label>
@@ -341,8 +342,11 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)] transition-all">
+                        <button type="submit" id="gallery-submit-btn" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)] transition-all">
                             Add to Grid
+                        </button>
+                        <button type="button" id="cancel-gallery-edit" class="hidden ml-3 bg-surface-container text-on-surface font-bold uppercase tracking-widest px-6 py-3 rounded-lg border border-outline-variant hover:bg-surface-container-highest">
+                            Cancel Edit
                         </button>
                     </form>
                 </div>
@@ -451,5 +455,5 @@
     </main>
 </div>
 
-<script src="dashboard.js?v=20260546"></script>
+<script src="dashboard.js?v=20260547"></script>
 </body></html>

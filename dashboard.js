@@ -449,6 +449,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Gallery Management
     const galleryList = document.getElementById('gallery-list');
     const addGalleryForm = document.getElementById('add-gallery-form');
+    const galleryFormTitle = document.getElementById('gallery-form-title');
+    const gallerySubmitBtn = document.getElementById('gallery-submit-btn');
+    const cancelGalleryEditBtn = document.getElementById('cancel-gallery-edit');
+    let currentGalleryItems = [];
 
     window.toggleGalleryInputs = () => {
         const type = document.getElementById('gallery-type').value;
@@ -469,9 +473,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!galleryList) return;
         try {
             const res = await fetch('/api/gallery');
-            const items = await res.json();
+            currentGalleryItems = await res.json();
             
-            galleryList.innerHTML = items.map(item => `
+            galleryList.innerHTML = currentGalleryItems.map(item => `
                 <div class="bg-background border border-outline-variant rounded-lg p-4 flex items-center justify-between">
                     <div class="flex items-center gap-4 flex-1">
                         <div class="w-16 h-16 rounded overflow-hidden bg-surface-container flex-shrink-0 flex items-center justify-center">
@@ -488,14 +492,46 @@ document.addEventListener('DOMContentLoaded', async () => {
                             </div>
                         </div>
                     </div>
-                    <button onclick="deleteGalleryItem(${item.id})" class="text-on-surface-variant hover:text-red-400 transition-colors ml-4 shrink-0">
-                        <span class="material-symbols-outlined">delete</span>
-                    </button>
+                    <div class="flex gap-2 ml-4 shrink-0">
+                        <button onclick="editGalleryItem(${item.id})" class="text-on-surface-variant hover:text-secondary transition-colors px-3 py-2 border border-outline-variant rounded hover:border-secondary">
+                            <span class="material-symbols-outlined align-middle mr-1">edit</span> Edit
+                        </button>
+                        <button onclick="deleteGalleryItem(${item.id})" class="text-on-surface-variant hover:text-red-400 transition-colors px-3 py-2 border border-outline-variant rounded hover:border-red-400">
+                            <span class="material-symbols-outlined align-middle mr-1">delete</span> Delete
+                        </button>
+                    </div>
                 </div>
             `).join('');
         } catch (error) {
             console.error('Failed to load gallery', error);
         }
+    };
+
+    const resetGalleryForm = () => {
+        document.getElementById('gallery-edit-id').value = '';
+        if (addGalleryForm) addGalleryForm.reset();
+        if (galleryFormTitle) galleryFormTitle.innerText = 'Add New Gallery Item';
+        if (gallerySubmitBtn) gallerySubmitBtn.innerText = 'Add to Grid';
+        if (cancelGalleryEditBtn) cancelGalleryEditBtn.classList.add('hidden');
+        toggleGalleryInputs();
+    };
+
+    window.editGalleryItem = (id) => {
+        const item = currentGalleryItems.find(galleryItem => Number(galleryItem.id) === Number(id));
+        if (!item || !addGalleryForm) return;
+
+        document.getElementById('gallery-edit-id').value = item.id;
+        document.getElementById('gallery-type').value = item.type || 'image';
+        document.getElementById('gallery-size').value = `${item.grid_column || 'span 1'},${item.grid_row || 'span 1'}`;
+        document.getElementById('gallery-title').value = item.title || '';
+        document.getElementById('gallery-file').value = '';
+        document.getElementById('gallery-url').value = item.type === 'text' ? '' : (item.content || '');
+        document.getElementById('gallery-text').value = item.type === 'text' ? (item.content || '') : '';
+        if (galleryFormTitle) galleryFormTitle.innerText = `Edit Gallery Item: ${item.title || item.type || ''}`;
+        if (gallerySubmitBtn) gallerySubmitBtn.innerText = 'Save Gallery Item';
+        if (cancelGalleryEditBtn) cancelGalleryEditBtn.classList.remove('hidden');
+        toggleGalleryInputs();
+        addGalleryForm.scrollIntoView({ behavior: 'smooth' });
     };
 
     window.deleteGalleryItem = async (id) => {
@@ -507,9 +543,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
+    if (cancelGalleryEditBtn) {
+        cancelGalleryEditBtn.addEventListener('click', resetGalleryForm);
+    }
+
     if (addGalleryForm) {
         addGalleryForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const editId = document.getElementById('gallery-edit-id').value;
             const typeSelect = document.getElementById('gallery-type').value;
             const sizeValue = document.getElementById('gallery-size').value;
             const title = document.getElementById('gallery-title').value;
@@ -532,6 +573,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                         return;
                     }
                     formData.append('image', file);
+                } else if (editId) {
+                    const existingItem = currentGalleryItems.find(item => Number(item.id) === Number(editId));
+                    content = existingItem?.content || '';
                 }
             } else if (typeSelect === 'text') {
                 content = document.getElementById('gallery-text').value;
@@ -543,16 +587,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             formData.append('content', content);
 
             try {
-                await fetch('/api/gallery', {
-                    method: 'POST',
+                await fetch(editId ? `/api/gallery/${editId}` : '/api/gallery', {
+                    method: editId ? 'PUT' : 'POST',
                     body: formData
                 });
                 
-                addGalleryForm.reset();
-                toggleGalleryInputs();
+                resetGalleryForm();
                 loadGallery();
             } catch (error) {
-                console.error('Failed to add gallery item', error);
+                console.error('Failed to save gallery item', error);
             }
         });
     }
