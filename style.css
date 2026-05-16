@@ -3916,3 +3916,19 @@ footer {
     line-height: 1.2;
   }
 }
+
+@media (min-width: 1024px) {
+  .coaches-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 280px));
+    justify-content: center;
+  }
+
+  .pricing-section .pricing-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 360px));
+    justify-content: center;
+  }
+
+  .all-pricing-plans-grid .pricing-card-row {
+    justify-content: center;
+  }
+}
