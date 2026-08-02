@@ -1,9 +1,22 @@
 const fs = require('fs');
 const path = require('path');
 
-const dataDir = process.env.DATA_DIR || __dirname;
+const os = require('os');
+const dataDir = process.env.DATA_DIR || path.join(os.homedir(), '.thedreamgym_data');
 fs.mkdirSync(dataDir, { recursive: true });
+
+const localDbPath = path.join(__dirname, 'database.json');
 const dbPath = path.join(dataDir, 'database.json');
+
+// Auto-migrate local database.json to persistent directory on startup if it doesn't exist there yet
+if (!fs.existsSync(dbPath) && fs.existsSync(localDbPath)) {
+    try {
+        fs.copyFileSync(localDbPath, dbPath);
+        console.log('Database successfully migrated to persistent storage:', dbPath);
+    } catch (err) {
+        console.error('Failed to migrate database:', err);
+    }
+}
 
 const initialData = {
     settings: {

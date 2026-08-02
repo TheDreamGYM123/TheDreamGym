@@ -18,9 +18,28 @@ if (fs.existsSync(envPath)) {
 
 const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || '';
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '';
-const dataDir = process.env.DATA_DIR || __dirname;
+const os = require('os');
+const dataDir = process.env.DATA_DIR || path.join(os.homedir(), '.thedreamgym_data');
 const uploadsDir = path.join(dataDir, 'uploads');
 fs.mkdirSync(uploadsDir, { recursive: true });
+
+// Auto-migrate local uploads folder on startup if the destination is empty
+const localUploadsDir = path.join(__dirname, 'uploads');
+if (fs.existsSync(localUploadsDir)) {
+    try {
+        const localFiles = fs.readdirSync(localUploadsDir);
+        localFiles.forEach(file => {
+            const src = path.join(localUploadsDir, file);
+            const dest = path.join(uploadsDir, file);
+            if (fs.statSync(src).isFile() && !fs.existsSync(dest)) {
+                fs.copyFileSync(src, dest);
+            }
+        });
+        console.log('Uploads successfully migrated to persistent storage:', uploadsDir);
+    } catch (err) {
+        console.error('Failed to migrate uploads:', err);
+    }
+}
 let razorpayClient = null;
 
 process.on('uncaughtException', (error) => {
