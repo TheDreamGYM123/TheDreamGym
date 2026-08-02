@@ -43,11 +43,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                 popupModal.style.transition = 'opacity 0.4s ease';
                 
                 popupModal.innerHTML = `
-                    <div style="position: relative; max-width: 550px; width: 90%; background-color: #222015; border: 2px solid #e6d02d; border-radius: 16px; overflow: hidden; box-shadow: 0 0 30px rgba(230, 208, 45, 0.25);">
-                        <button id="promo-popup-close" style="position: absolute; top: 12px; right: 16px; background: transparent; border: none; color: #cdc7ad; font-size: 28px; cursor: pointer; transition: color 0.2s; z-index: 10;">&times;</button>
-                        <a id="promo-popup-link" href="#" style="display: block; width: 100%; height: 100%; outline: none;">
-                            <img id="promo-popup-img" src="" alt="Exclusive Offer" style="width: 100%; height: auto; display: block; object-fit: cover;">
-                        </a>
+                    <div style="position: relative; max-width: 850px; width: 92%; background-color: #222015; border: 2px solid #e6d02d; border-radius: 16px; box-shadow: 0 0 35px rgba(230, 208, 45, 0.3); overflow: visible;">
+                        <!-- Close Button (Fixed over top-right of image) -->
+                        <button id="promo-popup-close" style="position: absolute; top: 16px; right: 16px; background: rgba(34, 32, 21, 0.85); border: 2px solid #e6d02d; color: #e6d02d; font-size: 24px; font-weight: bold; cursor: pointer; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 100000; box-shadow: 0 0 15px rgba(0,0,0,0.5);">&times;</button>
+                        
+                        <!-- Scrollable Content Area -->
+                        <div style="max-height: 80vh; overflow-y: auto; border-radius: 14px; scrollbar-width: thin; scrollbar-color: #e6d02d #222015;">
+                            <a id="promo-popup-link" href="#" style="display: block; width: 100%; outline: none;">
+                                <img id="promo-popup-img" src="" alt="Exclusive Offer" style="width: 100%; height: auto; display: block; object-fit: contain;">
+                            </a>
+                        </div>
                     </div>
                 `;
                 document.body.appendChild(popupModal);
