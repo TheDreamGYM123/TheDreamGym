@@ -394,6 +394,26 @@ app.post('/api/settings/upload', upload.fields([
         });
 });
 
+// POST Restart Server
+app.post('/api/system/restart', (req, res) => {
+    try {
+        const tmpDir = path.join(__dirname, 'tmp');
+        if (!fs.existsSync(tmpDir)) {
+            fs.mkdirSync(tmpDir, { recursive: true });
+        }
+        const restartFile = path.join(tmpDir, 'restart.txt');
+        fs.writeFileSync(restartFile, 'Restart triggered at ' + new Date().toISOString());
+    } catch (e) {
+        console.warn('Failed to touch tmp/restart.txt:', e);
+    }
+    
+    res.json({ success: true, message: 'Server is restarting. Please wait a few seconds...' });
+    
+    setTimeout(() => {
+        process.exit(0);
+    }, 1500);
+});
+
 // GET Pricing
 app.get('/api/pricing', (req, res) => {
     db.all("SELECT * FROM pricing", (err, rows) => {

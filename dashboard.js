@@ -49,6 +49,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const maintenanceToggle = document.getElementById('maintenance-toggle');
     const saveSystemSettingsBtn = document.getElementById('save-system-settings');
     const systemSettingsStatus = document.getElementById('system-settings-status');
+    const restartServerBtn = document.getElementById('restart-server-btn');
+    const restartStatus = document.getElementById('restart-status');
 
     // Promo Popup Elements
     const popupToggle = document.getElementById('popup-toggle');
@@ -255,6 +257,33 @@ document.addEventListener('DOMContentLoaded', async () => {
             } catch (error) {
                 console.error('Failed to save system settings', error);
                 alert('Failed to save settings');
+            }
+        });
+    }
+
+    if (restartServerBtn) {
+        restartServerBtn.addEventListener('click', async () => {
+            if (!confirm('Are you sure you want to restart the live server? This will reload all process dependencies and configurations.')) {
+                return;
+            }
+
+            try {
+                restartStatus.textContent = 'Restarting...';
+                restartStatus.style.opacity = '1';
+                
+                const response = await fetch('/api/system/restart', {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                
+                restartStatus.textContent = result.message || 'Restart triggered successfully!';
+                
+                setTimeout(() => {
+                    restartStatus.style.opacity = '0';
+                }, 5000);
+            } catch (error) {
+                console.error('Failed to trigger restart', error);
+                alert('Failed to trigger server restart.');
             }
         });
     }
