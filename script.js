@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 for(let i=0; i<15; i++) {
                     repeatedText += `${text}`;
                     if (btnText) {
-                        repeatedText += ` <span class="marquee-btn" data-href="${btnUrl}" style="background-color: var(--color-secondary); color: var(--color-on-secondary); padding: 4px 12px; border-radius: 4px; font-weight: bold; font-size: 11px; text-transform: uppercase; cursor: pointer; text-decoration: none; display: inline-block; vertical-align: middle; margin: 0 12px; position: relative; z-index: 101; pointer-events: auto;">${btnText}</span>`;
+                        repeatedText += ` <span class="marquee-btn" data-href="${btnUrl}" style="color: inherit; font-weight: 900; text-transform: uppercase; cursor: pointer; text-decoration: none; display: inline-block; vertical-align: middle; margin: 0 20px; position: relative; z-index: 101; pointer-events: auto; font-size: 14px; letter-spacing: 0.05em;">${btnText}</span>`;
                     }
                     repeatedText += ` &nbsp;•&nbsp; `;
                 }
@@ -689,6 +689,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             if (trainers.length > 0) {
                 coachesGrid.innerHTML = '';
+                
+                if (trainers.length < 4) {
+                    coachesGrid.classList.add('justify-center-flex');
+                } else {
+                    coachesGrid.classList.remove('justify-center-flex');
+                }
+
                 trainers.forEach(trainer => {
                     const delayStr = trainer.delay ? `style="transition-delay: ${trainer.delay};"` : '';
                     coachesGrid.innerHTML += `

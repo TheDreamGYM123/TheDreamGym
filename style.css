@@ -944,7 +944,20 @@ nav {
 
 @media (min-width: 1024px) {
   .coaches-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(240px, 280px));
+    justify-content: center;
+  }
+  
+  .coaches-grid.justify-center-flex {
+    display: flex !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: var(--gutter) !important;
+  }
+
+  .coaches-grid .coach-card {
+    width: 280px !important;
+    flex: 0 0 280px !important;
   }
 }
 
@@ -3918,15 +3931,6 @@ footer {
 }
 
 @media (min-width: 1024px) {
-  .coaches-grid {
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    justify-content: center;
-  }
-
-  .coaches-grid .coach-card {
-    width: 100%;
-  }
-
   .pricing-section .pricing-grid {
     grid-template-columns: repeat(auto-fit, minmax(260px, 360px));
     justify-content: center;
