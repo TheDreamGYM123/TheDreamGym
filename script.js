@@ -100,19 +100,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const btnUrl = settings.banner_btn_url || '#';
                 
                 const isPopupTrigger = settings.popup_enabled === '1';
-                const buttonTag = isPopupTrigger ? 'span' : 'a';
-                const hrefAttr = isPopupTrigger ? '' : `href="${btnUrl}"`;
-                
-                let innerHtml = `<span>${text}</span>`;
-                if (btnText) {
-                    innerHtml += `&nbsp;&nbsp;<${buttonTag} ${hrefAttr} class="marquee-btn" style="background-color: var(--color-secondary); color: var(--color-on-secondary); padding: 4px 12px; border-radius: 4px; font-weight: bold; font-size: 11px; text-transform: uppercase; cursor: pointer; text-decoration: none; display: inline-block; vertical-align: middle; margin-left: 8px;">${btnText}</${buttonTag}>`;
-                }
+                const buttonTag = 'span'; // Use span for consistent display inside animated text
                 
                 let repeatedText = '';
-                for(let i=0; i<25; i++) {
-                    repeatedText += `<div style="display: inline-flex; align-items: center; white-space: nowrap; margin-right: 48px;">${innerHtml}</div>`;
+                for(let i=0; i<15; i++) {
+                    repeatedText += `${text}`;
+                    if (btnText) {
+                        repeatedText += ` <span class="marquee-btn" data-href="${btnUrl}" style="background-color: var(--color-secondary); color: var(--color-on-secondary); padding: 4px 12px; border-radius: 4px; font-weight: bold; font-size: 11px; text-transform: uppercase; cursor: pointer; text-decoration: none; display: inline-block; vertical-align: middle; margin: 0 12px; position: relative; z-index: 101; pointer-events: auto;">${btnText}</span>`;
+                    }
+                    repeatedText += ` &nbsp;•&nbsp; `;
                 }
-                marqueeContent.innerHTML = repeatedText + repeatedText;
+                
+                marqueeContent.innerHTML = `<span>${repeatedText}</span><span>${repeatedText}</span>`;
                 
                 if (settings.banner_speed) {
                     marqueeContent.style.animationDuration = `${settings.banner_speed}s`;
@@ -120,14 +119,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                 mainMarquee.style.display = 'flex';
                 if(header) header.style.top = '40px';
                 
-                if (isPopupTrigger) {
-                    marqueeContent.querySelectorAll('.marquee-btn').forEach(btn => {
-                        btn.addEventListener('click', (e) => {
-                            e.preventDefault();
+                // Add click listener to all buttons in the marquee
+                marqueeContent.querySelectorAll('.marquee-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (isPopupTrigger) {
                             openPromotionPopup();
-                        });
+                        } else {
+                            const destUrl = btn.getAttribute('data-href');
+                            if (destUrl && destUrl !== '#') {
+                                window.location.href = destUrl;
+                            }
+                        }
                     });
-                }
+                });
             } else {
                 mainMarquee.style.display = 'none';
                 if(header) header.style.top = '0px';

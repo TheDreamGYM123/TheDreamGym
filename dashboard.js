@@ -347,6 +347,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (popupDesktopFile) popupDesktopFile.value = '';
                 if (popupMobileFile) popupMobileFile.value = '';
 
+                // Clear session storage to allow instant testing
+                sessionStorage.removeItem('promoPopupShown');
+
+                // Refresh previews with final paths from backend
+                const refreshRes = await fetch('/api/settings');
+                const updatedSettings = await refreshRes.json();
+                if (popupDesktopPreview && updatedSettings.popup_desktop_image) {
+                    popupDesktopPreview.src = updatedSettings.popup_desktop_image;
+                    popupDesktopPreview.classList.remove('hidden');
+                    if (popupDesktopPlaceholder) popupDesktopPlaceholder.classList.add('hidden');
+                }
+                if (popupMobilePreview && updatedSettings.popup_mobile_image) {
+                    popupMobilePreview.src = updatedSettings.popup_mobile_image;
+                    popupMobilePreview.classList.remove('hidden');
+                    if (popupMobilePlaceholder) popupMobilePlaceholder.classList.add('hidden');
+                }
+
                 // Show success
                 popupStatus.style.opacity = '1';
                 setTimeout(() => {
