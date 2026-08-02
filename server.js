@@ -18,7 +18,8 @@ if (fs.existsSync(envPath)) {
 
 const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || '';
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '';
-const uploadsDir = path.join(__dirname, 'uploads');
+const dataDir = process.env.DATA_DIR || __dirname;
+const uploadsDir = path.join(dataDir, 'uploads');
 fs.mkdirSync(uploadsDir, { recursive: true });
 let razorpayClient = null;
 
@@ -79,7 +80,7 @@ const staticCache = {
 
 // Serve static files
 app.use(express.static(__dirname, staticCache));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'), staticCache));
+app.use('/uploads', express.static(uploadsDir, staticCache));
 
 app.get('/health', (req, res) => {
     res.json({

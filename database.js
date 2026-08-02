@@ -1,7 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
-const dbPath = path.join(__dirname, 'database.json');
+const dataDir = process.env.DATA_DIR || __dirname;
+fs.mkdirSync(dataDir, { recursive: true });
+const dbPath = path.join(dataDir, 'database.json');
 
 const initialData = {
     settings: {
