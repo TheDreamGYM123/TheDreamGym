@@ -57,14 +57,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         mainContent.addEventListener('scroll', () => {
             let currentSectionId = '';
             
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                // Check if the section is in the viewport
-                if (mainContent.scrollTop >= (sectionTop - 150)) {
-                    currentSectionId = section.getAttribute('id');
-                }
-            });
+            // Check if we are scrolled to the very bottom
+            const isAtBottom = mainContent.scrollTop + mainContent.clientHeight >= mainContent.scrollHeight - 20;
+
+            if (isAtBottom) {
+                currentSectionId = sections[sections.length - 1].getAttribute('id');
+            } else {
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (mainContent.scrollTop >= (sectionTop - 150)) {
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+            }
 
             if (currentSectionId) {
                 sidebarLinks.forEach(link => {
@@ -138,7 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 bannerStatus.style.opacity = '1';
                 setTimeout(() => {
                     bannerStatus.style.opacity = '0';
-                }, 3000);
+                }, 1500);
 
             } catch (error) {
                 console.error('Failed to save settings', error);
@@ -161,7 +166,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 heroVideoStatus.style.opacity = '1';
                 setTimeout(() => {
                     heroVideoStatus.style.opacity = '0';
-                }, 3000);
+                }, 1500);
             } catch (error) {
                 console.error('Failed to save hero video URL', error);
                 alert('Failed to save video link');
@@ -190,7 +195,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 systemSettingsStatus.style.opacity = '1';
                 setTimeout(() => {
                     systemSettingsStatus.style.opacity = '0';
-                }, 3000);
+                }, 1500);
             } catch (error) {
                 console.error('Failed to save system settings', error);
                 alert('Failed to save settings');
