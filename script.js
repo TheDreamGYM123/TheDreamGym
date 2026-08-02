@@ -84,8 +84,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             setTimeout(() => {
                 popupModal.style.opacity = '1';
             }, 10);
-            
-            sessionStorage.setItem('promoPopupShown', 'true');
         }
 
         function closePromotionPopup() {
@@ -96,6 +94,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                     popupModal.style.display = 'none';
                 }, 400);
             }
+
+            try {
+                const isMobile = window.matchMedia('(max-width: 768px)').matches;
+                const desktopImg = settings.popup_desktop_image;
+                const mobileImg = settings.popup_mobile_image;
+                const activeImg = isMobile ? (mobileImg || desktopImg) : (desktopImg || mobileImg);
+                if (activeImg) {
+                    localStorage.setItem('promoPopupDismissedFor_' + activeImg, 'true');
+                }
+            } catch (e) {}
         }
 
         if (mainMarquee && marqueeContent) {
@@ -147,14 +155,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Auto show popup on page load if enabled
         if (settings.popup_enabled === '1') {
-            const delaySec = parseInt(settings.popup_delay || '3', 10);
             const isMobile = window.matchMedia('(max-width: 768px)').matches;
-            const hasImage = isMobile ? (settings.popup_mobile_image || settings.popup_desktop_image) : (settings.popup_desktop_image || settings.popup_mobile_image);
-            
-            if (hasImage && !sessionStorage.getItem('promoPopupShown')) {
-                setTimeout(() => {
-                    openPromotionPopup();
-                }, delaySec * 1000);
+            const desktopImg = settings.popup_desktop_image;
+            const mobileImg = settings.popup_mobile_image;
+            const activeImg = isMobile ? (mobileImg || desktopImg) : (desktopImg || mobileImg);
+
+            if (activeImg) {
+                let isDismissed = false;
+                try {
+                    isDismissed = localStorage.getItem('promoPopupDismissedFor_' + activeImg) === 'true';
+                } catch (e) {}
+
+                if (!isDismissed) {
+                    const delaySec = parseInt(settings.popup_delay || '3', 10);
+                    setTimeout(() => {
+                        openPromotionPopup();
+                    }, delaySec * 1000);
+                }
             }
         }
 
@@ -695,7 +712,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (trainers.length > 0) {
                 coachesGrid.innerHTML = '';
                 
-                if (trainers.length < 4) {
+                if (trainers.length < 3) {
                     coachesGrid.classList.add('justify-center-flex');
                 } else {
                     coachesGrid.classList.remove('justify-center-flex');

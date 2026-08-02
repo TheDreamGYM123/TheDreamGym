@@ -960,7 +960,7 @@ nav {
 
 @media (min-width: 1024px) {
   .coaches-grid {
-    grid-template-columns: repeat(4, minmax(240px, 280px));
+    grid-template-columns: repeat(3, minmax(280px, 360px));
     justify-content: center;
   }
   
@@ -972,8 +972,8 @@ nav {
   }
 
   .coaches-grid .coach-card {
-    width: 280px !important;
-    flex: 0 0 280px !important;
+    width: 360px !important;
+    flex: 0 0 360px !important;
   }
 }
 
