@@ -94,7 +94,8 @@ app.use((req, res, next) => {
         || req.path.startsWith('/api/admin');
     const isApi = req.path.startsWith('/api');
     const isStatic = req.path.match(/\.(css|js|png|jpg|jpeg|gif|svg|mp4|webm|webp|ico|txt|xml|webmanifest)$/i) 
-        || req.path.startsWith('/uploads');
+        || req.path.startsWith('/uploads')
+        || req.path.startsWith('/images');
 
     if (isAdmin || isApi || isStatic || req.method !== 'GET') {
         return next();
@@ -109,10 +110,10 @@ app.use((req, res, next) => {
         const isDeployed = settings.site_deployed !== '0';
 
         if (!isDeployed) {
-            return res.sendFile(path.join(__dirname, 'coming-soon.html'));
+            return res.sendFile(path.join(__dirname, 'html', 'coming-soon.html'));
         }
         if (maintenance) {
-            return res.sendFile(path.join(__dirname, 'maintenance.html'));
+            return res.sendFile(path.join(__dirname, 'html', 'maintenance.html'));
         }
         next();
     });
@@ -130,9 +131,21 @@ const staticCache = {
     }
 };
 
-// Serve static files
+// Serve static files (JS, CSS, manifests, etc. from root)
 app.use(express.static(__dirname, staticCache));
+// Serve images folder
+app.use('/images', express.static(path.join(__dirname, 'images'), staticCache));
+// Serve user-uploaded files
 app.use('/uploads', express.static(uploadsDir, staticCache));
+
+// --- Named Page Routes ---
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
+app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'html', 'admin.html')));
+app.get('/dashboard', (req, res) => res.sendFile(path.join(__dirname, 'html', 'dashboard.html')));
+app.get('/applications', (req, res) => res.sendFile(path.join(__dirname, 'html', 'applications.html')));
+app.get('/payments', (req, res) => res.sendFile(path.join(__dirname, 'html', 'payments.html')));
+app.get('/privacy-policy', (req, res) => res.sendFile(path.join(__dirname, 'html', 'privacy-policy.html')));
+app.get('/terms', (req, res) => res.sendFile(path.join(__dirname, 'html', 'terms.html')));
 
 app.get('/health', (req, res) => {
     res.json({
