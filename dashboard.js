@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
+﻿document.addEventListener('DOMContentLoaded', async () => {
     const escapeAdminHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
         '&': '&amp;',
         '<': '&lt;',
@@ -24,14 +24,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Check if logged in
     const token = localStorage.getItem('adminToken');
     if (!token) {
-        window.location.href = 'admin.html';
+        window.location.href = '/admin';
         return;
     }
 
     // Logout
     document.getElementById('logout-btn').addEventListener('click', () => {
         localStorage.removeItem('adminToken');
-        window.location.href = 'admin.html';
+        window.location.href = '/admin';
     });
 
     // Elements
@@ -636,8 +636,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                                                 ${plan.show_home ? '<span class="text-xs bg-green-400 text-black font-bold px-2 py-1 rounded">HOME</span>' : ''}
                                             </div>
                                         </div>
-                                        <div class="text-sm text-on-surface-variant mb-1">Price: ₹${escapeAdminHtml(plan.price || '')}</div>
-                                        ${plan.cut_price ? `<div class="text-sm text-on-surface-variant mb-1">Cut Price: ₹${escapeAdminHtml(plan.cut_price)}</div>` : ''}
+                                        <div class="text-sm text-on-surface-variant mb-1">Price: â‚¹${escapeAdminHtml(plan.price || '')}</div>
+                                        ${plan.cut_price ? `<div class="text-sm text-on-surface-variant mb-1">Cut Price: â‚¹${escapeAdminHtml(plan.cut_price)}</div>` : ''}
                                         <div class="text-sm text-on-surface-variant mb-4">Badge: ${escapeAdminHtml(plan.badge || 'None')}</div>
                                         <div class="flex flex-wrap gap-2">
                                             <button onclick="editPricing(${plan.id})" class="text-on-surface hover:text-secondary transition-colors px-3 py-2 border border-outline-variant rounded hover:border-secondary">
@@ -1184,7 +1184,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="bg-surface-container-highest border border-outline-variant/60 rounded-lg p-4"><div class="text-[11px] text-on-surface-variant uppercase tracking-widest mb-1">Name</div><strong>${escapeAdminHtml(request.name)}</strong></div>
                 <div class="bg-surface-container-highest border border-outline-variant/60 rounded-lg p-4"><div class="text-[11px] text-on-surface-variant uppercase tracking-widest mb-1">Transaction ID</div><strong class="break-all">${escapeAdminHtml(request.razorpay_payment_id || 'Not paid yet')}</strong></div>
                 <div class="bg-surface-container-highest border border-outline-variant/60 rounded-lg p-4"><div class="text-[11px] text-on-surface-variant uppercase tracking-widest mb-1">Plan</div><strong>${escapeAdminHtml(request.plan_name)} (${escapeAdminHtml(request.billing_cycle)})</strong></div>
-                <div class="bg-surface-container-highest border border-outline-variant/60 rounded-lg p-4"><div class="text-[11px] text-on-surface-variant uppercase tracking-widest mb-1">Amount</div><strong>₹${escapeAdminHtml(request.amount)}</strong></div>
+                <div class="bg-surface-container-highest border border-outline-variant/60 rounded-lg p-4"><div class="text-[11px] text-on-surface-variant uppercase tracking-widest mb-1">Amount</div><strong>â‚¹${escapeAdminHtml(request.amount)}</strong></div>
                 <div class="bg-surface-container-highest border border-outline-variant/60 rounded-lg p-4"><div class="text-[11px] text-on-surface-variant uppercase tracking-widest mb-1">Payment Time</div><strong>${formatAdminTime(request.paid_at)}</strong></div>
                 <div class="bg-surface-container-highest border border-outline-variant/60 rounded-lg p-4"><div class="text-[11px] text-on-surface-variant uppercase tracking-widest mb-1">Order ID</div><strong class="break-all">${escapeAdminHtml(request.razorpay_order_id || 'Not created in demo mode')}</strong></div>
             </div>
@@ -1238,7 +1238,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <span class="text-xs bg-background border border-outline-variant text-on-surface-variant px-3 py-1 rounded-full uppercase">${escapeAdminHtml(request.billing_cycle)}</span>
                             <span class="text-xs bg-secondary text-on-secondary font-bold px-3 py-1 rounded-full uppercase">${escapeAdminHtml(request.status)}</span>
                         </div>
-                        <div class="text-3xl font-display font-bold mt-3">₹${escapeAdminHtml(request.amount)}</div>
+                        <div class="text-3xl font-display font-bold mt-3">â‚¹${escapeAdminHtml(request.amount)}</div>
                         <div class="text-sm text-on-surface-variant flex flex-col md:flex-row gap-2 md:gap-4 mt-3">
                             <span><span class="material-symbols-outlined text-[16px] align-middle mr-1">person</span>${escapeAdminHtml(request.name)}</span>
                             <span><span class="material-symbols-outlined text-[16px] align-middle mr-1">mail</span>${escapeAdminHtml(request.email)}</span>

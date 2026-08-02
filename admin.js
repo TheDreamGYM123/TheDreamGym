@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (data.success) {
                     localStorage.setItem('adminToken', data.token);
-                    window.location.href = 'dashboard.html';
+                    window.location.href = '/dashboard';
                 } else {
                     alert('Invalid credentials');
                 }
