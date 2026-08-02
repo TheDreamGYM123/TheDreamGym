@@ -147,6 +147,18 @@ app.get('/payments', (req, res) => res.sendFile(path.join(__dirname, 'html', 'pa
 app.get('/privacy-policy', (req, res) => res.sendFile(path.join(__dirname, 'html', 'privacy-policy.html')));
 app.get('/terms', (req, res) => res.sendFile(path.join(__dirname, 'html', 'terms.html')));
 
+// --- Legacy .html redirects (301 permanent) ---
+// Handles old bookmarks/cached links still using .html filenames
+app.get('/index.html',          (req, res) => res.redirect(301, '/'));
+app.get('/admin.html',          (req, res) => res.redirect(301, '/admin'));
+app.get('/dashboard.html',      (req, res) => res.redirect(301, '/dashboard'));
+app.get('/applications.html',   (req, res) => res.redirect(301, '/applications'));
+app.get('/payments.html',       (req, res) => res.redirect(301, '/payments'));
+app.get('/privacy-policy.html', (req, res) => res.redirect(301, '/privacy-policy'));
+app.get('/terms.html',          (req, res) => res.redirect(301, '/terms'));
+app.get('/coming-soon.html',    (req, res) => res.redirect(301, '/'));
+app.get('/maintenance.html',    (req, res) => res.redirect(301, '/'));
+
 app.get('/health', (req, res) => {
     res.json({
         status: 'ok',
