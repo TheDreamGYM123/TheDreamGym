@@ -23,7 +23,9 @@ const initialData = {
         banner_text: 'NOW & SAVE $50 ON INITIATION - ELITE MEMBERS',
         banner_active: '1',
         banner_speed: '120',
-        hero_video_url: ''
+        hero_video_url: '',
+        maintenance_mode: '0',
+        site_deployed: '1'
     },
     pricing: [
         { id: 1, name: 'Membership Fee', category: 'membership', period: 'One-time', price: '1499', cut_price: '2999', badge: 'Architects of performance initiation', features: '["Registration is separate from the training plans below."]', is_popular: 0, show_home: 0, is_active: 1, sort_order: 0 },

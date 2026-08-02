@@ -43,6 +43,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const heroVideoUrl = document.getElementById('hero-video-url');
     const saveHeroVideoBtn = document.getElementById('save-hero-video');
     const heroVideoStatus = document.getElementById('hero-video-status');
+    const deployToggle = document.getElementById('deploy-toggle');
+    const maintenanceToggle = document.getElementById('maintenance-toggle');
+    const saveSystemSettingsBtn = document.getElementById('save-system-settings');
+    const systemSettingsStatus = document.getElementById('system-settings-status');
 
     // Scrollspy for Sidebar (Highlight active section)
     const mainContent = document.querySelector('main');
@@ -93,6 +97,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         if (heroVideoUrl && settings.hero_video_url) {
             heroVideoUrl.value = settings.hero_video_url;
+        }
+        if (deployToggle) {
+            deployToggle.checked = settings.site_deployed !== '0';
+        }
+        if (maintenanceToggle) {
+            maintenanceToggle.checked = settings.maintenance_mode === '1';
         }
     } catch (error) {
         console.error('Failed to load settings', error);
@@ -155,6 +165,35 @@ document.addEventListener('DOMContentLoaded', async () => {
             } catch (error) {
                 console.error('Failed to save hero video URL', error);
                 alert('Failed to save video link');
+            }
+        });
+    }
+
+    if (saveSystemSettingsBtn) {
+        saveSystemSettingsBtn.addEventListener('click', async () => {
+            const siteDeployed = deployToggle.checked ? '1' : '0';
+            const maintenanceMode = maintenanceToggle.checked ? '1' : '0';
+
+            try {
+                await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: 'site_deployed', value: siteDeployed })
+                });
+
+                await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: 'maintenance_mode', value: maintenanceMode })
+                });
+
+                systemSettingsStatus.style.opacity = '1';
+                setTimeout(() => {
+                    systemSettingsStatus.style.opacity = '0';
+                }, 3000);
+            } catch (error) {
+                console.error('Failed to save system settings', error);
+                alert('Failed to save settings');
             }
         });
     }

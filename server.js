@@ -85,6 +85,39 @@ app.use(compression({
 app.use(cors());
 app.use(express.json());
 
+// Live status & Maintenance mode middleware
+app.use((req, res, next) => {
+    const isAdmin = req.path.startsWith('/admin') 
+        || req.path.startsWith('/dashboard') 
+        || req.path.startsWith('/applications') 
+        || req.path.startsWith('/payments') 
+        || req.path.startsWith('/api/admin');
+    const isApi = req.path.startsWith('/api');
+    const isStatic = req.path.match(/\.(css|js|png|jpg|jpeg|gif|svg|mp4|webm|webp|ico|txt|xml|webmanifest)$/i) 
+        || req.path.startsWith('/uploads');
+
+    if (isAdmin || isApi || isStatic || req.method !== 'GET') {
+        return next();
+    }
+
+    db.all("SELECT key, value FROM settings", (err, rows) => {
+        if (err || !rows) return next();
+        const settings = {};
+        rows.forEach(row => { settings[row.key] = row.value; });
+
+        const maintenance = settings.maintenance_mode === '1';
+        const isDeployed = settings.site_deployed !== '0';
+
+        if (!isDeployed) {
+            return res.sendFile(path.join(__dirname, 'coming-soon.html'));
+        }
+        if (maintenance) {
+            return res.sendFile(path.join(__dirname, 'maintenance.html'));
+        }
+        next();
+    });
+});
+
 const staticCache = {
     setHeaders: (res, filePath) => {
         const ext = path.extname(filePath).toLowerCase();

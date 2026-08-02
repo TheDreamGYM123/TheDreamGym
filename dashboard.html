@@ -79,6 +79,9 @@
             <a href="payments.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest/30 hover:text-on-surface rounded-lg font-bold tracking-wide transition-colors">
                 <span class="material-symbols-outlined">payments</span> Payments
             </a>
+            <a href="dashboard.html#system-settings-section" class="sidebar-link flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest/30 hover:text-on-surface rounded-lg font-bold tracking-wide transition-colors">
+                <span class="material-symbols-outlined">tune</span> System Settings
+            </a>
         </nav>
         <div class="p-4 border-t border-outline-variant/30">
             <button id="logout-btn" class="w-full flex items-center justify-center gap-2 px-4 py-3 text-on-surface-variant hover:text-red-400 transition-colors">
@@ -448,6 +451,53 @@
                     <div id="trainers-list" class="space-y-4">
                         <!-- Loaded dynamically -->
                     </div>
+                </div>
+            </section>
+
+            <!-- System Settings Section -->
+            <section id="system-settings-section" class="bg-surface-container rounded-xl border border-outline-variant/30 p-8 shadow-xl mt-8 mb-16">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-xl font-display font-bold text-secondary flex items-center gap-2">
+                            <span class="material-symbols-outlined">tune</span> System Operational Settings
+                        </h2>
+                        <p class="text-on-surface-variant text-sm mt-1">Configure status, launch parameters, and system availability modes.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Toggle Row: Launch Status -->
+                    <div class="flex items-center justify-between p-4 bg-surface-container-highest rounded-lg border border-outline-variant/30">
+                        <div>
+                            <h3 class="font-bold text-on-surface flex items-center gap-2">
+                                <span class="material-symbols-outlined text-secondary">rocket_launch</span> Launch Status (Site Deployed)
+                            </h3>
+                            <p class="text-on-surface-variant text-xs mt-1">When turned OFF, visitors will see the 'Coming Soon' pre-launch page.</p>
+                        </div>
+                        <div class="relative inline-block w-12 align-middle select-none transition duration-200 ease-in">
+                            <input type="checkbox" id="deploy-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 transition-transform duration-300 transform" checked />
+                            <label for="deploy-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-500 cursor-pointer"></label>
+                        </div>
+                    </div>
+
+                    <!-- Toggle Row: Maintenance Mode -->
+                    <div class="flex items-center justify-between p-4 bg-surface-container-highest rounded-lg border border-outline-variant/30">
+                        <div>
+                            <h3 class="font-bold text-on-surface flex items-center gap-2">
+                                <span class="material-symbols-outlined text-secondary">construction</span> Maintenance Mode
+                            </h3>
+                            <p class="text-on-surface-variant text-xs mt-1">When turned ON, visitors will see a 'Scheduled Maintenance' screen with fallback support.</p>
+                        </div>
+                        <div class="relative inline-block w-12 align-middle select-none transition duration-200 ease-in">
+                            <input type="checkbox" id="maintenance-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 transition-transform duration-300 transform" />
+                            <label for="maintenance-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-500 cursor-pointer"></label>
+                        </div>
+                    </div>
+
+                    <button id="save-system-settings" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)] transition-all">
+                        Save System Settings
+                    </button>
+                    <span id="system-settings-status" class="ml-4 text-green-400 text-sm opacity-0 transition-opacity">Saved successfully!</span>
                 </div>
             </section>
 
