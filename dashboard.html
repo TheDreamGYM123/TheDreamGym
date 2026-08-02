@@ -58,6 +58,9 @@
             <a href="dashboard.html#banner-section" class="sidebar-link active flex items-center gap-3 px-4 py-3 bg-surface-container-highest/50 text-secondary rounded-lg font-bold tracking-wide transition-colors">
                 <span class="material-symbols-outlined">settings</span> Top Banner
             </a>
+            <a href="dashboard.html#popup-section" class="sidebar-link flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest/30 hover:text-on-surface rounded-lg font-bold tracking-wide transition-colors">
+                <span class="material-symbols-outlined">auto_awesome</span> Promo Popup
+            </a>
             <a href="dashboard.html#reviews-section" class="sidebar-link flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest/30 hover:text-on-surface rounded-lg font-bold tracking-wide transition-colors">
                 <span class="material-symbols-outlined">reviews</span> Client Reviews
             </a>
@@ -122,11 +125,24 @@
                 </div>
 
                 <div class="space-y-4">
-                    <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase">Banner Text</label>
-                    <input type="text" id="banner-text" class="w-full bg-surface-container-highest border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="e.g. NOW & SAVE $50 ON INITIATION • ELITE MEMBERS">
-                    
-                    <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase">Banner Speed (Seconds)</label>
-                    <input type="number" id="banner-speed" class="w-full bg-surface-container-highest border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="120" min="10" max="300">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Banner Text</label>
+                            <input type="text" id="banner-text" class="w-full bg-surface-container-highest border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="e.g. NOW & SAVE $50 ON INITIATION • ELITE MEMBERS">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Banner Speed (Seconds)</label>
+                            <input type="number" id="banner-speed" class="w-full bg-surface-container-highest border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="120" min="10" max="300">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Button Label (CTA)</label>
+                            <input type="text" id="banner-btn-text" class="w-full bg-surface-container-highest border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="e.g. Join Now →">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Button Destination (URL)</label>
+                            <input type="url" id="banner-btn-url" class="w-full bg-surface-container-highest border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="e.g. https://thedreamgym.com/#pricing">
+                        </div>
+                    </div>
                     
                     <button id="save-banner" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)] transition-all">
                         Save Banner Changes
@@ -150,6 +166,75 @@
                     </button>
                     <span id="hero-video-status" class="ml-4 text-green-400 text-sm opacity-0 transition-opacity">Saved successfully!</span>
                 </div>
+            </section>
+
+            <!-- First-Visit Popup Section -->
+            <section id="popup-section" class="bg-surface-container rounded-xl border border-outline-variant/30 p-8 shadow-xl mt-8">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-xl font-display font-bold text-secondary flex items-center gap-2">
+                            <span class="material-symbols-outlined">auto_awesome</span> First-Visit Promotion Popup
+                        </h2>
+                        <p class="text-on-surface-variant text-sm mt-1">Configure the modal popup that appears when a user first visits your homepage.</p>
+                    </div>
+                    
+                    <!-- Toggle Switch -->
+                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                        <input type="checkbox" name="toggle" id="popup-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 transition-transform duration-300 transform" />
+                        <label for="popup-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-500 cursor-pointer"></label>
+                    </div>
+                </div>
+
+                <form id="save-popup-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Desktop Image -->
+                        <div class="bg-surface-container-highest p-6 rounded-lg border border-outline-variant/30 flex flex-col justify-between">
+                            <div>
+                                <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Desktop Image</label>
+                                <input type="file" id="popup-desktop-file" accept="image/*" class="w-full bg-background border border-outline-variant/50 rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-secondary transition-colors mb-4">
+                                <span class="text-on-surface-variant text-xs block mb-4">Recommended: 1200×800px or wider.</span>
+                            </div>
+                            <div class="relative flex items-center justify-center border border-dashed border-outline-variant/50 rounded-lg p-4 min-h-[160px]">
+                                <img id="popup-desktop-preview" src="" alt="Desktop Preview" class="max-h-[140px] rounded-lg hidden">
+                                <span id="popup-desktop-placeholder" class="text-on-surface-variant text-xs">No image uploaded</span>
+                            </div>
+                        </div>
+
+                        <!-- Mobile Image -->
+                        <div class="bg-surface-container-highest p-6 rounded-lg border border-outline-variant/30 flex flex-col justify-between">
+                            <div>
+                                <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Mobile Image</label>
+                                <input type="file" id="popup-mobile-file" accept="image/*" class="w-full bg-background border border-outline-variant/50 rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-secondary transition-colors mb-4">
+                                <span class="text-on-surface-variant text-xs block mb-4">Recommended: 800×1200px or taller.</span>
+                            </div>
+                            <div class="relative flex items-center justify-center border border-dashed border-outline-variant/50 rounded-lg p-4 min-h-[160px]">
+                                <img id="popup-mobile-preview" src="" alt="Mobile Preview" class="max-h-[140px] rounded-lg hidden">
+                                <span id="popup-mobile-placeholder" class="text-on-surface-variant text-xs">No image uploaded</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Popup Redirect URL</label>
+                            <input type="url" id="popup-link-url" class="w-full bg-surface-container-highest border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="e.g. https://thedreamgym.com/#pricing">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">Display Delay (Seconds) — <span class="text-secondary">Extra Feature</span></label>
+                            <input type="number" id="popup-delay" class="w-full bg-surface-container-highest border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" placeholder="3" min="0" max="60">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <button type="submit" class="bg-secondary text-on-secondary font-bold uppercase tracking-widest px-6 py-3 rounded-lg hover:shadow-[0_0_15px_rgba(230,208,45,0.4)] transition-all">
+                            Save Popup Settings
+                        </button>
+                        <button type="button" id="delete-popup-btn" class="bg-red-950 text-red-400 border border-red-900/50 hover:bg-red-900/30 font-bold uppercase tracking-widest px-6 py-3 rounded-lg transition-all">
+                            Delete Popup
+                        </button>
+                        <span id="popup-status" class="text-green-400 text-sm opacity-0 transition-opacity">Saved successfully!</span>
+                    </div>
+                </form>
             </section>
 
             <!-- Reviews Settings Section -->

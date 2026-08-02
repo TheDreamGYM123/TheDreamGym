@@ -38,6 +38,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const bannerText = document.getElementById('banner-text');
     const bannerSpeed = document.getElementById('banner-speed');
     const bannerToggle = document.getElementById('banner-toggle');
+    const bannerBtnText = document.getElementById('banner-btn-text');
+    const bannerBtnUrl = document.getElementById('banner-btn-url');
     const saveBannerBtn = document.getElementById('save-banner');
     const bannerStatus = document.getElementById('banner-status');
     const heroVideoUrl = document.getElementById('hero-video-url');
@@ -47,6 +49,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     const maintenanceToggle = document.getElementById('maintenance-toggle');
     const saveSystemSettingsBtn = document.getElementById('save-system-settings');
     const systemSettingsStatus = document.getElementById('system-settings-status');
+
+    // Promo Popup Elements
+    const popupToggle = document.getElementById('popup-toggle');
+    const popupDesktopFile = document.getElementById('popup-desktop-file');
+    const popupMobileFile = document.getElementById('popup-mobile-file');
+    const popupDesktopPreview = document.getElementById('popup-desktop-preview');
+    const popupDesktopPlaceholder = document.getElementById('popup-desktop-placeholder');
+    const popupMobilePreview = document.getElementById('popup-mobile-preview');
+    const popupMobilePlaceholder = document.getElementById('popup-mobile-placeholder');
+    const popupLinkUrl = document.getElementById('popup-link-url');
+    const popupDelay = document.getElementById('popup-delay');
+    const savePopupForm = document.getElementById('save-popup-form');
+    const deletePopupBtn = document.getElementById('delete-popup-btn');
+    const popupStatus = document.getElementById('popup-status');
 
     // Scrollspy for Sidebar (Highlight active section)
     const mainContent = document.querySelector('main');
@@ -100,6 +116,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (bannerToggle && settings.banner_active === '1') {
             bannerToggle.checked = true;
         }
+        if (bannerBtnText && settings.banner_btn_text !== undefined) {
+            bannerBtnText.value = settings.banner_btn_text;
+        }
+        if (bannerBtnUrl && settings.banner_btn_url !== undefined) {
+            bannerBtnUrl.value = settings.banner_btn_url;
+        }
         if (heroVideoUrl && settings.hero_video_url) {
             heroVideoUrl.value = settings.hero_video_url;
         }
@@ -109,16 +131,38 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (maintenanceToggle) {
             maintenanceToggle.checked = settings.maintenance_mode === '1';
         }
+
+        // Load Popup settings
+        if (popupToggle) {
+            popupToggle.checked = settings.popup_enabled === '1';
+        }
+        if (popupLinkUrl && settings.popup_link_url !== undefined) {
+            popupLinkUrl.value = settings.popup_link_url;
+        }
+        if (popupDelay && settings.popup_delay !== undefined) {
+            popupDelay.value = settings.popup_delay;
+        }
+        if (popupDesktopPreview && settings.popup_desktop_image) {
+            popupDesktopPreview.src = settings.popup_desktop_image;
+            popupDesktopPreview.classList.remove('hidden');
+            if (popupDesktopPlaceholder) popupDesktopPlaceholder.classList.add('hidden');
+        }
+        if (popupMobilePreview && settings.popup_mobile_image) {
+            popupMobilePreview.src = settings.popup_mobile_image;
+            popupMobilePreview.classList.remove('hidden');
+            if (popupMobilePlaceholder) popupMobilePlaceholder.classList.add('hidden');
+        }
     } catch (error) {
         console.error('Failed to load settings', error);
     }
 
-    // Save banner settings
     if (saveBannerBtn) {
         saveBannerBtn.addEventListener('click', async () => {
             const text = bannerText.value;
             const speed = bannerSpeed.value || '120';
             const active = bannerToggle.checked ? '1' : '0';
+            const btnText = bannerBtnText.value.trim();
+            const btnUrl = bannerBtnUrl.value.trim();
 
             try {
                 await fetch('/api/settings', {
@@ -137,6 +181,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ key: 'banner_active', value: active })
+                });
+
+                await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: 'banner_btn_text', value: btnText })
+                });
+
+                await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: 'banner_btn_url', value: btnUrl })
                 });
 
                 // Show success message
@@ -199,6 +255,182 @@ document.addEventListener('DOMContentLoaded', async () => {
             } catch (error) {
                 console.error('Failed to save system settings', error);
                 alert('Failed to save settings');
+            }
+        });
+    }
+
+    // Image Preview Handlers for Promo Popup
+    if (popupDesktopFile) {
+        popupDesktopFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    popupDesktopPreview.src = event.target.result;
+                    popupDesktopPreview.classList.remove('hidden');
+                    if (popupDesktopPlaceholder) popupDesktopPlaceholder.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    if (popupMobileFile) {
+        popupMobileFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    popupMobilePreview.src = event.target.result;
+                    popupMobilePreview.classList.remove('hidden');
+                    if (popupMobilePlaceholder) popupMobilePlaceholder.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Save Promo Popup Settings
+    if (savePopupForm) {
+        savePopupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const enabled = popupToggle.checked ? '1' : '0';
+            const linkUrl = popupLinkUrl.value.trim();
+            const delay = popupDelay.value || '3';
+
+            try {
+                // 1. Handle file uploads if any
+                const formData = new FormData();
+                let hasFiles = false;
+
+                if (popupDesktopFile && popupDesktopFile.files[0]) {
+                    formData.append('popup_desktop_image', popupDesktopFile.files[0]);
+                    hasFiles = true;
+                }
+                if (popupMobileFile && popupMobileFile.files[0]) {
+                    formData.append('popup_mobile_image', popupMobileFile.files[0]);
+                    hasFiles = true;
+                }
+
+                if (hasFiles) {
+                    const uploadResponse = await fetch('/api/settings/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const uploadResult = await uploadResponse.json();
+                    if (!uploadResult.success) {
+                        throw new Error(uploadResult.error || 'Upload failed');
+                    }
+                }
+
+                // 2. Save text settings
+                await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: 'popup_enabled', value: enabled })
+                });
+
+                await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: 'popup_link_url', value: linkUrl })
+                });
+
+                await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: 'popup_delay', value: delay })
+                });
+
+                // Clear files inputs so they aren't uploaded again on subsequent saves
+                if (popupDesktopFile) popupDesktopFile.value = '';
+                if (popupMobileFile) popupMobileFile.value = '';
+
+                // Show success
+                popupStatus.style.opacity = '1';
+                setTimeout(() => {
+                    popupStatus.style.opacity = '0';
+                }, 3000);
+
+            } catch (err) {
+                console.error('Failed to save popup settings', err);
+                alert('Failed to save popup settings: ' + err.message);
+            }
+        });
+    }
+
+    // Delete/Reset Promo Popup
+    if (deletePopupBtn) {
+        deletePopupBtn.addEventListener('click', async () => {
+            if (!confirm('Are you sure you want to delete and reset the promo popup settings?')) {
+                return;
+            }
+
+            try {
+                await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: 'popup_enabled', value: '0' })
+                });
+
+                await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: 'popup_desktop_image', value: '' })
+                });
+
+                await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: 'popup_mobile_image', value: '' })
+                });
+
+                await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: 'popup_link_url', value: '' })
+                });
+
+                await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: 'popup_delay', value: '3' })
+                });
+
+                // Reset UI
+                popupToggle.checked = false;
+                popupLinkUrl.value = '';
+                popupDelay.value = '3';
+                if (popupDesktopFile) popupDesktopFile.value = '';
+                if (popupMobileFile) popupMobileFile.value = '';
+
+                if (popupDesktopPreview) {
+                    popupDesktopPreview.src = '';
+                    popupDesktopPreview.classList.add('hidden');
+                }
+                if (popupDesktopPlaceholder) {
+                    popupDesktopPlaceholder.classList.remove('hidden');
+                }
+
+                if (popupMobilePreview) {
+                    popupMobilePreview.src = '';
+                    popupMobilePreview.classList.add('hidden');
+                }
+                if (popupMobilePlaceholder) {
+                    popupMobilePlaceholder.classList.remove('hidden');
+                }
+
+                popupStatus.textContent = 'Reset successfully!';
+                popupStatus.style.opacity = '1';
+                setTimeout(() => {
+                    popupStatus.style.opacity = '0';
+                    popupStatus.textContent = 'Saved successfully!';
+                }, 3000);
+
+            } catch (err) {
+                console.error('Failed to reset popup settings', err);
+                alert('Failed to reset popup settings');
             }
         });
     }

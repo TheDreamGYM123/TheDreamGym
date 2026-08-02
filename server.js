@@ -353,6 +353,47 @@ app.post('/api/settings', (req, res) => {
     });
 });
 
+// POST Settings Uploads
+app.post('/api/settings/upload', upload.fields([
+    { name: 'popup_desktop_image', maxCount: 1 },
+    { name: 'popup_mobile_image', maxCount: 1 }
+]), (req, res) => {
+    const files = req.files || {};
+    const updates = [];
+
+    if (files['popup_desktop_image']) {
+        const filePath = '/uploads/' + files['popup_desktop_image'][0].filename;
+        updates.push(new Promise((resolve, reject) => {
+            db.run("INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = ?", ['popup_desktop_image', filePath, filePath], (err) => {
+                if (err) reject(err);
+                else resolve({ key: 'popup_desktop_image', value: filePath });
+            });
+        }));
+    }
+
+    if (files['popup_mobile_image']) {
+        const filePath = '/uploads/' + files['popup_mobile_image'][0].filename;
+        updates.push(new Promise((resolve, reject) => {
+            db.run("INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = ?", ['popup_mobile_image', filePath, filePath], (err) => {
+                if (err) reject(err);
+                else resolve({ key: 'popup_mobile_image', value: filePath });
+            });
+        }));
+    }
+
+    if (updates.length === 0) {
+        return res.json({ success: true, message: 'No files uploaded' });
+    }
+
+    Promise.all(updates)
+        .then((results) => {
+            res.json({ success: true, results });
+        })
+        .catch((err) => {
+            res.status(500).json({ error: err.message });
+        });
+});
+
 // GET Pricing
 app.get('/api/pricing', (req, res) => {
     db.all("SELECT * FROM pricing", (err, rows) => {

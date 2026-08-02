@@ -21,23 +21,129 @@ document.addEventListener('DOMContentLoaded', async () => {
         const marqueeContent = document.getElementById('marquee-content');
         const header = document.getElementById('header');
         
+        // --- Promotion Popup Helper Functions ---
+        function openPromotionPopup() {
+            let popupModal = document.getElementById('promo-popup-modal');
+            if (!popupModal) {
+                popupModal = document.createElement('div');
+                popupModal.id = 'promo-popup-modal';
+                popupModal.style.position = 'fixed';
+                popupModal.style.top = '0';
+                popupModal.style.left = '0';
+                popupModal.style.width = '100%';
+                popupModal.style.height = '100%';
+                popupModal.style.backgroundColor = 'rgba(21, 19, 10, 0.85)';
+                popupModal.style.backdropFilter = 'blur(8px)';
+                popupModal.style.webkitBackdropFilter = 'blur(8px)';
+                popupModal.style.zIndex = '99999';
+                popupModal.style.display = 'flex';
+                popupModal.style.alignItems = 'center';
+                popupModal.style.justifyContent = 'center';
+                popupModal.style.opacity = '0';
+                popupModal.style.transition = 'opacity 0.4s ease';
+                
+                popupModal.innerHTML = `
+                    <div style="position: relative; max-width: 550px; width: 90%; background-color: #222015; border: 2px solid #e6d02d; border-radius: 16px; overflow: hidden; box-shadow: 0 0 30px rgba(230, 208, 45, 0.25);">
+                        <button id="promo-popup-close" style="position: absolute; top: 12px; right: 16px; background: transparent; border: none; color: #cdc7ad; font-size: 28px; cursor: pointer; transition: color 0.2s; z-index: 10;">&times;</button>
+                        <a id="promo-popup-link" href="#" style="display: block; width: 100%; height: 100%; outline: none;">
+                            <img id="promo-popup-img" src="" alt="Exclusive Offer" style="width: 100%; height: auto; display: block; object-fit: cover;">
+                        </a>
+                    </div>
+                `;
+                document.body.appendChild(popupModal);
+                
+                document.getElementById('promo-popup-close').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    closePromotionPopup();
+                });
+                
+                popupModal.addEventListener('click', (e) => {
+                    if (e.target === popupModal) {
+                        closePromotionPopup();
+                    }
+                });
+            }
+            
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            const desktopImg = settings.popup_desktop_image;
+            const mobileImg = settings.popup_mobile_image;
+            const activeImg = isMobile ? (mobileImg || desktopImg) : (desktopImg || mobileImg);
+            const redirectUrl = settings.popup_link_url || '#';
+            
+            if (!activeImg) return;
+            
+            document.getElementById('promo-popup-img').src = activeImg;
+            document.getElementById('promo-popup-link').href = redirectUrl;
+            
+            popupModal.style.display = 'flex';
+            setTimeout(() => {
+                popupModal.style.opacity = '1';
+            }, 10);
+            
+            sessionStorage.setItem('promoPopupShown', 'true');
+        }
+
+        function closePromotionPopup() {
+            const popupModal = document.getElementById('promo-popup-modal');
+            if (popupModal) {
+                popupModal.style.opacity = '0';
+                setTimeout(() => {
+                    popupModal.style.display = 'none';
+                }, 400);
+            }
+        }
+
         if (mainMarquee && marqueeContent) {
             if (settings.banner_active === '1') {
                 const text = settings.banner_text || '';
-                let repeatedText = '';
-                for(let i=0; i<30; i++) {
-                    repeatedText += `${text} &nbsp;•&nbsp; `;
+                const btnText = settings.banner_btn_text || '';
+                const btnUrl = settings.banner_btn_url || '#';
+                
+                const isPopupTrigger = settings.popup_enabled === '1';
+                const buttonTag = isPopupTrigger ? 'span' : 'a';
+                const hrefAttr = isPopupTrigger ? '' : `href="${btnUrl}"`;
+                
+                let innerHtml = `<span>${text}</span>`;
+                if (btnText) {
+                    innerHtml += `&nbsp;&nbsp;<${buttonTag} ${hrefAttr} class="marquee-btn" style="background-color: var(--color-secondary); color: var(--color-on-secondary); padding: 4px 12px; border-radius: 4px; font-weight: bold; font-size: 11px; text-transform: uppercase; cursor: pointer; text-decoration: none; display: inline-block; vertical-align: middle; margin-left: 8px;">${btnText}</${buttonTag}>`;
                 }
-                marqueeContent.innerHTML = `<span>${repeatedText}</span><span>${repeatedText}</span>`;
+                
+                let repeatedText = '';
+                for(let i=0; i<25; i++) {
+                    repeatedText += `<div style="display: inline-flex; align-items: center; white-space: nowrap; margin-right: 48px;">${innerHtml}</div>`;
+                }
+                marqueeContent.innerHTML = repeatedText + repeatedText;
                 
                 if (settings.banner_speed) {
                     marqueeContent.style.animationDuration = `${settings.banner_speed}s`;
                 }
                 mainMarquee.style.display = 'flex';
                 if(header) header.style.top = '40px';
+                
+                if (isPopupTrigger) {
+                    marqueeContent.querySelectorAll('.marquee-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            openPromotionPopup();
+                        });
+                    });
+                }
             } else {
                 mainMarquee.style.display = 'none';
                 if(header) header.style.top = '0px';
+            }
+        }
+
+        // Auto show popup on page load if enabled
+        if (settings.popup_enabled === '1') {
+            const delaySec = parseInt(settings.popup_delay || '3', 10);
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            const hasImage = isMobile ? (settings.popup_mobile_image || settings.popup_desktop_image) : (settings.popup_desktop_image || settings.popup_mobile_image);
+            
+            if (hasImage && !sessionStorage.getItem('promoPopupShown')) {
+                setTimeout(() => {
+                    openPromotionPopup();
+                }, delaySec * 1000);
             }
         }
 
