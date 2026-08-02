@@ -63,6 +63,41 @@
             z-index: 2;
         }
 
+        /* Header Logos (Always Visible) */
+        .header-logos {
+            position: absolute;
+            top: 24px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .header-logos * {
+            pointer-events: auto;
+        }
+
+        .gym-logo img {
+            height: 32px;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+        }
+
+        .as-creates-logo {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .as-creates-logo strong {
+            color: var(--color-secondary);
+        }
+
         /* Coming Soon Card */
         .coming-soon-card {
             position: relative;
@@ -77,18 +112,39 @@
             border-radius: 20px;
             text-align: center;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(230, 208, 45, 0.05);
-            animation: cardFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        @keyframes cardFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .coming-soon-card.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+
+        /* Close Button inside Card */
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: var(--color-on-surface-variant);
+            font-size: 24px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .rocket-icon {
@@ -164,6 +220,41 @@
             text-decoration: none;
             font-weight: 700;
         }
+
+        /* Floating Info Trigger (shows when card is hidden) */
+        .info-trigger {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            z-index: 10;
+            background: rgba(34, 32, 21, 0.85);
+            border: 1px solid rgba(75, 71, 52, 0.4);
+            color: var(--color-on-surface);
+            font-weight: 700;
+            font-size: 13px;
+            padding: 10px 18px;
+            border-radius: 9999px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+        }
+
+        .info-trigger.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .info-trigger:hover {
+            border-color: var(--color-secondary);
+            color: var(--color-secondary);
+        }
     </style>
 </head>
 <body>
@@ -172,7 +263,18 @@
         <div class="video-overlay"></div>
     </div>
 
+    <!-- Floating Logos (Always Visible) -->
+    <div class="header-logos">
+        <div class="gym-logo">
+            <img src="/logo.png" alt="The Dream Gym">
+        </div>
+        <div class="as-creates-logo">
+            Developing by <strong>AS Creates</strong>
+        </div>
+    </div>
+
     <div class="coming-soon-card" id="fallback-card">
+        <button id="close-card-btn" class="close-btn" aria-label="Close Card">&times;</button>
         <div class="rocket-icon">🚀</div>
         <h1>Coming Soon</h1>
         <p>We're launching soon! Our team is putting on the final touches to bring you the ultimate digital fitness hub. Check back soon.</p>
@@ -181,13 +283,23 @@
             Pre-launch phase
         </div>
         <div class="footer-text">
-            &copy; 2026 <a href="/">The Dream Gym</a>. All rights reserved.
+            &copy; 2026 <a href="/">The Dream Gym</a>. All rights reserved.<br>
+            <span style="font-size: 10px; opacity: 0.8; margin-top: 4px; display: block;">Developing by AS Creates</span>
         </div>
     </div>
+
+    <!-- Info Button to restore card -->
+    <button class="info-trigger" id="info-btn">
+        <span>🚀</span> Status Info
+    </button>
 
     <script>
         var video = document.getElementById('maintenance-video');
         var wrapper = document.getElementById('video-wrapper');
+        var fallbackCard = document.getElementById('fallback-card');
+        var closeBtn = document.getElementById('close-card-btn');
+        var infoBtn = document.getElementById('info-btn');
+        var hideTimeout;
         
         var desktopVideoSrc = "https://res.cloudinary.com/nsqqegj1/video/upload/q_auto,f_auto/v1784749054/coming_soon_dzqqpd.mp4";
         var mobileVideoSrc = "https://res.cloudinary.com/nsqqegj1/video/upload/q_auto,f_auto/v1784749050/coming_soon_mobile_yuxk9x.mp4";
@@ -215,6 +327,29 @@
 
         window.addEventListener('resize', updateVideoSource);
         updateVideoSource();
+
+        // Hide / Show card functionality
+        function showCard() {
+            fallbackCard.classList.remove('hidden');
+            infoBtn.classList.remove('visible');
+        }
+
+        function hideCard() {
+            fallbackCard.classList.add('hidden');
+            infoBtn.classList.add('visible');
+        }
+
+        closeBtn.addEventListener('click', function() {
+            clearTimeout(hideTimeout);
+            hideCard();
+        });
+
+        infoBtn.addEventListener('click', function() {
+            showCard();
+        });
+
+        // Auto hide card after 3 seconds
+        hideTimeout = setTimeout(hideCard, 3000);
     </script>
 </body>
 </html>
