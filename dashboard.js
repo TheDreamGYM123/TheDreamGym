@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 bannerStatus.style.opacity = '1';
                 setTimeout(() => {
                     bannerStatus.style.opacity = '0';
-                }, 1500);
+                }, 3000);
 
             } catch (error) {
                 console.error('Failed to save settings', error);
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 heroVideoStatus.style.opacity = '1';
                 setTimeout(() => {
                     heroVideoStatus.style.opacity = '0';
-                }, 1500);
+                }, 3000);
             } catch (error) {
                 console.error('Failed to save hero video URL', error);
                 alert('Failed to save video link');
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 systemSettingsStatus.style.opacity = '1';
                 setTimeout(() => {
                     systemSettingsStatus.style.opacity = '0';
-                }, 1500);
+                }, 3000);
             } catch (error) {
                 console.error('Failed to save system settings', error);
                 alert('Failed to save settings');
