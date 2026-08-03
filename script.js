@@ -23,6 +23,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // --- Promotion Popup Helper Functions ---
         function openPromotionPopup() {
+            if (settings.popup_enabled !== '1') return;
+
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            const desktopImg = settings.popup_desktop_image;
+            const mobileImg = settings.popup_mobile_image;
+            const activeImg = isMobile 
+                ? (mobileImg || desktopImg) 
+                : (desktopImg || mobileImg);
+            const redirectUrl = settings.popup_link_url || '#';
+            
+            if (!activeImg) return;
+
             let popupModal = document.getElementById('promo-popup-modal');
             if (!popupModal) {
                 popupModal = document.createElement('div');
@@ -88,17 +100,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
                 });
             }
-            
-            const isMobile = window.matchMedia('(max-width: 768px)').matches;
-            const desktopImg = settings.popup_desktop_image;
-            const mobileImg = settings.popup_mobile_image;
-            const defaultPromoImg = '/images/Background-hero.jpg';
-            const activeImg = isMobile 
-                ? (mobileImg || desktopImg || defaultPromoImg) 
-                : (desktopImg || mobileImg || defaultPromoImg);
-            const redirectUrl = settings.popup_link_url || '#';
-            
-            if (!activeImg) return;
             
             document.getElementById('promo-popup-img').src = activeImg;
             
@@ -182,8 +183,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        // Auto show popup on page load immediately for all visitors
-        openPromotionPopup();
+        // Auto show popup based on backend settings (enabled state, uploaded image presence, and delay)
+        if (settings.popup_enabled === '1') {
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            const desktopImg = settings.popup_desktop_image;
+            const mobileImg = settings.popup_mobile_image;
+            const activeImg = isMobile ? (mobileImg || desktopImg) : (desktopImg || mobileImg);
+
+            if (activeImg) {
+                const popupDelaySec = parseFloat(settings.popup_delay) || 0;
+                if (popupDelaySec > 0) {
+                    setTimeout(() => {
+                        openPromotionPopup();
+                    }, popupDelaySec * 1000);
+                } else {
+                    openPromotionPopup();
+                }
+            }
+        }
 
         const watchVideoBtn = document.getElementById('watch-video-btn');
         if (watchVideoBtn && settings.hero_video_url) {
