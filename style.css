@@ -212,8 +212,8 @@ button {
 }
 
 .marquee-btn {
-  background-color: var(--surface);
-  color: var(--secondary) !important;
+  background-color: #000000;
+  color: #ffffff !important;
   font-weight: 800;
   text-transform: uppercase;
   cursor: pointer;
@@ -221,20 +221,23 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 3px 12px;
-  margin: 0 16px;
+  padding: 3px 14px;
+  margin: 0 14px;
   border-radius: 9999px;
   font-size: 11px;
-  letter-spacing: 0.05em;
-  transition: all 0.3s ease;
-  border: 1px solid var(--secondary);
+  line-height: 1;
+  letter-spacing: 0.06em;
+  transition: all 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  white-space: nowrap;
 }
 
 .marquee-btn:hover {
-  background-color: #ffffff;
-  color: var(--surface) !important;
+  background-color: var(--secondary);
+  color: #000000 !important;
+  border-color: var(--secondary);
   transform: scale(1.05);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .marquee-content {

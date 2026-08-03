@@ -48,11 +48,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <button id="promo-popup-close" style="position: absolute; top: 16px; right: 16px; background: rgba(34, 32, 21, 0.85); border: 2px solid #e6d02d; color: #e6d02d; font-size: 24px; font-weight: bold; cursor: pointer; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 100000; box-shadow: 0 0 15px rgba(0,0,0,0.5);">&times;</button>
                         
                         <!-- Scrollable Content Area -->
-                        <div style="max-height: 80vh; overflow-y: auto; border-radius: 14px; scrollbar-width: thin; scrollbar-color: #e6d02d #222015;">
+                        <div style="max-height: 85vh; overflow-y: auto; border-radius: 14px; scrollbar-width: thin; scrollbar-color: #e6d02d #222015;">
                             <img id="promo-popup-img" src="" alt="Exclusive Offer" style="width: 100%; height: auto; display: block; object-fit: contain; cursor: pointer;">
-                        </div>
-                        <div style="padding: 16px; text-align: center;">
-                            <button id="promo-catalog-btn" class="font-label-caps" style="background: var(--secondary); color: var(--on-primary); border: none; padding: 12px 32px; border-radius: 9999px; cursor: pointer; font-weight: 800; letter-spacing: 0.1em; font-size: 12px;">VIEW THE ELITE CATALOG</button>
                         </div>
                     </div>
                 `;
@@ -61,13 +58,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.getElementById('promo-popup-close').addEventListener('click', (e) => {
                     e.preventDefault();
                     closePromotionPopup();
-                });
-                
-                document.getElementById('promo-catalog-btn').addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    closePromotionPopup();
-                    openModal('plans-modal');
                 });
 
                 document.getElementById('promo-popup-img').addEventListener('click', (e) => {
@@ -183,24 +173,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Auto show popup on page load if enabled
-        if (settings.popup_enabled === '1') {
+        const isPopupEnabled = String(settings.popup_enabled || '') === '1' || String(settings.popup_enabled || '').toLowerCase() === 'true';
+        if (isPopupEnabled) {
             const isMobile = window.matchMedia('(max-width: 768px)').matches;
             const desktopImg = settings.popup_desktop_image;
             const mobileImg = settings.popup_mobile_image;
             const activeImg = isMobile ? (mobileImg || desktopImg) : (desktopImg || mobileImg);
 
             if (activeImg) {
-                let isDismissed = false;
-                try {
-                    isDismissed = sessionStorage.getItem('promoPopupDismissedFor_' + activeImg) === 'true';
-                } catch (e) {}
-
-                if (!isDismissed) {
-                    const delaySec = parseInt(settings.popup_delay || '3', 10);
-                    setTimeout(() => {
-                        openPromotionPopup();
-                    }, delaySec * 1000);
-                }
+                const delaySec = Math.max(0, parseInt(settings.popup_delay || '1', 10));
+                setTimeout(() => {
+                    openPromotionPopup();
+                }, delaySec * 1000);
             }
         }
 
