@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 for(let i=0; i<15; i++) {
                     repeatedText += `${text}`;
                     if (btnText) {
-                        repeatedText += ` <span class="marquee-btn" data-href="${btnUrl}" style="color: inherit; font-weight: 900; text-transform: uppercase; cursor: pointer; text-decoration: none; display: inline-block; vertical-align: middle; margin: 0 20px; position: relative; z-index: 101; pointer-events: auto; font-size: 14px; letter-spacing: 0.05em;">${btnText}</span>`;
+                        repeatedText += ` <span class="marquee-btn" data-href="${btnUrl}" style="position: relative; z-index: 101; pointer-events: auto;">${btnText}</span>`;
                     }
                     repeatedText += ` &nbsp;•&nbsp; `;
                 }
@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     marqueeContent.style.animationDuration = `${settings.banner_speed}s`;
                 }
                 mainMarquee.style.display = 'flex';
-                if(header) header.style.top = '40px';
+                if(header) header.style.top = '30px';
                 
                 // Add click listener to all buttons in the marquee
                 marqueeContent.querySelectorAll('.marquee-btn').forEach(btn => {
