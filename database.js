@@ -28,7 +28,7 @@ const initialData = {
         hero_video_url: '',
         maintenance_mode: '0',
         site_deployed: '1',
-        popup_enabled: '0',
+        popup_enabled: '1',
         popup_desktop_image: '',
         popup_mobile_image: '',
         popup_link_url: '',

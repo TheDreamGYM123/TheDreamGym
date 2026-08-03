@@ -211,8 +211,8 @@ button {
   border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
-.marquee-btn {
-  background-color: #000000;
+.marquee-content .marquee-btn {
+  background-color: #000000 !important;
   color: #ffffff !important;
   font-weight: 800;
   text-transform: uppercase;
@@ -221,22 +221,22 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 5px 16px;
+  padding: 5px 18px;
   margin: 0 14px;
   border-radius: 9999px;
   font-size: 11px;
   line-height: 1.2;
   letter-spacing: 0.06em;
   transition: all 0.25s ease;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   white-space: nowrap;
   box-sizing: border-box;
 }
 
-.marquee-btn:hover {
-  background-color: var(--secondary);
+.marquee-content .marquee-btn:hover {
+  background-color: var(--secondary) !important;
   color: #000000 !important;
-  border-color: var(--secondary);
+  border-color: var(--secondary) !important;
   transform: scale(1.05);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
@@ -247,7 +247,7 @@ button {
   animation: marquee 120s linear infinite;
 }
 
-.marquee-content span {
+.marquee-content > span {
   padding: 0 16px;
   color: #201c00; /* on-primary-fixed override */
 }
