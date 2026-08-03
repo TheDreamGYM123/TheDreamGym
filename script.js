@@ -92,7 +92,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             const isMobile = window.matchMedia('(max-width: 768px)').matches;
             const desktopImg = settings.popup_desktop_image;
             const mobileImg = settings.popup_mobile_image;
-            const activeImg = isMobile ? (mobileImg || desktopImg) : (desktopImg || mobileImg);
+            const defaultPromoImg = '/images/Background-hero.jpg';
+            const activeImg = isMobile 
+                ? (mobileImg || desktopImg || defaultPromoImg) 
+                : (desktopImg || mobileImg || defaultPromoImg);
             const redirectUrl = settings.popup_link_url || '#';
             
             if (!activeImg) return;
@@ -149,7 +152,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     marqueeContent.style.animationDuration = `${settings.banner_speed}s`;
                 }
                 mainMarquee.style.display = 'flex';
-                if(header) header.style.top = '30px';
+                if(header) header.style.top = '36px';
                 
                 // Add click listener to all buttons in the marquee
                 marqueeContent.querySelectorAll('.marquee-btn').forEach(btn => {
@@ -178,10 +181,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             const isMobile = window.matchMedia('(max-width: 768px)').matches;
             const desktopImg = settings.popup_desktop_image;
             const mobileImg = settings.popup_mobile_image;
-            const activeImg = isMobile ? (mobileImg || desktopImg) : (desktopImg || mobileImg);
+            const defaultPromoImg = '/images/Background-hero.jpg';
+            const activeImg = isMobile 
+                ? (mobileImg || desktopImg || defaultPromoImg) 
+                : (desktopImg || mobileImg || defaultPromoImg);
 
             if (activeImg) {
-                const delaySec = Math.max(0, parseInt(settings.popup_delay || '1', 10));
+                const delaySec = Math.max(0, parseInt(settings.popup_delay || '0', 10));
                 setTimeout(() => {
                     openPromotionPopup();
                 }, delaySec * 1000);
