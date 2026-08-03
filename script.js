@@ -159,11 +159,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                     btn.addEventListener('click', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        if (isPopupTrigger) {
-                            openPromotionPopup();
-                        } else {
-                            const destUrl = btn.getAttribute('data-href');
-                            if (destUrl && destUrl !== '#') {
+                        closePromotionPopup();
+
+                        const destUrl = btn.getAttribute('data-href') || settings.banner_btn_url || settings.popup_link_url || '#pricing';
+                        if (destUrl && destUrl !== '#') {
+                            if (destUrl.startsWith('#')) {
+                                const target = document.querySelector(destUrl);
+                                if (target) {
+                                    target.scrollIntoView({ behavior: 'smooth' });
+                                } else {
+                                    window.location.hash = destUrl;
+                                }
+                            } else {
                                 window.location.href = destUrl;
                             }
                         }
@@ -175,11 +182,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        // Auto show popup on page load for all visitors
-        const delaySec = Math.max(0, parseInt(settings.popup_delay || '0', 10));
-        setTimeout(() => {
-            openPromotionPopup();
-        }, delaySec * 1000);
+        // Auto show popup on page load immediately for all visitors
+        openPromotionPopup();
 
         const watchVideoBtn = document.getElementById('watch-video-btn');
         if (watchVideoBtn && settings.hero_video_url) {
