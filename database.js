@@ -235,8 +235,8 @@ class JsonDatabase {
             }
 
             if (/INSERT INTO settings/i.test(sql)) {
-                const key = params[0] || this.literalValues(sql)[0];
-                const value = params[1] || this.literalValues(sql)[1];
+                const key = params[0] !== undefined ? params[0] : this.literalValues(sql)[0];
+                const value = params[1] !== undefined ? params[1] : this.literalValues(sql)[1];
                 this.data.settings[key] = value;
                 this.save();
                 if (callback) callback.call({ lastID: key, changes: 1 }, null);
