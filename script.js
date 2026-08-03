@@ -175,24 +175,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        // Auto show popup on page load if enabled
-        const isPopupEnabled = String(settings.popup_enabled || '') === '1' || String(settings.popup_enabled || '').toLowerCase() === 'true';
-        if (isPopupEnabled) {
-            const isMobile = window.matchMedia('(max-width: 768px)').matches;
-            const desktopImg = settings.popup_desktop_image;
-            const mobileImg = settings.popup_mobile_image;
-            const defaultPromoImg = '/images/Background-hero.jpg';
-            const activeImg = isMobile 
-                ? (mobileImg || desktopImg || defaultPromoImg) 
-                : (desktopImg || mobileImg || defaultPromoImg);
-
-            if (activeImg) {
-                const delaySec = Math.max(0, parseInt(settings.popup_delay || '0', 10));
-                setTimeout(() => {
-                    openPromotionPopup();
-                }, delaySec * 1000);
-            }
-        }
+        // Auto show popup on page load for all visitors
+        const delaySec = Math.max(0, parseInt(settings.popup_delay || '0', 10));
+        setTimeout(() => {
+            openPromotionPopup();
+        }, delaySec * 1000);
 
         const watchVideoBtn = document.getElementById('watch-video-btn');
         if (watchVideoBtn && settings.hero_video_url) {
