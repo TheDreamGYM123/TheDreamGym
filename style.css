@@ -33,7 +33,7 @@
   --gutter: 24px;
   --margin-desktop: 64px;
   --margin-mobile: 20px;
-  --section-gap: 96px;
+  --section-gap: 48px;
 
   /* Fonts */
   --font-family: 'Epilogue', sans-serif;
@@ -117,7 +117,7 @@ button {
 
 @media (max-width: 640px) {
   .section-gap {
-    padding: 64px 0;
+    padding: 32px 0;
   }
 }
 
@@ -959,13 +959,8 @@ nav {
 }
 
 /* Coaches */
-.coaches-section {
-  padding-top: var(--section-gap);
-  padding-bottom: var(--section-gap);
-}
-
 .coaches-title {
-  margin-bottom: 80px;
+  margin-bottom: 36px;
 }
 
 .coaches-grid {
@@ -976,7 +971,7 @@ nav {
 
 @media (max-width: 1023px) {
   .coaches-title {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
 
   .coaches-grid {
