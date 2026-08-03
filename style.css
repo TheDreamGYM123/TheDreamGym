@@ -959,6 +959,11 @@ nav {
 }
 
 /* Coaches */
+.coaches-section {
+  padding-top: var(--section-gap);
+  padding-bottom: var(--section-gap);
+}
+
 .coaches-title {
   margin-bottom: 80px;
 }
