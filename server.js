@@ -123,7 +123,7 @@ const staticCache = {
     setHeaders: (res, filePath) => {
         const ext = path.extname(filePath).toLowerCase();
         const fileName = path.basename(filePath).toLowerCase();
-        if (fileName === 'robots.txt' || fileName === 'sitemap.xml' || fileName === 'dashboard.js' || ext === '.html') {
+        if (fileName === 'robots.txt' || fileName === 'sitemap.xml' || fileName === 'dashboard.js' || ext === '.html' || ext === '.css' || ext === '.js') {
             res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
         } else if (ext) {
             res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
