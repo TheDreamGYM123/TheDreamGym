@@ -404,6 +404,7 @@ nav {
   position: absolute;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
 }
 
 .hero-bg picture,
@@ -419,6 +420,20 @@ nav {
 .hero-bg img {
   object-fit: cover;
   object-position: center top;
+  animation: heroBgZoom 20s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes heroBgZoom {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.08) translateY(-10px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
 }
 
 .hero-overlay {
