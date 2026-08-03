@@ -25,6 +25,7 @@
   --on-background: #e8e2d1;
   --error: #ffb4ab;
   --on-error: #690005;
+  --on-tertiary-container: #cdc7ad;
 
   /* Spacing */
   --unit: 8px;
@@ -98,6 +99,7 @@ button {
 
 /* Utilities */
 .container {
+  width: 100%;
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 var(--margin-mobile);
@@ -3169,6 +3171,49 @@ footer {
 }
 .whatsapp-float:hover {
   transform: scale(1.1);
+}
+
+.elite-catalog-float {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  background-color: var(--surface-container-high);
+  border: 1px solid var(--secondary);
+  color: var(--secondary);
+  padding: 12px 24px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  z-index: 1000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.elite-catalog-float:hover {
+  transform: scale(1.05);
+  background-color: var(--secondary);
+  color: var(--background);
+  box-shadow: 0 4px 20px rgba(230, 208, 45, 0.4);
+}
+
+.elite-catalog-float .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.elite-catalog-float span:not(.material-symbols-outlined) {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  font-size: 13px;
+}
+
+@media (max-width: 640px) {
+  .elite-catalog-float {
+    bottom: 16px;
+    left: 16px;
+    padding: 8px 16px;
+  }
 }
 
 /* Contact Form */

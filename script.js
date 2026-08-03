@@ -49,9 +49,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                         
                         <!-- Scrollable Content Area -->
                         <div style="max-height: 80vh; overflow-y: auto; border-radius: 14px; scrollbar-width: thin; scrollbar-color: #e6d02d #222015;">
-                            <a id="promo-popup-link" href="#" style="display: block; width: 100%; outline: none;">
-                                <img id="promo-popup-img" src="" alt="Exclusive Offer" style="width: 100%; height: auto; display: block; object-fit: contain;">
-                            </a>
+                            <img id="promo-popup-img" src="" alt="Exclusive Offer" style="width: 100%; height: auto; display: block; object-fit: contain; cursor: pointer;">
+                        </div>
+                        <div style="padding: 16px; text-align: center;">
+                            <button id="promo-catalog-btn" class="font-label-caps" style="background: var(--secondary); color: var(--on-primary); border: none; padding: 12px 32px; border-radius: 9999px; cursor: pointer; font-weight: 800; letter-spacing: 0.1em; font-size: 12px;">VIEW THE ELITE CATALOG</button>
                         </div>
                     </div>
                 `;
@@ -60,6 +61,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.getElementById('promo-popup-close').addEventListener('click', (e) => {
                     e.preventDefault();
                     closePromotionPopup();
+                });
+                
+                document.getElementById('promo-catalog-btn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closePromotionPopup();
+                    openModal('plans-modal');
+                });
+
+                document.getElementById('promo-popup-img').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closePromotionPopup();
+                    openModal('plans-modal');
                 });
                 
                 popupModal.addEventListener('click', (e) => {
@@ -78,7 +93,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!activeImg) return;
             
             document.getElementById('promo-popup-img').src = activeImg;
-            document.getElementById('promo-popup-link').href = redirectUrl;
             
             popupModal.style.display = 'flex';
             setTimeout(() => {
