@@ -74,7 +74,22 @@ document.addEventListener('DOMContentLoaded', async () => {
                     e.preventDefault();
                     e.stopPropagation();
                     closePromotionPopup();
-                    openModal('plans-modal');
+                    
+                    const redirectUrl = settings.popup_link_url || '#pricing';
+                    if (redirectUrl && redirectUrl !== '#') {
+                        if (redirectUrl.startsWith('#')) {
+                            setTimeout(() => {
+                                const target = document.querySelector(redirectUrl);
+                                if (target) {
+                                    target.scrollIntoView({ behavior: 'smooth' });
+                                } else {
+                                    window.location.hash = redirectUrl;
+                                }
+                            }, 300);
+                        } else {
+                            window.location.href = redirectUrl;
+                        }
+                    }
                 });
                 
                 popupModal.addEventListener('click', (e) => {
@@ -115,7 +130,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const mobileImg = settings.popup_mobile_image;
                 const activeImg = isMobile ? (mobileImg || desktopImg) : (desktopImg || mobileImg);
                 if (activeImg) {
-                    localStorage.setItem('promoPopupDismissedFor_' + activeImg, 'true');
+                    sessionStorage.setItem('promoPopupDismissedFor_' + activeImg, 'true');
                 }
             } catch (e) {}
         }
@@ -177,7 +192,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (activeImg) {
                 let isDismissed = false;
                 try {
-                    isDismissed = localStorage.getItem('promoPopupDismissedFor_' + activeImg) === 'true';
+                    isDismissed = sessionStorage.getItem('promoPopupDismissedFor_' + activeImg) === 'true';
                 } catch (e) {}
 
                 if (!isDismissed) {
